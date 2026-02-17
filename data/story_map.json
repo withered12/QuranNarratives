@@ -1,0 +1,850 @@
+{
+  "surah_2": {
+    "name": "Al-Baqarah",
+    "name_ar": "البقرة",
+    "stories": [
+      {
+        "id": "adam_creation",
+        "title": "Creation of Adam",
+        "title_ar": "خلق آدم عليه السلام",
+        "start_ayah": 30,
+        "end_ayah": 39,
+        "summary": "The beginning of humanity and the trial of Iblis.",
+        "summary_ar": "خلق الله لآدم وأمر الملائكة بالسجود وامتناع إبليس.",
+        "tags": [
+          "creation",
+          "paradise"
+        ],
+        "tags_ar": [
+          "الخلق",
+          "الجنة"
+        ],
+        "prophets": [
+          "Adam"
+        ],
+        "prophets_ar": [
+          "آدم"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 1
+      },
+      {
+        "id": "yellow_cow",
+        "title": "The Yellow Cow",
+        "title_ar": "قصة البقرة",
+        "start_ayah": 67,
+        "end_ayah": 73,
+        "summary": "A murder mystery solved through a divine commands.",
+        "summary_ar": "أمر بني إسرائيل بذبح بقرة لكشف جريمة قتل.",
+        "tags": [
+          "mystery",
+          "israelites"
+        ],
+        "tags_ar": [
+          "بنو إسرائيل",
+          "المعجزة"
+        ],
+        "prophets": [
+          "Musa"
+        ],
+        "prophets_ar": [
+          "موسى"
+        ],
+        "category": "Nations",
+        "category_ar": "الأمم",
+        "chronology_index": 52
+      }
+    ]
+  },
+  "surah_3": {
+    "name": "Ali 'Imran",
+    "name_ar": "آل عمران",
+    "stories": [
+      {
+        "id": "maryam_childhood",
+        "title": "Maryam's Childhood",
+        "title_ar": "نشأة مريم",
+        "start_ayah": 33,
+        "end_ayah": 37,
+        "summary": "Her dedication to the Temple and Zakariya's guardianship.",
+        "summary_ar": "نذر أم مريم وكفالة زكريا لها في المحراب.",
+        "tags": [
+          "devotion",
+          "purity"
+        ],
+        "tags_ar": [
+          "العبادة",
+          "الطهارة"
+        ],
+        "prophets": [
+          "Zakariya"
+        ],
+        "prophets_ar": [
+          "زكريا"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 90
+      }
+    ]
+  },
+  "surah_5": {
+    "name": "Al-Ma'idah",
+    "name_ar": "المائدة",
+    "stories": [
+      {
+        "id": "habil_qabil",
+        "title": "Habil & Qabil",
+        "title_ar": "هابيل وقابيل",
+        "start_ayah": 27,
+        "end_ayah": 31,
+        "summary": "The first murder between the sons of Adam.",
+        "summary_ar": "قصة أول جريمة قتل في الأرض بسبب الحسد.",
+        "tags": [
+          "murder",
+          "envy"
+        ],
+        "tags_ar": [
+          "الحسد",
+          "الندم"
+        ],
+        "prophets": [],
+        "prophets_ar": [],
+        "category": "History",
+        "category_ar": "التاريخ",
+        "chronology_index": 2
+      },
+      {
+        "id": "the_table",
+        "title": "The Heavenly Table",
+        "title_ar": "المائدة",
+        "start_ayah": 112,
+        "end_ayah": 115,
+        "summary": "The miracle of the feast requested by the disciples of Jesus.",
+        "summary_ar": "طلب الحواريين مائدة من السماء كمعجزة.",
+        "tags": [
+          "miracle",
+          "jesus"
+        ],
+        "tags_ar": [
+          "المعجزة",
+          "عيسى"
+        ],
+        "prophets": [
+          "Isa"
+        ],
+        "prophets_ar": [
+          "عيسى"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 97
+      }
+    ]
+  },
+  "surah_7": {
+    "name": "Al-A'raf",
+    "name_ar": "الأعراف",
+    "stories": [
+      {
+        "id": "nuh_araf",
+        "title": "Noah & The Ark",
+        "title_ar": "نوح والسفينة",
+        "start_ayah": 59,
+        "end_ayah": 64,
+        "summary": "The call to faith and the saving of the believers from the flood.",
+        "summary_ar": "دعوة نوح ونجاة المؤمنين في السفينة من الطوفان.",
+        "tags": [
+          "flood",
+          "ark"
+        ],
+        "tags_ar": [
+          "الطوفان",
+          "السفينة"
+        ],
+        "prophets": [
+          "Nuh"
+        ],
+        "prophets_ar": [
+          "نوح"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 5
+      },
+      {
+        "id": "hud_araf",
+        "title": "Hud & Aad",
+        "title_ar": "هود وقوم عاد",
+        "start_ayah": 65,
+        "end_ayah": 72,
+        "summary": "The destruction of the powerful tribe of Aad.",
+        "summary_ar": "هود عليه السلام مع قوم عاد الذين اغتروا بقوتهم.",
+        "tags": [
+          "arrogance",
+          "wind"
+        ],
+        "tags_ar": [
+          "الغرور",
+          "الريح العقيم"
+        ],
+        "prophets": [
+          "Hud"
+        ],
+        "prophets_ar": [
+          "هود"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 8
+      },
+      {
+        "id": "salih_araf",
+        "title": "Salih & The Camel",
+        "title_ar": "صالح والناقة",
+        "start_ayah": 73,
+        "end_ayah": 79,
+        "summary": "The trial of the sacred she-camel among the people of Thamud.",
+        "summary_ar": "معجزة الناقة لقوم ثمود وتكذيبهم.",
+        "tags": [
+          "miracle",
+          "camel"
+        ],
+        "tags_ar": [
+          "المعجزة",
+          "الناقة"
+        ],
+        "prophets": [
+          "Salih"
+        ],
+        "prophets_ar": [
+          "صالح"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 10
+      }
+    ]
+  },
+  "surah_11": {
+    "name": "Hud",
+    "name_ar": "هود",
+    "stories": [
+      {
+        "id": "nuh_son",
+        "title": "Noah's Son",
+        "title_ar": "نوح وابنه",
+        "start_ayah": 42,
+        "end_ayah": 47,
+        "summary": "The heart-breaking attempt of Noah to save his disbelieving son.",
+        "summary_ar": "محاولة نوح إنقاذ ابنه وكلامه مع ربه.",
+        "tags": [
+          "family",
+          "flood"
+        ],
+        "tags_ar": [
+          "الأهل",
+          "الغرق"
+        ],
+        "prophets": [
+          "Nuh"
+        ],
+        "prophets_ar": [
+          "نوح"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 6
+      },
+      {
+        "id": "ibrahim_angels",
+        "title": "Ibrahim & The Angels",
+        "title_ar": "إبراهيم والملائكة",
+        "start_ayah": 69,
+        "end_ayah": 76,
+        "summary": "Angels bring news of a son to Abraham and Sarah.",
+        "summary_ar": "بشرى الملائكة لإبراهيم وسارة بإسحاق.",
+        "tags": [
+          "hospitality",
+          "angels"
+        ],
+        "tags_ar": [
+          "الكرم",
+          "البشرى"
+        ],
+        "prophets": [
+          "Ibrahim"
+        ],
+        "prophets_ar": [
+          "إبراهيم"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 16
+      }
+    ]
+  },
+  "surah_12": {
+    "name": "Yusuf",
+    "name_ar": "يوسف",
+    "stories": [
+      {
+        "id": "yusuf_complete",
+        "title": "The Life of Yusuf",
+        "title_ar": "قصة يوسف كاملة",
+        "start_ayah": 1,
+        "end_ayah": 101,
+        "summary": "The most beautiful story: from the well to the throne.",
+        "summary_ar": "أحسن القصص: من الجب إلى ملك مصر.",
+        "tags": [
+          "patience",
+          "dreams",
+          "forgiveness"
+        ],
+        "tags_ar": [
+          "الصبر",
+          "الأحلام",
+          "العفو"
+        ],
+        "prophets": [
+          "Yusuf",
+          "Yaqub"
+        ],
+        "prophets_ar": [
+          "يوسف",
+          "يعقوب"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 35
+      }
+    ]
+  },
+  "surah_18": {
+    "name": "Al-Kahf",
+    "name_ar": "الكهف",
+    "stories": [
+      {
+        "id": "ashab_kahf",
+        "title": "Sleepers of the Cave",
+        "title_ar": "أصحاب الكهف",
+        "start_ayah": 9,
+        "end_ayah": 26,
+        "summary": "The youths who fled for their faith and slept for 309 years.",
+        "summary_ar": "فتية فروا بدينهم فآواهم الله في الكهف.",
+        "tags": [
+          "faith",
+          "miracle"
+        ],
+        "tags_ar": [
+          "الإيمان",
+          "المعجزة"
+        ],
+        "prophets": [],
+        "prophets_ar": [],
+        "category": "Parables",
+        "category_ar": "الأمثال",
+        "chronology_index": 100
+      },
+      {
+        "id": "musa_khidr",
+        "title": "Musa & Al-Khidr",
+        "title_ar": "موسى والخضر",
+        "start_ayah": 60,
+        "end_ayah": 82,
+        "summary": "The journey of knowledge and unexpected wisdom.",
+        "summary_ar": "رحلة موسى في طلب العلم مع العبد الصالح.",
+        "tags": [
+          "knowledge",
+          "patience"
+        ],
+        "tags_ar": [
+          "العلم",
+          "الحكمة"
+        ],
+        "prophets": [
+          "Musa",
+          "Al-Khidr"
+        ],
+        "prophets_ar": [
+          "موسى",
+          "الخضر"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 50
+      },
+      {
+        "id": "dhul_qarnayn",
+        "title": "Dhul-Qarnayn",
+        "title_ar": "ذو القرنين",
+        "start_ayah": 83,
+        "end_ayah": 98,
+        "summary": "The righteous king who built the barrier against Gog and Magog.",
+        "summary_ar": "الملك الصالح الذي بنى السد.",
+        "tags": [
+          "kingship",
+          "justice"
+        ],
+        "tags_ar": [
+          "الملك",
+          "العدل"
+        ],
+        "prophets": [],
+        "prophets_ar": [],
+        "category": "History",
+        "category_ar": "التاريخ",
+        "chronology_index": 20
+      }
+    ]
+  },
+  "surah_19": {
+    "name": "Maryam",
+    "name_ar": "مريم",
+    "stories": [
+      {
+        "id": "isa_birth",
+        "title": "The Birth of Isa",
+        "title_ar": "ولادة عيسى",
+        "start_ayah": 16,
+        "end_ayah": 34,
+        "summary": "The miracle of birth without a father and the speech in the cradle.",
+        "summary_ar": "معجزة ولادة عيسى وكلامه في المهد.",
+        "tags": [
+          "miracle",
+          "purity"
+        ],
+        "tags_ar": [
+          "المعجزة",
+          "الطهارة"
+        ],
+        "prophets": [
+          "Isa"
+        ],
+        "prophets_ar": [
+          "عيسى"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 95
+      }
+    ]
+  },
+  "surah_20": {
+    "name": "Ta-Ha",
+    "name_ar": "طه",
+    "stories": [
+      {
+        "id": "musa_burning_bush",
+        "title": "The Burning Bush",
+        "title_ar": "نداء موسى",
+        "start_ayah": 9,
+        "end_ayah": 36,
+        "summary": "Musa's first conversation with God at Mount Sinai.",
+        "summary_ar": "لقاء موسى بربه في الوادي المقدس طوى.",
+        "tags": [
+          "revelation",
+          "fire"
+        ],
+        "tags_ar": [
+          "الوحي",
+          "المعجزة"
+        ],
+        "prophets": [
+          "Musa"
+        ],
+        "prophets_ar": [
+          "موسى"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 45
+      }
+    ]
+  },
+  "surah_21": {
+    "name": "Al-Anbiya",
+    "name_ar": "الأنبياء",
+    "stories": [
+      {
+        "id": "ibrahim_idols",
+        "title": "Ibrahim & The Idols",
+        "title_ar": "إبراهيم والأصنام",
+        "start_ayah": 51,
+        "end_ayah": 71,
+        "summary": "Breaking the idols and surviving the fire.",
+        "summary_ar": "تحطيم إبراهيم للأصنام ونجاته من النار.",
+        "tags": [
+          "monotheism",
+          "fire"
+        ],
+        "tags_ar": [
+          "التوحيد",
+          "المعجزة"
+        ],
+        "prophets": [
+          "Ibrahim"
+        ],
+        "prophets_ar": [
+          "إبراهيم"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 15
+      },
+      {
+        "id": "yunus_whale",
+        "title": "Yunus in the Whale",
+        "title_ar": "يونس في بطن الحوت",
+        "start_ayah": 87,
+        "end_ayah": 88,
+        "summary": "The repentance and prayer from the depths of the ocean.",
+        "summary_ar": "تسبيح يونس في ظلمات بطن الحوت.",
+        "tags": [
+          "prayer",
+          "whale"
+        ],
+        "tags_ar": [
+          "الدعاء",
+          "الحوت"
+        ],
+        "prophets": [
+          "Yunus"
+        ],
+        "prophets_ar": [
+          "يونس"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 80
+      }
+    ]
+  },
+  "surah_27": {
+    "name": "An-Naml",
+    "name_ar": "النمل",
+    "stories": [
+      {
+        "id": "sulayman_bilqis",
+        "title": "Sulayman & Bilqis",
+        "title_ar": "سليمان وبلقيس",
+        "start_ayah": 20,
+        "end_ayah": 44,
+        "summary": "The Queen of Sheba and the wisdom of King Solomon.",
+        "summary_ar": "قصة الهدهد وملكة سبأ مع سليمان.",
+        "tags": [
+          "wisdom",
+          "animals"
+        ],
+        "tags_ar": [
+          "الحكمة",
+          "الحيوان"
+        ],
+        "prophets": [
+          "Sulayman"
+        ],
+        "prophets_ar": [
+          "سليمان"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 75
+      }
+    ]
+  },
+  "surah_28": {
+    "name": "Al-Qasas",
+    "name_ar": "القصص",
+    "stories": [
+      {
+        "id": "musa_baby",
+        "title": "The Baby in the Basket",
+        "title_ar": "موسى في اليم",
+        "start_ayah": 7,
+        "end_ayah": 13,
+        "summary": "Musa's survival and upbringing in Pharaoh's palace.",
+        "summary_ar": "إلقاء موسى في البحر ووصوله لقصر فرعون.",
+        "tags": [
+          "motherhood",
+          "trust"
+        ],
+        "tags_ar": [
+          "الأمومة",
+          "اليقين"
+        ],
+        "prophets": [
+          "Musa"
+        ],
+        "prophets_ar": [
+          "موسى"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 44
+      },
+      {
+        "id": "qarun",
+        "title": "Qarun's Treasure",
+        "title_ar": "كنوز قارون",
+        "start_ayah": 76,
+        "end_ayah": 82,
+        "summary": "The parable of wealth and arrogance.",
+        "summary_ar": "قصة قارون وكنوزه التي خسف بها الأرض.",
+        "tags": [
+          "wealth",
+          "arrogance"
+        ],
+        "tags_ar": [
+          "المال",
+          "الغرور"
+        ],
+        "prophets": [],
+        "prophets_ar": [],
+        "category": "Nations",
+        "category_ar": "الأمم",
+        "chronology_index": 55
+      }
+    ]
+  },
+  "surah_34": {
+    "name": "Saba",
+    "name_ar": "سبأ",
+    "stories": [
+      {
+        "id": "saba_flood",
+        "title": "The Flood of Arim",
+        "title_ar": "سيل العرم",
+        "start_ayah": 15,
+        "end_ayah": 17,
+        "summary": "The destruction of the dams of Sheba.",
+        "summary_ar": "عذاب أهل سبأ بسيل العرم لكفرهم بالنعمة.",
+        "tags": [
+          "flood",
+          "gratitude"
+        ],
+        "tags_ar": [
+          "الشكر",
+          "العذاب"
+        ],
+        "prophets": [],
+        "prophets_ar": [],
+        "category": "History",
+        "category_ar": "التاريخ",
+        "chronology_index": 82
+      }
+    ]
+  },
+  "surah_37": {
+    "name": "As-Saffat",
+    "name_ar": "الصافات",
+    "stories": [
+      {
+        "id": "ilyas",
+        "title": "Prophet Ilyas",
+        "title_ar": "إلياس عليه السلام",
+        "start_ayah": 123,
+        "end_ayah": 132,
+        "summary": "The call against the idol Ba'al.",
+        "summary_ar": "دعوة إلياس لقومه لترك عبادة بعل.",
+        "tags": [
+          "preaching",
+          "monotheism"
+        ],
+        "tags_ar": [
+          "التوحيد",
+          "الدعوة"
+        ],
+        "prophets": [
+          "Ilyas"
+        ],
+        "prophets_ar": [
+          "إلياس"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 65
+      }
+    ]
+  },
+  "surah_38": {
+    "name": "Saad",
+    "name_ar": "ص",
+    "stories": [
+      {
+        "id": "ayyub",
+        "title": "Patience of Ayyub",
+        "title_ar": "صبر أيوب",
+        "start_ayah": 41,
+        "end_ayah": 44,
+        "summary": "The ultimate test of health and family.",
+        "summary_ar": "ابتلاء نبي الله أيوب وصبره العظيم.",
+        "tags": [
+          "patience",
+          "healing"
+        ],
+        "tags_ar": [
+          "الصبر",
+          "الشفاء"
+        ],
+        "prophets": [
+          "Ayyub"
+        ],
+        "prophets_ar": [
+          "أيوب"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 33
+      }
+    ]
+  },
+  "surah_54": {
+    "name": "Al-Qamar",
+    "name_ar": "القمر",
+    "stories": [
+      {
+        "id": "splitting_moon",
+        "title": "Splitting of the Moon",
+        "title_ar": "انشقاق القمر",
+        "start_ayah": 1,
+        "end_ayah": 2,
+        "summary": "The miracle given to the Prophet Muhammad in Mecca.",
+        "summary_ar": "معجزة انشقاق القمر للنبي صلى الله عليه وسلم.",
+        "tags": [
+          "miracle",
+          "prophetic"
+        ],
+        "tags_ar": [
+          "المعجزة",
+          "النبوة"
+        ],
+        "prophets": [
+          "Muhammad"
+        ],
+        "prophets_ar": [
+          "محمد"
+        ],
+        "category": "History",
+        "category_ar": "التاريخ",
+        "chronology_index": 120
+      }
+    ]
+  },
+  "surah_66": {
+    "name": "At-Tahrim",
+    "name_ar": "التحريم",
+    "stories": [
+      {
+        "id": "asiya_pharaoh",
+        "title": "Asiya & Pharaoh",
+        "title_ar": "امرأة فرعون",
+        "start_ayah": 11,
+        "end_ayah": 11,
+        "summary": "The example of a believing woman in the house of a tyrant.",
+        "summary_ar": "ضرب الله مثلاً للذين آمنوا امرأة فرعون.",
+        "tags": [
+          "faith",
+          "paradise"
+        ],
+        "tags_ar": [
+          "الإيمان",
+          "الجنة"
+        ],
+        "prophets": [],
+        "prophets_ar": [],
+        "category": "History",
+        "category_ar": "التاريخ",
+        "chronology_index": 48
+      }
+    ]
+  },
+  "surah_71": {
+    "name": "Nuh",
+    "name_ar": "نوح",
+    "stories": [
+      {
+        "id": "nuh_950",
+        "title": "The 950 Year Call",
+        "title_ar": "دعوة نوح الطويلة",
+        "start_ayah": 1,
+        "end_ayah": 28,
+        "summary": "Noah's persistence in calling his people day and night.",
+        "summary_ar": "تفصيل دعوة نوح لقومه طوال 950 سنة.",
+        "tags": [
+          "persistence",
+          "preaching"
+        ],
+        "tags_ar": [
+          "الدعوة",
+          "الصبر"
+        ],
+        "prophets": [
+          "Nuh"
+        ],
+        "prophets_ar": [
+          "نوح"
+        ],
+        "category": "Prophets",
+        "category_ar": "الأنبياء",
+        "chronology_index": 4
+      }
+    ]
+  },
+  "surah_85": {
+    "name": "Al-Buruj",
+    "name_ar": "البروج",
+    "stories": [
+      {
+        "id": "people_ditch",
+        "title": "People of the Ditch",
+        "title_ar": "أصحاب الأخدود",
+        "start_ayah": 4,
+        "end_ayah": 9,
+        "summary": "The martyrs who were burned for their faith.",
+        "summary_ar": "قصة المؤمنين الذين أحرقوا في الأخدود بسبب إيمانهم.",
+        "tags": [
+          "sacrifice",
+          "faith"
+        ],
+        "tags_ar": [
+          "التضحية",
+          "الإيمان"
+        ],
+        "prophets": [],
+        "prophets_ar": [],
+        "category": "History",
+        "category_ar": "التاريخ",
+        "chronology_index": 115
+      }
+    ]
+  },
+  "surah_105": {
+    "name": "Al-Fil",
+    "name_ar": "الفيل",
+    "stories": [
+      {
+        "id": "abraha_elephant",
+        "title": "Abraha & Elephant",
+        "title_ar": "أصحاب الفيل",
+        "start_ayah": 1,
+        "end_ayah": 5,
+        "summary": "The divine protection of the Kaaba from Abraha's army.",
+        "summary_ar": "حماية الله للكعبة من جيش أبرهة وفيلته.",
+        "tags": [
+          "protection",
+          "kaaba"
+        ],
+        "tags_ar": [
+          "الحماية",
+          "الكعبة"
+        ],
+        "prophets": [],
+        "prophets_ar": [],
+        "category": "History",
+        "category_ar": "التاريخ",
+        "chronology_index": 121
+      }
+    ]
+  }
+}
