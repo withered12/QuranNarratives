@@ -18,24 +18,26 @@ export const StoryNode: React.FC<StoryNodeProps> = ({
     size = 20,
     glow = true
 }) => {
-    const opacity = useSharedValue(0.4);
+    const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+
+    const opacity = useSharedValue(1); // Start fully opaque
 
     useEffect(() => {
         if (glow) {
             opacity.value = withRepeat(
                 withSequence(
-                    withTiming(0.8, { duration: 1500 }),
-                    withTiming(0.4, { duration: 1500 })
+                    withTiming(0.6, { duration: 1000 }), // Dim slightly
+                    withTiming(1, { duration: 1000 })    // Return to full brightness
                 ),
                 -1,
                 true
             );
         } else {
-            opacity.value = 0.4;
+            opacity.value = 1;
         }
     }, [glow]);
 
-    const animatedGlowStyles = useAnimatedStyle(() => ({
+    const animatedStyles = useAnimatedStyle(() => ({
         opacity: opacity.value,
     }));
 
@@ -44,30 +46,18 @@ export const StoryNode: React.FC<StoryNodeProps> = ({
             styles.container,
             { width: size, height: size },
         ]}>
-            {glow && (
-                <Animated.View
-                    style={[
-                        styles.glowRing,
-                        {
-                            width: size * 2.0, // Fixed size, no expansion
-                            height: size * 2.0,
-                            borderRadius: size,
-                            backgroundColor: '#bf9540',
-                            top: -size * 0.5, // Center it (size/2 - size)
-                            left: -size * 0.5,
-                        },
-                        animatedGlowStyles
-                    ]}
-                />
-            )}
-            <LinearGradient
+            <AnimatedLinearGradient
                 colors={['#e5c17d', '#bf9540', '#8c6a26']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                style={[styles.pearl, { borderRadius: size / 2 }]}
+                style={[
+                    styles.pearl,
+                    { borderRadius: size / 2 },
+                    animatedStyles
+                ]}
             >
                 <View style={[styles.core, { width: size * 0.4, height: size * 0.4, borderRadius: size * 0.2 }]} />
-            </LinearGradient>
+            </AnimatedLinearGradient>
         </View>
     );
 };
@@ -90,12 +80,5 @@ const styles = StyleSheet.create({
     },
     core: {
         backgroundColor: 'rgba(255, 255, 255, 0.4)',
-    },
-    glowRing: {
-        position: 'absolute',
-        shadowColor: '#bf9540',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.8,
-        shadowRadius: 15,
     },
 });
