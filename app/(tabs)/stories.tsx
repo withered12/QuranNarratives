@@ -22,6 +22,13 @@ export default function Codex() {
         <TouchableOpacity
             key={item}
             style={styles.categoryCard}
+            onPress={() => {
+                // Navigate to home with Prophet name as query
+                router.push({
+                    pathname: '/',
+                    params: { query: item }
+                });
+            }}
         >
             <GoldGradientBorder borderRadius={12}>
                 <View style={styles.categoryContent}>

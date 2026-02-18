@@ -112,24 +112,40 @@ export default function Reader() {
                         ))
                     )}
                 </View>
-
-                {showTafsir && (
-                    <View style={styles.tafsirContainer}>
-                        <LinearGradient
-                            colors={['rgba(191, 149, 64, 0.1)', 'transparent']}
-                            style={styles.tafsirGradient}
-                        />
-                        <Text style={styles.tafsirTitle}>نظرة العلماء والتبصر</Text>
-                        {loadingTafsir ? (
-                            <ActivityIndicator color="#bf9540" />
-                        ) : (
-                            tafsirData.map((para, i) => (
-                                <Text key={i} style={styles.tafsirText}>{para.replace(/<[^>]*>?/gm, '')}</Text>
-                            ))
-                        )}
-                    </View>
-                )}
             </ScrollView>
+
+            {/* Tafsir Modal */}
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showTafsir}
+                onRequestClose={() => setShowTafsir(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <BlurView intensity={100} tint="dark" style={styles.modalBlur}>
+                        <View style={styles.modalHeader}>
+                            <TouchableOpacity
+                                onPress={() => setShowTafsir(false)}
+                                style={styles.closeButton}
+                            >
+                                <MaterialCommunityIcons name="close" size={24} color="#bf9540" />
+                            </TouchableOpacity>
+                            <Text style={styles.tafsirTitle}>التفسير والقصة</Text>
+                            <View style={{ width: 40 }} />
+                        </View>
+
+                        <ScrollView style={styles.tafsirScroll} contentContainerStyle={styles.tafsirContent}>
+                            {loadingTafsir ? (
+                                <ActivityIndicator color="#bf9540" size="large" style={{ marginTop: 40 }} />
+                            ) : (
+                                tafsirData.map((para, i) => (
+                                    <Text key={i} style={styles.tafsirText}>{para.replace(/<[^>]*>?/gm, '')}</Text>
+                                ))
+                            )}
+                        </ScrollView>
+                    </BlurView>
+                </View>
+            </Modal>
 
             {/* Floating Action Button */}
             <View style={styles.fabContainer}>
@@ -311,36 +327,55 @@ const styles = StyleSheet.create({
         height: 120,
         zIndex: 90,
     },
-    tafsirContainer: {
-        marginTop: 40,
-        padding: 32,
-        backgroundColor: 'rgba(255, 255, 255, 0.03)',
-        borderRadius: 32,
-        marginHorizontal: 16,
-        borderWidth: 1,
-        borderColor: 'rgba(191, 149, 64, 0.1)',
+    tafsirScroll: {
+        flex: 1,
     },
-    tafsirGradient: {
-        position: 'absolute',
-        top: 0,
-        start: 0,
-        end: 0,
-        height: 100,
-        borderRadius: 32,
+    tafsirContent: {
+        padding: 24,
+        paddingBottom: 60,
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    modalBlur: {
+        height: '85%',
+        borderTopLeftRadius: 32,
+        borderTopRightRadius: 32,
+        overflow: 'hidden',
+        borderTopWidth: 1,
+        borderTopColor: 'rgba(191, 149, 64, 0.3)',
+    },
+    modalHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(191, 149, 64, 0.1)',
+    },
+    closeButton: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(191, 149, 64, 0.1)',
     },
     tafsirTitle: {
         fontFamily: 'Cinzel_700Bold',
-        fontSize: 12,
+        fontSize: 16,
         color: '#bf9540',
         letterSpacing: 2,
-        marginBottom: 20,
-        textAlign: 'center',
     },
     tafsirText: {
         fontFamily: 'Newsreader_400Regular',
-        fontSize: 16,
-        color: 'rgba(245, 245, 220, 0.8)',
-        lineHeight: 28,
-        marginBottom: 16,
+        fontSize: 18,
+        color: '#F5F5DC',
+        lineHeight: 32,
+        marginBottom: 24,
+        textAlign: 'right',
     }
 });

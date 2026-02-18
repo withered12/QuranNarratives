@@ -101,10 +101,7 @@ export default function Home() {
                     </View>
                     <View style={styles.headerActions}>
                         <TouchableOpacity style={styles.iconButton}>
-                            <MaterialCommunityIcons name="magnify" size={20} color="#bf9540" />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.iconButton}>
-                            <MaterialCommunityIcons name="account" size={20} color="#bf9540" />
+                            <MaterialCommunityIcons name="menu" size={24} color="#bf9540" />
                         </TouchableOpacity>
                     </View>
                 </View>

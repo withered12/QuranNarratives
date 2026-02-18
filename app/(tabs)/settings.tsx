@@ -11,7 +11,7 @@ export default function SettingsScreen() {
     const version = Constants.expoConfig?.version || '1.0.0';
 
     const handleEmailSupport = () => {
-        Linking.openURL('mailto:aburawi@outlook.com');
+        Linking.openURL('mailto:support@nur.digital');
     };
 
     const Section = ({ title, children }: { title?: string, children: React.ReactNode }) => (
@@ -73,7 +73,7 @@ export default function SettingsScreen() {
 
                     {/* Data Sources Section */}
                     <Section title="مصادر البيانات">
-                        <Row label="نص القرآن" value="الرسم العثماني" />
+                        <Row label="نص القرآن" value="الرسم العثماني (Quran.com)" />
                         <Row label="التفسير" value="تفسير ابن كثير" />
                         <Row label="الروايات" value="أبحاث AAtech" isLast />
                     </Section>
