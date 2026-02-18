@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 24,
+        paddingHorizontal: 16, // Reduced
         paddingVertical: 16,
     },
     backButton: {
@@ -125,25 +125,25 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingHorizontal: 24, // Reverted
+        paddingHorizontal: 16, // Reduced
         overflow: 'visible',
     },
     timelineLine: {
         position: 'absolute',
-        start: 40, // 24 (pad) + 8 (node) + 8 (half width)
+        start: 24,
         top: 0,
         bottom: 0,
         width: 1,
     },
     timelineItemContainer: {
         position: 'relative',
-        paddingStart: 48, // Reverted
+        paddingStart: 32, // Reduced
         marginBottom: 24,
         overflow: 'visible',
     },
     nodeWrapper: {
         position: 'absolute',
-        start: 8, // Reduced
+        start: 0, // Reduced
         top: 20,
         overflow: 'visible',
     },
