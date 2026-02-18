@@ -1,9 +1,9 @@
-import { View, Text, FlatList, Pressable, StatusBar, I18nManager, TextInput } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Link, Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { getSurahList, searchStories } from '../../services/quranApi';
+import { FlatList, I18nManager, Pressable, StatusBar, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import { getSurahList, searchStories } from '../../services/quranApi';
 
 export default function Home() {
     const router = useRouter();
@@ -34,9 +34,18 @@ export default function Home() {
 
             <View className="px-6 pt-4" style={{ paddingHorizontal: 24, paddingTop: 16 }}>
                 {/* Header */}
-                <View className="mb-6" style={{ marginBottom: 24 }}>
-                    <Text className="text-4xl font-bold text-[#D4AF37] mb-2" style={{ color: '#D4AF37', fontSize: 36, fontWeight: 'bold', textAlign: alignAr }}>قصص القرآن</Text>
-                    <Text className="text-[#E0E0E0] text-lg opacity-80" style={{ color: '#E0E0E0', fontSize: 18, textAlign: alignAr }}>استكشف القصص والعبر في آيات الذكر الحكيم.</Text>
+                <View className="mb-6 flex-row items-start" style={{ marginBottom: 24, flexDirection: 'row', alignItems: 'flex-start' }}>
+                    <View className="flex-1" style={{ flex: 1 }}>
+                        <Text className="text-4xl font-bold text-[#D4AF37] mb-2" style={{ color: '#D4AF37', fontSize: 36, fontWeight: 'bold', textAlign: alignAr }}>قصص القرآن</Text>
+                        <Text className="text-[#E0E0E0] text-lg opacity-80" style={{ color: '#E0E0E0', fontSize: 18, textAlign: alignAr }}>استكشف القصص والعبر في آيات الذكر الحكيم.</Text>
+                    </View>
+                    <Pressable
+                        onPress={() => router.push('/settings')}
+                        className="p-2 bg-[#1E1E1E] rounded-full border border-[#D4AF37]/20"
+                        style={{ padding: 8, backgroundColor: '#1E1E1E', borderRadius: 999, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.2)', [isRTL ? 'marginRight' : 'marginLeft']: 12 }}
+                    >
+                        <Ionicons name="menu-outline" size={24} color="#D4AF37" />
+                    </Pressable>
                 </View>
 
                 {/* Smart Search Bar */}

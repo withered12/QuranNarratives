@@ -1,12 +1,12 @@
-import { View, Text, FlatList, ActivityIndicator, Pressable, I18nManager, useWindowDimensions, ScrollView } from 'react-native';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, I18nManager, Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
+import RenderHTML from 'react-native-render-html';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getStoryDetails, getStoryVerses } from '../../services/quranApi';
 import { fetchAndMergeNarrative } from '../../services/TafsirService';
 import { Ayah } from '../../types';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import RenderHTML from 'react-native-render-html';
 
 export default function Reader() {
     const { storyId, surahId } = useLocalSearchParams();
@@ -160,15 +160,10 @@ export default function Reader() {
 
                                 {/* Arabic Text */}
                                 <Text
-                                    className="text-3xl text-[#E0E0E0] mb-8 leading-[64px]"
-                                    style={{ fontSize: 32, color: '#E0E0E0', marginBottom: 32, lineHeight: 64, fontFamily: 'System', textAlign: alignAr }}
+                                    className="text-3xl text-[#E0E0E0] mb-2 leading-[64px]"
+                                    style={{ fontSize: 32, color: '#E0E0E0', marginBottom: 8, lineHeight: 64, fontFamily: 'System', textAlign: alignAr }}
                                 >
                                     {item.text}
-                                </Text>
-
-                                {/* English Translation */}
-                                <Text className="text-gray-400 text-lg leading-7 font-normal" style={{ color: '#9CA3AF', fontSize: 18, lineHeight: 28, textAlign: alignEn }}>
-                                    {item.translation}
                                 </Text>
                             </View>
                         )}
