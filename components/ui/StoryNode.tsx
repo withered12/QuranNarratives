@@ -18,35 +18,24 @@ export const StoryNode: React.FC<StoryNodeProps> = ({
     size = 20,
     glow = true
 }) => {
-    const scale = useSharedValue(1);
     const opacity = useSharedValue(0.4);
 
     useEffect(() => {
         if (glow) {
-            scale.value = withRepeat(
-                withSequence(
-                    withTiming(1.5, { duration: 1500 }),
-                    withTiming(1, { duration: 1500 })
-                ),
-                -1,
-                true
-            );
             opacity.value = withRepeat(
                 withSequence(
-                    withTiming(0.6, { duration: 1500 }),
-                    withTiming(0.2, { duration: 1500 })
+                    withTiming(0.8, { duration: 1500 }),
+                    withTiming(0.4, { duration: 1500 })
                 ),
                 -1,
                 true
             );
         } else {
-            scale.value = 1;
             opacity.value = 0.4;
         }
     }, [glow]);
 
     const animatedGlowStyles = useAnimatedStyle(() => ({
-        transform: [{ scale: scale.value }],
         opacity: opacity.value,
     }));
 
@@ -60,10 +49,12 @@ export const StoryNode: React.FC<StoryNodeProps> = ({
                     style={[
                         styles.glowRing,
                         {
-                            width: size * 2.5,
-                            height: size * 2.5,
-                            borderRadius: size * 1.25,
+                            width: size * 2.0, // Fixed size, no expansion
+                            height: size * 2.0,
+                            borderRadius: size,
                             backgroundColor: '#bf9540',
+                            top: -size * 0.5, // Center it (size/2 - size)
+                            left: -size * 0.5,
                         },
                         animatedGlowStyles
                     ]}
