@@ -1,73 +1,177 @@
-import { View, Text, FlatList, Pressable, I18nManager } from 'react-native';
-import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
-import { getSurahStories } from '../../services/quranApi';
+import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
+import { GoldGradientBorder } from '@/components/ui/GoldGradientBorder';
+import { StoryNode } from '@/components/ui/StoryNode';
+import { getSurahStories } from '@/services/quranApi';
+import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import React from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function SurahTimeline() {
     const { id } = useLocalSearchParams();
     const router = useRouter();
-    const isRTL = I18nManager.isRTL;
-
-    // Dynamic Alignment Strategy: Empirical fix (Left = Right in current env)
-    const alignAr = 'left';
-
     const surahId = Array.isArray(id) ? id[0] : id;
-    // @ts-ignore
     const data = getSurahStories(surahId || '');
 
-    if (!data) {
+    if (!data) return null;
+
+    const renderStoryItem = ({ item, index }: { item: any, index: number }) => {
         return (
-            <View className="flex-1 bg-[#121212] justify-center items-center" style={{ flex: 1, backgroundColor: '#121212', justifyContent: 'center', alignItems: 'center' }}>
-                <Text className="text-[#E0E0E0]" style={{ color: '#E0E0E0' }}>السورة غير موجودة</Text>
+            <View style={styles.timelineItemContainer}>
+                <View style={styles.nodeWrapper}>
+                    <StoryNode size={16} glow={true} />
+                </View>
+
+                <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={() => router.push({
+                        pathname: `/reader/${item.id}`,
+                        params: { surahId: surahId }
+                    })}
+                >
+                    <GoldGradientBorder borderRadius={12}>
+                        <View style={styles.cardContent}>
+                            <View style={styles.cardHeader}>
+                                <View>
+                                    <Text style={styles.ayahRange}>AYATS {item.start_ayah} — {item.end_ayah}</Text>
+                                    <Text style={styles.storyTitle}>{item.title_ar}</Text>
+                                </View>
+                                <MaterialCommunityIcons name="chevron-right" size={20} color="#bf9540" />
+                            </View>
+                            <Text style={styles.storySummary} numberOfLines={3}>
+                                {item.summary_ar}
+                            </Text>
+                        </View>
+                    </GoldGradientBorder>
+                </TouchableOpacity>
             </View>
         );
-    }
+    };
 
     return (
-        <SafeAreaView className="flex-1 bg-[#121212]" edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: '#121212' }}>
-            <Stack.Screen options={{ headerShown: false }} />
+        <BackgroundPattern>
+            <SafeAreaView style={styles.safeArea}>
+                <Stack.Screen options={{ headerShown: false }} />
 
-            <View className="px-6 py-4 flex-row items-center justify-between" style={{ flexDirection: 'row', paddingHorizontal: 24, paddingVertical: 16, alignItems: 'center', justifyContent: 'space-between' }}>
-                <Pressable onPress={() => router.back()} className="p-2">
-                    <Ionicons name={isRTL ? "arrow-forward" : "arrow-back"} size={24} color="#D4AF37" />
-                </Pressable>
-                <Text className="text-2xl font-bold text-[#D4AF37]" style={{ color: '#D4AF37', fontSize: 28, fontWeight: 'bold' }}>سورة {data.name_ar}</Text>
-                <View style={{ width: 40 }} />
-            </View>
-
-            <Text className="text-center text-gray-400 mb-6" style={{ textAlign: 'center', color: '#9CA3AF', marginBottom: 24 }}>التسلسل الزمني للقصص</Text>
-
-            <FlatList
-                data={data.stories}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 40 }}
-                renderItem={({ item, index }) => (
-                    <View className="flex-row items-start" style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                        {/* Timeline Line */}
-                        <View className="items-center pt-2" style={{ alignItems: 'center', width: 24, marginRight: isRTL ? 0 : 16, marginLeft: isRTL ? 16 : 0, paddingTop: 8 }}>
-                            <View className="w-4 h-4 rounded-full bg-[#D4AF37] z-10" style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: '#D4AF37', zIndex: 10 }} />
-                            {index < data.stories.length - 1 && (
-                                <View className="w-0.5 h-full bg-gray-700 absolute top-4" style={{ width: 2, height: '100%', backgroundColor: '#374151', position: 'absolute', top: 16 }} />
-                            )}
-                        </View>
-
-                        {/* Content */}
-                        <Pressable
-                            onPress={() => router.push({
-                                pathname: `/reader/${item.id}`,
-                                params: { surahId: surahId }
-                            })}
-                            className="flex-1 bg-[#1E1E1E] p-5 rounded-2xl mb-8 border border-gray-800"
-                            style={{ flex: 1, backgroundColor: '#1E1E1E', padding: 20, borderRadius: 16, marginBottom: 32, borderWidth: 1, borderColor: '#1F2937', alignItems: isRTL ? 'flex-start' : 'flex-start' }}
-                        >
-                            <Text className="text-xl font-bold text-[#E0E0E0] mb-1" style={{ color: '#E0E0E0', fontSize: 20, fontWeight: 'bold', textAlign: alignAr }}>{item.title_ar}</Text>
-                            <Text className="text-[#D4AF37] text-sm mb-3 font-semibold" style={{ color: '#D4AF37', fontSize: 14, marginBottom: 12, fontWeight: '600', textAlign: alignAr }}>الآيات {item.start_ayah} - {item.end_ayah}</Text>
-                            <Text className="text-gray-400 text-sm leading-6" style={{ color: '#9CA3AF', fontSize: 16, lineHeight: 24, textAlign: alignAr }}>{item.summary_ar}</Text>
-                        </Pressable>
+                {/* Sub Header */}
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+                        <MaterialCommunityIcons name="arrow-left" size={24} color="#bf9540" />
+                    </TouchableOpacity>
+                    <View style={styles.titleContainer}>
+                        <Text style={styles.subtitle}>SURAH</Text>
+                        <Text style={styles.title}>{data.name_ar}</Text>
                     </View>
-                )}
-            />
-        </SafeAreaView>
+                    <View style={{ width: 40 }} />
+                </View>
+
+                <View style={styles.content}>
+                    {/* Central Vertical Line */}
+                    <LinearGradient
+                        colors={['rgba(191,149,64,0)', 'rgba(191,149,64,0.4)', 'rgba(191,149,64,0)']}
+                        style={styles.timelineLine}
+                    />
+
+                    <FlatList
+                        data={data.stories}
+                        renderItem={renderStoryItem}
+                        keyExtractor={item => item.id}
+                        contentContainerStyle={styles.listContent}
+                        showsVerticalScrollIndicator={false}
+                    />
+                </View>
+            </SafeAreaView>
+        </BackgroundPattern>
     );
 }
+
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 24,
+        paddingVertical: 16,
+    },
+    backButton: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(191, 149, 64, 0.1)',
+    },
+    titleContainer: {
+        alignItems: 'center',
+    },
+    subtitle: {
+        fontFamily: 'Cinzel_400Regular',
+        fontSize: 10,
+        letterSpacing: 3,
+        color: 'rgba(191, 149, 64, 0.6)',
+    },
+    title: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 22,
+        color: '#bf9540',
+        marginTop: 2,
+    },
+    content: {
+        flex: 1,
+        paddingHorizontal: 24,
+    },
+    timelineLine: {
+        position: 'absolute',
+        left: 24 + 8, // Match nodes
+        top: 0,
+        bottom: 0,
+        width: 1,
+    },
+    timelineItemContainer: {
+        position: 'relative',
+        paddingLeft: 40,
+        marginBottom: 24,
+    },
+    nodeWrapper: {
+        position: 'absolute',
+        left: 0,
+        top: 20,
+    },
+    cardContent: {
+        backgroundColor: 'rgba(10, 12, 20, 0.95)',
+        padding: 16,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 8,
+    },
+    ayahRange: {
+        fontSize: 10,
+        fontFamily: 'Lato_700Bold',
+        color: 'rgba(191, 149, 64, 0.8)',
+        letterSpacing: 1,
+    },
+    storyTitle: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 18,
+        color: '#ffffff',
+        marginTop: 2,
+    },
+    storySummary: {
+        color: 'rgba(255, 255, 255, 0.6)',
+        fontSize: 14,
+        lineHeight: 20,
+        fontFamily: 'Newsreader_400Regular',
+    },
+    listContent: {
+        paddingTop: 20,
+        paddingBottom: 40,
+    }
+});

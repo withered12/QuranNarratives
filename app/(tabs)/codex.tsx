@@ -1,141 +1,257 @@
-import { View, Text, FlatList, Pressable, ScrollView, I18nManager } from 'react-native';
-import { useRouter, Stack } from 'expo-router';
-import { useState } from 'react';
-import { getAllStories, getAllProphetsAr, getAllTagsAr, getChronologicalStories } from '../../services/quranApi';
+import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
+import { GoldGradientBorder } from '@/components/ui/GoldGradientBorder';
+import { getAllProphetsAr, getAllTagsAr } from '@/services/quranApi';
+import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Stack, useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
 
-type Tab = 'Prophets' | 'Themes' | 'Timeline';
+type Tab = 'Prophets' | 'Themes' | 'Chronicles';
 
 export default function Codex() {
     const router = useRouter();
-    const isRTL = I18nManager.isRTL;
     const [activeTab, setActiveTab] = useState<Tab>('Prophets');
-    const [filter, setFilter] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const prophets = getAllProphetsAr();
-    const tags = getAllTagsAr();
-    const allStories = getAllStories();
-    const chronoStories = getChronologicalStories();
+    const themes = getAllTagsAr();
 
-    const filteredStories = allStories.filter(s => {
-        if (!filter) return false;
-        if (activeTab === 'Prophets') return s.prophets_ar?.includes(filter);
-        if (activeTab === 'Themes') return s.tags_ar?.includes(filter);
-        return true;
-    });
-
-    const renderStoryItem = ({ item }: { item: any }) => (
-        <Pressable
-            onPress={() => router.push({
-                pathname: `/reader/${item.id}`,
-                params: { surahId: item.surahId }
-            })}
-            className="bg-[#1E1E1E] p-4 rounded-xl mb-4 border border-gray-800"
-            style={{ backgroundColor: '#1E1E1E', padding: 16, borderRadius: 12, marginBottom: 12, borderWidth: 1, borderColor: '#1F2937' }}
+    const renderCategoryItem = (item: string) => (
+        <TouchableOpacity
+            key={item}
+            style={styles.categoryCard}
         >
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <View className="flex-1">
-                    <Text className="text-lg font-bold text-[#E0E0E0]" style={{ color: '#E0E0E0', fontSize: 18, fontWeight: 'bold', textAlign: 'right' }}>{item.title_ar}</Text>
-                    <Text className="text-[#D4AF37] text-xs" style={{ color: '#D4AF37', fontSize: 12, textAlign: 'left' }}>{item.title}</Text>
+            <GoldGradientBorder borderRadius={12}>
+                <View style={styles.categoryContent}>
+                    <Text style={styles.categoryTextAr}>{item}</Text>
+                    <MaterialCommunityIcons name="chevron-right" size={16} color="#bf9540" />
                 </View>
-                <Ionicons name="chevron-forward" size={20} color="#D4AF37" />
-            </View>
-        </Pressable>
+            </GoldGradientBorder>
+        </TouchableOpacity>
     );
 
     return (
-        <SafeAreaView className="flex-1 bg-[#121212]" style={{ flex: 1, backgroundColor: '#121212' }}>
-            <Stack.Screen options={{ headerShown: false }} />
+        <BackgroundPattern>
+            <SafeAreaView style={styles.safeArea}>
+                <Stack.Screen options={{ headerShown: false }} />
 
-            {/* Header */}
-            <View className="px-6 py-4 flex-row items-center justify-between" style={{ flexDirection: 'row', paddingHorizontal: 24, paddingVertical: 16, alignItems: 'center', justifyContent: 'space-between' }}>
-                <Pressable onPress={() => router.back()} className="p-2">
-                    <Ionicons name="arrow-forward" size={24} color="#D4AF37" />
-                </Pressable>
-                <Text className="text-2xl font-bold text-[#D4AF37]" style={{ color: '#D4AF37', fontSize: 28, fontWeight: 'bold' }}>الفهرس العام</Text>
-                <View style={{ width: 40 }} />
-            </View>
-
-            {/* Custom Tab Bar */}
-            <View className="flex-row px-4 mb-6" style={{ flexDirection: 'row', paddingHorizontal: 16, marginBottom: 24 }}>
-                {(['Prophets', 'Themes', 'Timeline'] as Tab[]).map((tab) => (
-                    <Pressable
-                        key={tab}
-                        onPress={() => { setActiveTab(tab); setFilter(null); }}
-                        className={`flex-1 py-3 items-center ${activeTab === tab ? 'border-b-2 border-[#D4AF37]' : ''}`}
-                        style={{ flex: 1, paddingVertical: 12, alignItems: 'center', borderBottomWidth: activeTab === tab ? 2 : 0, borderBottomColor: '#D4AF37' }}
-                    >
-                        <Text
-                            className={`font-semibold ${activeTab === tab ? 'text-[#D4AF37]' : 'text-gray-500'}`}
-                            style={{ color: activeTab === tab ? '#D4AF37' : '#6B7280', fontWeight: 'bold' }}
-                        >
-                            {tab === 'Prophets' ? 'الأنبياء' : tab === 'Themes' ? 'المواضيع' : 'التسلسل التاريخي'}
-                        </Text>
-                    </Pressable>
-                ))}
-            </View>
-
-            <View className="flex-1 px-6" style={{ flex: 1, paddingHorizontal: 24 }}>
-                {activeTab === 'Prophets' && !filter && (
-                    <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-                        {prophets.map(p => (
-                            <Pressable
-                                key={p}
-                                onPress={() => setFilter(p)}
-                                className="bg-[#1E1E1E] px-4 py-2 rounded-full m-1 border border-[#D4AF37]/30"
-                                style={{ backgroundColor: '#1E1E1E', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, margin: 4, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.3)' }}
-                            >
-                                <Text style={{ color: '#E0E0E0', fontSize: 16 }}>{p}</Text>
-                            </Pressable>
-                        ))}
-                    </ScrollView>
-                )}
-
-                {activeTab === 'Themes' && !filter && (
-                    <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
-                        {tags.map(t => (
-                            <Pressable
-                                key={t}
-                                onPress={() => setFilter(t)}
-                                className="bg-[#D4AF37]/10 px-4 py-2 rounded-lg m-1 border border-[#D4AF37]/20"
-                                style={{ backgroundColor: 'rgba(212, 175, 55, 0.1)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8, margin: 4, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.2)' }}
-                            >
-                                <Text style={{ color: '#D4AF37', fontSize: 14 }}>#{t}</Text>
-                            </Pressable>
-                        ))}
-                    </ScrollView>
-                )}
-
-                {activeTab === 'Timeline' && (
-                    <FlatList
-                        data={chronoStories}
-                        keyExtractor={(item) => item.id}
-                        renderItem={renderStoryItem}
-                        ListHeaderComponent={() => (
-                            <Text className="text-gray-500 mb-4 text-xs italic" style={{ color: '#6B7280', marginBottom: 16, textAlign: 'center' }}>
-                                ترتيب القصص حسب التسلسل الزمني للأنبياء
-                            </Text>
-                        )}
-                    />
-                )}
-
-                {filter && (activeTab === 'Prophets' || activeTab === 'Themes') && (
-                    <View style={{ flex: 1 }}>
-                        <View className="flex-row justify-between items-center mb-4" style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                            <Pressable onPress={() => setFilter(null)}>
-                                <Text style={{ color: '#D4AF37', fontSize: 16 }}>إلغاء</Text>
-                            </Pressable>
-                            <Text className="text-[#E0E0E0] font-bold text-lg" style={{ color: '#E0E0E0', fontWeight: 'bold', fontSize: 18 }}>{filter}</Text>
-                        </View>
-                        <FlatList
-                            data={filteredStories}
-                            keyExtractor={(item) => item.id}
-                            renderItem={renderStoryItem}
-                        />
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    {/* Header */}
+                    <View style={styles.header}>
+                        <Text style={styles.headerSubtitle}>DISCOVER</Text>
+                        <Text style={styles.headerTitle}>CHRONICLES</Text>
                     </View>
-                )}
-            </View>
-        </SafeAreaView>
+
+                    {/* Search Bar */}
+                    <View style={styles.searchContainer}>
+                        <View style={styles.searchBackground}>
+                            <MaterialCommunityIcons name="magnify" size={20} color="rgba(191, 149, 64, 0.6)" />
+                            <TextInput
+                                placeholder="PROPHETS, THEMES, OR PLACES..."
+                                placeholderTextColor="rgba(191, 149, 64, 0.4)"
+                                style={styles.searchInput}
+                                value={searchQuery}
+                                onChangeText={setSearchQuery}
+                            />
+                        </View>
+                    </View>
+
+                    {/* Tab Switcher */}
+                    <View style={styles.tabContainer}>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabScroll}>
+                            {(['Prophets', 'Themes', 'Chronicles'] as Tab[]).map((tab) => (
+                                <TouchableOpacity
+                                    key={tab}
+                                    onPress={() => setActiveTab(tab)}
+                                    style={[styles.tabButton, activeTab === tab && styles.tabButtonActive]}
+                                >
+                                    <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
+                                        {tab.toUpperCase()}
+                                    </Text>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    </View>
+
+                    {/* Featured Sections */}
+                    <View style={styles.sectionContainer}>
+                        <Text style={styles.sectionTitle}>CURATED SELECTIONS</Text>
+                        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.featuredScroll}>
+                            {[1, 2, 3].map((i) => (
+                                <TouchableOpacity key={i} style={styles.featuredCard}>
+                                    <GoldGradientBorder borderRadius={20}>
+                                        <View style={styles.featuredContent}>
+                                            <LinearGradient
+                                                colors={['rgba(191,149,64,0.3)', 'transparent', 'rgba(10,12,20,0.9)']}
+                                                style={styles.featuredOverlay}
+                                            />
+                                            <View style={styles.featuredTextContainer}>
+                                                <Text style={styles.featuredTag}>CHAPTER {i}</Text>
+                                                <Text style={styles.featuredTitle}>Prophetic Wisdom</Text>
+                                            </View>
+                                        </View>
+                                    </GoldGradientBorder>
+                                </TouchableOpacity>
+                            ))}
+                        </ScrollView>
+                    </View>
+
+                    {/* List Section */}
+                    <View style={styles.listContainer}>
+                        <Text style={styles.sectionTitle}>{activeTab.toUpperCase()}</Text>
+                        <View style={styles.categoryGrid}>
+                            {activeTab === 'Prophets' ? prophets.map(renderCategoryItem) :
+                                activeTab === 'Themes' ? themes.map(renderCategoryItem) :
+                                    [1, 2, 3, 4, 5].map(i => renderCategoryItem(`Chronicle ${i}`))}
+                        </View>
+                    </View>
+
+                    <View style={{ height: 100 }} />
+                </ScrollView>
+            </SafeAreaView>
+        </BackgroundPattern>
     );
 }
+
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+    },
+    header: {
+        paddingHorizontal: 24,
+        paddingTop: 24,
+        marginBottom: 24,
+    },
+    headerSubtitle: {
+        fontFamily: 'Cinzel_400Regular',
+        fontSize: 10,
+        letterSpacing: 4,
+        color: 'rgba(191, 149, 64, 0.6)',
+    },
+    headerTitle: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 28,
+        color: '#bf9540',
+        marginTop: 4,
+        letterSpacing: 2,
+    },
+    searchContainer: {
+        paddingHorizontal: 24,
+        marginBottom: 32,
+    },
+    searchBackground: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.03)',
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderWidth: 1,
+        borderColor: 'rgba(191, 149, 64, 0.1)',
+    },
+    searchInput: {
+        flex: 1,
+        marginLeft: 12,
+        color: '#F5F5DC',
+        fontFamily: 'Lato_700Bold',
+        fontSize: 12,
+        letterSpacing: 1,
+    },
+    tabContainer: {
+        marginBottom: 32,
+    },
+    tabScroll: {
+        paddingHorizontal: 24,
+        gap: 12,
+    },
+    tabButton: {
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'rgba(191, 149, 64, 0.2)',
+        backgroundColor: 'rgba(191, 149, 64, 0.02)',
+    },
+    tabButtonActive: {
+        backgroundColor: '#bf9540',
+        borderColor: '#bf9540',
+    },
+    tabText: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 10,
+        color: 'rgba(191, 149, 64, 0.6)',
+        letterSpacing: 1,
+    },
+    tabTextActive: {
+        color: '#0a0c14',
+    },
+    sectionContainer: {
+        marginBottom: 32,
+    },
+    sectionTitle: {
+        paddingHorizontal: 24,
+        marginBottom: 16,
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 10,
+        color: 'rgba(255, 255, 255, 0.4)',
+        letterSpacing: 2,
+    },
+    featuredScroll: {
+        paddingHorizontal: 24,
+        gap: 16,
+    },
+    featuredCard: {
+        width: 280,
+        height: 180,
+    },
+    featuredContent: {
+        flex: 1,
+        backgroundColor: '#111827',
+        borderRadius: 20,
+        overflow: 'hidden',
+    },
+    featuredOverlay: {
+        ...StyleSheet.absoluteFillObject,
+    },
+    featuredTextContainer: {
+        position: 'absolute',
+        bottom: 20,
+        left: 20,
+    },
+    featuredTag: {
+        fontFamily: 'Lato_700Bold',
+        fontSize: 8,
+        color: '#bf9540',
+        letterSpacing: 2,
+        marginBottom: 4,
+    },
+    featuredTitle: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 18,
+        color: '#ffffff',
+    },
+    listContainer: {
+        paddingHorizontal: 24,
+    },
+    categoryGrid: {
+        gap: 12,
+    },
+    categoryCard: {
+        width: '100%',
+    },
+    categoryContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        backgroundColor: 'rgba(10, 12, 20, 0.95)',
+    },
+    categoryTextAr: {
+        fontFamily: 'Amiri_400Regular',
+        fontSize: 18,
+        color: '#F5F5DC',
+    }
+});

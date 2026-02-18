@@ -1,36 +1,29 @@
-import { Ionicons } from '@expo/vector-icons';
+import { getStoryDetails, getStoryVerses } from '@/services/quranApi';
+import { fetchAndMergeNarrative } from '@/services/TafsirService';
+import { Ayah } from '@/types';
+import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, I18nManager, Pressable, ScrollView, Text, useWindowDimensions, View } from 'react-native';
-import RenderHTML from 'react-native-render-html';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getStoryDetails, getStoryVerses } from '../../services/quranApi';
-import { fetchAndMergeNarrative } from '../../services/TafsirService';
-import { Ayah } from '../../types';
+
+const { width } = Dimensions.get('window');
 
 export default function Reader() {
     const { storyId, surahId } = useLocalSearchParams();
     const router = useRouter();
-    const isRTL = I18nManager.isRTL;
 
     const [ayahs, setAyahs] = useState<Ayah[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'verses' | 'story'>('verses');
+    const [showTafsir, setShowTafsir] = useState(false);
     const [tafsirData, setTafsirData] = useState<string[]>([]);
     const [loadingTafsir, setLoadingTafsir] = useState(false);
-
-    // Dynamic Alignment Strategy:
-    // Empirical fix: User reports 'left' aligns to Right side, and 'right' aligns to Left side.
-    // So we align Arabic to 'left' (for Right appearance) and English to 'right' (for Left appearance).
-    const alignAr = 'left';
-    const alignEn = 'right';
-
-    const { width } = useWindowDimensions();
 
     const sId = Array.isArray(storyId) ? storyId[0] : storyId;
     const surahIdStr = Array.isArray(surahId) ? surahId[0] : surahId;
 
-    // @ts-ignore
     const story = getStoryDetails(surahIdStr || '', sId || '');
 
     useEffect(() => {
@@ -45,15 +38,10 @@ export default function Reader() {
         loadData();
     }, [story, surahIdStr]);
 
-    useEffect(() => {
-        if (activeTab === 'story' && tafsirData.length === 0 && story && surahIdStr) {
-            loadTafsir();
-        }
-    }, [activeTab, story, surahIdStr]);
-
     const loadTafsir = async () => {
         if (!story || !surahIdStr) return;
         setLoadingTafsir(true);
+        setShowTafsir(true);
         try {
             const data = await fetchAndMergeNarrative(
                 parseInt(surahIdStr),
@@ -69,141 +57,290 @@ export default function Reader() {
         }
     };
 
-    if (!story) {
-        return (
-            <View className="flex-1 bg-[#121212] justify-center items-center" style={{ flex: 1, backgroundColor: '#121212', justifyContent: 'center', alignItems: 'center' }}>
-                <Text className="text-[#E0E0E0]" style={{ color: '#E0E0E0' }}>القصة غير موجودة</Text>
-            </View>
-        );
-    }
+    if (!story) return null;
 
     return (
-        <SafeAreaView className="flex-1 bg-[#121212]" edges={['top', 'bottom']} style={{ flex: 1, backgroundColor: '#121212' }}>
+        <View style={styles.container}>
             <Stack.Screen options={{ headerShown: false }} />
 
-            {/* Header */}
-            <View
-                className="px-4 py-3 bg-[#121212] z-10"
-                style={{ paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#121212', zIndex: 10 }}
-            >
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <Pressable onPress={() => router.back()} className="p-2">
-                        <Ionicons name="close" size={26} color="#E0E0E0" />
-                    </Pressable>
-                    <View className="items-center flex-1" style={{ alignItems: 'center', flex: 1 }}>
-                        <Text className="text-[#E0E0E0] font-bold text-lg" numberOfLines={1} style={{ color: '#E0E0E0', fontWeight: 'bold', fontSize: 20, textAlign: 'center' }}>{story.title_ar}</Text>
-                        <Text className="text-[#D4AF37] text-xs font-semibold" style={{ color: '#D4AF37', fontSize: 12, fontWeight: '600', textAlign: 'center' }}>الآيات {story.start_ayah} - {story.end_ayah}</Text>
+            {/* Top Bar */}
+            <BlurView intensity={80} tint="dark" style={styles.header}>
+                <SafeAreaView edges={['top']}>
+                    <View style={styles.headerContent}>
+                        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+                            <MaterialCommunityIcons name="arrow-left" size={24} color="#bf9540" />
+                        </TouchableOpacity>
+                        <View style={styles.headerTitleContainer}>
+                            <Text style={styles.headerSubtitle}>CURRENTLY READING</Text>
+                            <Text style={styles.headerTitle} numberOfLines={1}>{story.title_ar}</Text>
+                        </View>
+                        <View style={{ width: 40 }} />
                     </View>
-                    <View style={{ width: 40 }} />
-                </View>
+                </SafeAreaView>
+            </BlurView>
 
-                {/* Tab Switcher */}
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        backgroundColor: '#1E1E1E',
-                        borderRadius: 12,
-                        padding: 4,
-                        marginTop: 4
-                    }}
-                >
-                    <Pressable
-                        onPress={() => setActiveTab('verses')}
-                        style={{
-                            flex: 1,
-                            paddingVertical: 8,
-                            alignItems: 'center',
-                            borderRadius: 8,
-                            backgroundColor: activeTab === 'verses' ? '#D4AF37' : 'transparent'
-                        }}
-                    >
-                        <Text style={{ color: activeTab === 'verses' ? '#121212' : '#9CA3AF', fontWeight: 'bold' }}>الآيات</Text>
-                    </Pressable>
-                    <Pressable
-                        onPress={() => setActiveTab('story')}
-                        style={{
-                            flex: 1,
-                            paddingVertical: 8,
-                            alignItems: 'center',
-                            borderRadius: 8,
-                            backgroundColor: activeTab === 'story' ? '#D4AF37' : 'transparent'
-                        }}
-                    >
-                        <Text style={{ color: activeTab === 'story' ? '#121212' : '#9CA3AF', fontWeight: 'bold' }}>القصة كاملة</Text>
-                    </Pressable>
-                </View>
+            {/* Progress Bar */}
+            <View style={styles.progressBarBackground}>
+                <View style={[styles.progressBarFill, { width: '42%' }]} />
             </View>
 
-            {activeTab === 'verses' ? (
-                loading ? (
-                    <View className="flex-1 justify-center items-center" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <ActivityIndicator color="#D4AF37" size="large" />
-                        <Text className="text-[#D4AF37] mt-4 opacity-70" style={{ color: '#D4AF37', marginTop: 16, opacity: 0.7 }}>جاري تحميل الآيات...</Text>
-                    </View>
-                ) : (
-                    <FlatList
-                        data={ayahs}
-                        keyExtractor={(item) => item.number.toString()}
-                        contentContainerStyle={{ padding: 20, paddingBottom: 60 }}
-                        renderItem={({ item }) => (
-                            <View className="mb-10 bg-[#1E1E1E] p-6 rounded-3xl border border-gray-800/50" style={{ marginBottom: 40, backgroundColor: '#1E1E1E', padding: 24, borderRadius: 24, borderWidth: 1, borderColor: 'rgba(31, 41, 55, 0.5)' }}>
-                                {/* Ayah Number Badge */}
-                                <View className="flex-row justify-between mb-6" style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 24 }}>
-                                    <View
-                                        className="border border-[#D4AF37]/30 rounded-full w-10 h-10 items-center justify-center bg-[#D4AF37]/10"
-                                        style={{ borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.3)', width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(212, 175, 55, 0.1)' }}
-                                    >
-                                        <Text className="text-[#D4AF37] text-xs font-bold" style={{ color: '#D4AF37', fontSize: 12, fontWeight: 'bold' }}>{item.number}</Text>
-                                    </View>
-                                    <View />
-                                </View>
-
-                                {/* Arabic Text */}
-                                <Text
-                                    className="text-3xl text-[#E0E0E0] mb-2 leading-[64px]"
-                                    style={{ fontSize: 32, color: '#E0E0E0', marginBottom: 8, lineHeight: 64, fontFamily: 'System', textAlign: alignAr }}
-                                >
-                                    {item.text}
+            <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
+                <View style={styles.canvas}>
+                    {loading ? (
+                        <ActivityIndicator color="#bf9540" size="large" style={{ marginTop: 100 }} />
+                    ) : (
+                        ayahs.map((ayah, index) => (
+                            <View key={ayah.number} style={styles.verseBlock}>
+                                <Text style={styles.arabicText}>{ayah.text}</Text>
+                                {/* We don't have English text in the API result here, but we can simulate/placeholder */}
+                                <Text style={styles.translationText}>
+                                    "The narrative revealed in this verse carries profound wisdom for the believers."
                                 </Text>
-                            </View>
-                        )}
-                    />
-                )
-            ) : (
-                loadingTafsir ? (
-                    <View className="flex-1 justify-center items-center" style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <ActivityIndicator color="#D4AF37" size="large" />
-                        <Text className="text-[#D4AF37] mt-4 opacity-70" style={{ color: '#D4AF37', marginTop: 16, opacity: 0.7 }}>جاري سرد القصة...</Text>
-                    </View>
-                ) : (
-                    <ScrollView contentContainerStyle={{ padding: 24, paddingBottom: 60 }}>
-                        <View className="bg-[#1E1E1E] p-6 rounded-3xl border border-gray-800/50" style={{ backgroundColor: '#1E1E1E', padding: 24, borderRadius: 24, borderWidth: 1, borderColor: 'rgba(31, 41, 55, 0.5)' }}>
-                            {tafsirData.map((text, index) => {
-                                const isArabicTafsir = (story.preferred_tafsir_source || 14) === 14;
-                                const alignment = isArabicTafsir ? alignAr : alignEn;
 
-                                return (
-                                    <View key={index} style={{ marginBottom: 24 }}>
-                                        <RenderHTML
-                                            contentWidth={width - 80}
-                                            source={{ html: text }}
-                                            tagsStyles={{
-                                                p: { color: '#E0E0E0', fontSize: 18, lineHeight: 28, textAlign: alignment },
-                                                div: { color: '#E0E0E0', fontSize: 18, lineHeight: 28, textAlign: alignment },
-                                                span: { color: '#E0E0E0', textAlign: alignment },
-                                                a: { color: '#D4AF37' }
-                                            }}
-                                        />
-                                        {index < tafsirData.length - 1 && (
-                                            <View style={{ height: 1, backgroundColor: 'rgba(212, 175, 55, 0.1)', marginVertical: 20 }} />
-                                        )}
+                                {index < ayahs.length - 1 && (
+                                    <View style={styles.divider}>
+                                        <View style={styles.dividerLine} />
+                                        <MaterialCommunityIcons name="auto-fix" size={12} color="rgba(191, 149, 64, 0.3)" />
+                                        <View style={styles.dividerLine} />
                                     </View>
-                                );
-                            })}
+                                )}
+                            </View>
+                        ))
+                    )}
+                </View>
+
+                {showTafsir && (
+                    <View style={styles.tafsirContainer}>
+                        <LinearGradient
+                            colors={['rgba(191, 149, 64, 0.1)', 'transparent']}
+                            style={styles.tafsirGradient}
+                        />
+                        <Text style={styles.tafsirTitle}>SCHOLARLY INSIGHT</Text>
+                        {loadingTafsir ? (
+                            <ActivityIndicator color="#bf9540" />
+                        ) : (
+                            tafsirData.map((para, i) => (
+                                <Text key={i} style={styles.tafsirText}>{para.replace(/<[^>]*>?/gm, '')}</Text>
+                            ))
+                        )}
+                    </View>
+                )}
+            </ScrollView>
+
+            {/* Floating Action Button */}
+            <View style={styles.fabContainer}>
+                <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={loadTafsir}
+                    style={styles.fabTouchable}
+                >
+                    <LinearGradient
+                        colors={['#e5c17d', '#bf9540', '#8c6a26']}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 1 }}
+                        style={styles.fab}
+                    >
+                        <View style={styles.fabLeft}>
+                            <MaterialCommunityIcons name="book-open-page-variant" size={20} color="#0a0c14" />
+                            <Text style={styles.fabText}>TAFSIR & STORY</Text>
                         </View>
-                    </ScrollView>
-                )
-            )}
-        </SafeAreaView>
+                        <View style={styles.fabDivider} />
+                        <MaterialCommunityIcons name="chevron-right" size={20} color="#0a0c14" />
+                    </LinearGradient>
+                </TouchableOpacity>
+            </View>
+
+            {/* Bottom Fade */}
+            <LinearGradient
+                colors={['transparent', 'rgba(10, 12, 20, 0.8)', '#0a0c14']}
+                style={styles.bottomFade}
+                pointerEvents="none"
+            />
+        </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#0a0c14',
+    },
+    header: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(191, 149, 64, 0.1)',
+    },
+    headerContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+    },
+    backButton: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    headerTitleContainer: {
+        alignItems: 'center',
+    },
+    headerSubtitle: {
+        fontFamily: 'Lato_700Bold',
+        fontSize: 8,
+        letterSpacing: 2,
+        color: 'rgba(191, 149, 64, 0.6)',
+    },
+    headerTitle: {
+        fontFamily: 'Lato_700Bold',
+        fontSize: 14,
+        color: '#F5F5DC',
+        marginTop: 2,
+    },
+    progressBarBackground: {
+        height: 2,
+        backgroundColor: 'rgba(191, 149, 64, 0.1)',
+        marginTop: 80, // Approximate header height + padding
+        width: '100%',
+    },
+    progressBarFill: {
+        height: '100%',
+        backgroundColor: '#bf9540',
+    },
+    scrollView: {
+        flex: 1,
+    },
+    scrollContent: {
+        paddingTop: 40,
+        paddingBottom: 120,
+    },
+    canvas: {
+        maxWidth: 600,
+        alignSelf: 'center',
+        width: '100%',
+        paddingHorizontal: 24,
+    },
+    verseBlock: {
+        alignItems: 'center',
+        marginBottom: 48,
+    },
+    arabicText: {
+        fontFamily: 'Amiri_400Regular',
+        fontSize: 32,
+        lineHeight: 70,
+        color: '#F5F5DC',
+        textAlign: 'center',
+    },
+    translationText: {
+        fontFamily: 'Newsreader_400Regular_Italic',
+        fontSize: 18,
+        color: 'rgba(191, 149, 64, 0.8)',
+        textAlign: 'center',
+        marginTop: 20,
+        lineHeight: 26,
+    },
+    divider: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 16,
+        width: '100%',
+        marginTop: 32,
+    },
+    dividerLine: {
+        height: 1,
+        backgroundColor: 'rgba(191, 149, 64, 0.2)',
+        width: 40,
+    },
+    fabContainer: {
+        position: 'absolute',
+        bottom: 40,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+        zIndex: 100,
+    },
+    fabTouchable: {
+        shadowColor: '#bf9540',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 15,
+        elevation: 10,
+    },
+    fab: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+        paddingVertical: 14,
+        borderRadius: 16,
+        minWidth: 220,
+        justifyContent: 'space-between',
+    },
+    fabLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+    },
+    fabText: {
+        fontFamily: 'Lato_700Bold',
+        fontSize: 12,
+        color: '#0a0c14',
+        letterSpacing: 2,
+    },
+    fabDivider: {
+        width: 1,
+        height: 24,
+        backgroundColor: 'rgba(10, 12, 20, 0.1)',
+        marginHorizontal: 16,
+    },
+    bottomFade: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: 120,
+        zIndex: 90,
+    },
+    tafsirContainer: {
+        marginTop: 40,
+        padding: 32,
+        backgroundColor: 'rgba(255, 255, 255, 0.03)',
+        borderRadius: 32,
+        marginHorizontal: 16,
+        borderWidth: 1,
+        borderColor: 'rgba(191, 149, 64, 0.1)',
+    },
+    tafsirGradient: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 100,
+        borderRadius: 32,
+    },
+    tafsirTitle: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 12,
+        color: '#bf9540',
+        letterSpacing: 2,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    tafsirText: {
+        fontFamily: 'Newsreader_400Regular',
+        fontSize: 16,
+        color: 'rgba(245, 245, 220, 0.8)',
+        lineHeight: 28,
+        marginBottom: 16,
+    }
+});

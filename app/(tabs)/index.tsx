@@ -1,144 +1,360 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Link, Stack, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { FlatList, I18nManager, Pressable, StatusBar, Text, TextInput, View } from 'react-native';
+import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
+import { GoldGradientBorder } from '@/components/ui/GoldGradientBorder';
+import { StoryNode } from '@/components/ui/StoryNode';
+import { getSurahList } from '@/services/quranApi';
+import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Link } from 'expo-router';
+import React from 'react';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getSurahList, searchStories } from '../../services/quranApi';
 
 export default function Home() {
-    const router = useRouter();
     const surahs = getSurahList();
-    const isRTL = I18nManager.isRTL;
 
-    // Dynamic Alignment Strategy: Empirical fix
-    const alignAr = 'left'; // Goal: Right
-    const alignEn = 'right'; // Goal: Left
+    const renderTimelineItem = ({ item, index }: { item: any, index: number }) => {
+        const isLocked = index > 1; // Simulation for demo
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState<any[]>([]);
+        return (
+            <View style={styles.timelineItemContainer}>
+                {/* Story Node (Pearl) */}
+                <View style={styles.nodeWrapper}>
+                    <StoryNode size={20} glow={!isLocked} />
+                </View>
 
-    const handleSearch = (text: string) => {
-        setSearchQuery(text);
-        if (text.length > 0) {
-            const results = searchStories(text);
-            setSearchResults(results);
-        } else {
-            setSearchResults([]);
-        }
+                {/* Card */}
+                <Link href={`/surah/${item.id}`} asChild>
+                    <TouchableOpacity activeOpacity={0.9} style={styles.cardTouchable}>
+                        {isLocked ? (
+                            <View style={styles.lockedCard}>
+                                <View style={styles.cardHeader}>
+                                    <View>
+                                        <Text style={styles.revelationText}>
+                                            REVELATION {item.id.toString().padStart(2, '0')} • MECCAN
+                                        </Text>
+                                        <Text style={styles.surahName}>Sura {item.name_ar}</Text>
+                                        <Text style={styles.surahTranslationLower}>{item.name_en}</Text>
+                                    </View>
+                                    <Text style={styles.surahNumberLocked}>{item.id}</Text>
+                                </View>
+                                <View style={styles.lockRow}>
+                                    <MaterialCommunityIcons name="lock" size={14} color="rgba(191, 149, 64, 0.5)" />
+                                    <Text style={styles.lockText}>COMPLETE PREVIOUS TO UNLOCK</Text>
+                                </View>
+                            </View>
+                        ) : (
+                            <GoldGradientBorder borderRadius={16}>
+                                <View style={styles.cardContent}>
+                                    <View style={styles.cardHeader}>
+                                        <View>
+                                            <Text style={styles.revelationTextGold}>
+                                                REVELATION {item.id.toString().padStart(2, '0')} • MECCAN
+                                            </Text>
+                                            <Text style={styles.surahNameWhite}>Sura {item.name_ar}</Text>
+                                            <Text style={styles.surahTranslationGold}>{item.name_en}</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={styles.surahNumberGold}>{item.id}</Text>
+                                        </View>
+                                    </View>
+
+                                    <Text style={styles.surahSummary}>
+                                        {item.stories?.[0]?.summary || "Exploring the divine narratives and profound wisdom revealed in this chapter of the Holy Quran."}
+                                    </Text>
+
+                                    <View style={styles.cardFooter}>
+                                        <View style={styles.tagRow}>
+                                            <View style={styles.tag}>
+                                                <Text style={styles.tagText}>WISDOM</Text>
+                                            </View>
+                                            <View style={styles.tag}>
+                                                <Text style={styles.tagText}>CREATION</Text>
+                                            </View>
+                                        </View>
+                                        <View style={styles.exploreButton}>
+                                            <Text style={styles.exploreText}>EXPLORE</Text>
+                                            <MaterialCommunityIcons name="arrow-right" size={14} color="#bf9540" />
+                                        </View>
+                                    </View>
+                                </View>
+                            </GoldGradientBorder>
+                        )}
+                    </TouchableOpacity>
+                </Link>
+            </View>
+        );
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-[#121212]" style={{ backgroundColor: '#121212', flex: 1 }}>
-            <Stack.Screen options={{ headerShown: false }} />
-            <StatusBar barStyle="light-content" />
-
-            <View className="px-6 pt-4" style={{ paddingHorizontal: 24, paddingTop: 16 }}>
+        <BackgroundPattern>
+            <SafeAreaView style={styles.safeArea}>
                 {/* Header */}
-                <View className="mb-6 flex-row items-start" style={{ marginBottom: 24, flexDirection: 'row', alignItems: 'flex-start' }}>
-                    <View className="flex-1" style={{ flex: 1 }}>
-                        <Text className="text-4xl font-bold text-[#D4AF37] mb-2" style={{ color: '#D4AF37', fontSize: 36, fontWeight: 'bold', textAlign: alignAr }}>قصص القرآن</Text>
-                        <Text className="text-[#E0E0E0] text-lg opacity-80" style={{ color: '#E0E0E0', fontSize: 18, textAlign: alignAr }}>استكشف القصص والعبر في آيات الذكر الحكيم.</Text>
+                <View style={styles.header}>
+                    <View>
+                        <Text style={styles.headerTitle}>QURAN</Text>
+                        <Text style={styles.headerSubtitle}>NARRATIVES</Text>
                     </View>
-                    <Pressable
-                        onPress={() => router.push('/settings')}
-                        className="p-2 bg-[#1E1E1E] rounded-full border border-[#D4AF37]/20"
-                        style={{ padding: 8, backgroundColor: '#1E1E1E', borderRadius: 999, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.2)', [isRTL ? 'marginRight' : 'marginLeft']: 12 }}
-                    >
-                        <Ionicons name="menu-outline" size={24} color="#D4AF37" />
-                    </Pressable>
+                    <View style={styles.headerActions}>
+                        <TouchableOpacity style={styles.iconButton}>
+                            <MaterialCommunityIcons name="magnify" size={20} color="#bf9540" />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.iconButton}>
+                            <MaterialCommunityIcons name="account" size={20} color="#bf9540" />
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
-                {/* Smart Search Bar */}
-                <View
-                    className="flex-row items-center bg-[#1E1E1E] px-4 py-3 rounded-2xl mb-8 border border-gray-800"
-                    style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#1E1E1E', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 16, marginBottom: 32, borderWidth: 1, borderColor: '#1F2937' }}
-                >
-                    <Ionicons name="search" size={20} color="#6B7280" style={{ [isRTL ? 'marginLeft' : 'marginRight']: 12 }} />
-                    <TextInput
-                        placeholder="ابحث عن نبي، موضوع، أو قصة..."
-                        placeholderTextColor="#6B7280"
-                        value={searchQuery}
-                        onChangeText={handleSearch}
-                        className="flex-1 text-[#E0E0E0] text-base"
-                        style={{ flex: 1, color: '#E0E0E0', fontSize: 16, textAlign: alignAr }}
+                {/* Timeline Selector */}
+                <View style={styles.selectorContainer}>
+                    <View style={styles.selector}>
+                        <TouchableOpacity style={styles.selectorButtonActive}>
+                            <Text style={styles.selectorTextActive}>CHRONOLOGICAL</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.selectorButtonInactive}>
+                            <Text style={styles.selectorTextInactive}>TRADITIONAL</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                {/* Timeline Content */}
+                <View style={styles.timelineContent}>
+                    {/* Central Vertical Line */}
+                    <LinearGradient
+                        colors={['rgba(191,149,64,0)', 'rgba(191,149,64,0.4)', 'rgba(191,149,64,0)']}
+                        style={styles.timelineLine}
                     />
-                    {searchQuery.length > 0 && (
-                        <Pressable onPress={() => handleSearch('')}>
-                            <Ionicons name="close-circle" size={20} color="#6B7280" />
-                        </Pressable>
-                    )}
-                </View>
 
-                {/* Search Results Overlay / Section */}
-                {searchQuery.length > 0 ? (
-                    <View style={{ flex: 1 }}>
-                        <Text className="text-[#D4AF37] mb-4 font-bold" style={{ color: '#D4AF37', marginBottom: 16, fontWeight: 'bold' }}>نتائج البحث عن "{searchQuery}"</Text>
-                        <FlatList
-                            data={searchResults}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
-                                <Pressable
-                                    onPress={() => {
-                                        setSearchQuery('');
-                                        router.push({
-                                            pathname: `/reader/${item.id}`,
-                                            params: { surahId: item.surahId }
-                                        });
-                                    }}
-                                    className="bg-[#1E1E1E] p-4 rounded-xl mb-3 border border-[#D4AF37]/20"
-                                    style={{ backgroundColor: '#1E1E1E', padding: 16, borderRadius: 12, marginBottom: 12, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.2)' }}
-                                >
-                                    <Text className="text-[#E0E0E0] font-bold" style={{ color: '#E0E0E0', fontWeight: 'bold', writingDirection: 'rtl', textAlign: 'right' }}>{item.title_ar}</Text>
-                                    <Text className="text-gray-500 text-xs" style={{ color: '#6B7280', fontSize: 12, writingDirection: 'ltr', textAlign: 'left' }}>{item.title}</Text>
-                                </Pressable>
-                            )}
-                            ListEmptyComponent={() => (
-                                <Text style={{ color: '#6B7280', textAlign: 'center', marginTop: 20 }}>لم يتم العثور على قصص.</Text>
-                            )}
-                        />
-                    </View>
-                ) : (
                     <FlatList
                         data={surahs}
-                        keyExtractor={(item) => item.id}
-                        style={{ width: '100%' }}
-                        renderItem={({ item }) => (
-                            <Link href={`/surah/${item.id}`} asChild>
-                                <Pressable
-                                    className="bg-[#1E1E1E] p-6 rounded-2xl mb-4 border border-[#D4AF37]/20"
-                                    style={{
-                                        backgroundColor: '#1E1E1E',
-                                        padding: 24,
-                                        borderRadius: 16,
-                                        marginBottom: 16,
-                                        borderWidth: 1,
-                                        borderColor: 'rgba(212, 175, 55, 0.2)',
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                                        <Text className="text-2xl font-bold text-[#E0E0E0] mb-1" style={{ color: '#E0E0E0', fontSize: 22, fontWeight: 'bold', writingDirection: 'rtl', textAlign: 'right' }}>سورة {item.name_ar}</Text>
-                                        <Text className="text-gray-400" style={{ color: '#9CA3AF', writingDirection: 'rtl', textAlign: 'right' }}>{item.stories.length} قصص متوفرة</Text>
-                                    </View>
-                                    <View
-                                        className="bg-[#D4AF37]/20 w-12 h-12 rounded-full items-center justify-center"
-                                        style={{ backgroundColor: 'rgba(212, 175, 55, 0.2)', width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' }}
-                                    >
-                                        <Text className="text-[#D4AF37] font-bold text-lg" style={{ color: '#D4AF37', fontWeight: 'bold' }}>{item.id}</Text>
-                                    </View>
-                                </Pressable>
-                            </Link>
-                        )}
-                        ListHeaderComponent={() => (
-                            <View className="mb-4" style={{ marginBottom: 16 }}>
-                                <Text className="text-[#D4AF37] font-semibold uppercase tracking-widest text-xs" style={{ color: '#D4AF37', letterSpacing: 1.5, fontSize: 12 }}>السور المختارة</Text>
-                            </View>
-                        )}
+                        renderItem={renderTimelineItem}
+                        keyExtractor={item => item.id.toString()}
+                        contentContainerStyle={styles.listContent}
+                        showsVerticalScrollIndicator={false}
                     />
-                )}
-            </View>
-        </SafeAreaView>
+                </View>
+            </SafeAreaView>
+        </BackgroundPattern>
     );
 }
+
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 24,
+        paddingVertical: 16,
+    },
+    headerTitle: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 24,
+        letterSpacing: 4,
+        color: '#bf9540',
+    },
+    headerSubtitle: {
+        fontFamily: 'Cinzel_400Regular',
+        fontSize: 10,
+        letterSpacing: 3,
+        color: 'rgba(191, 149, 64, 0.8)',
+        marginTop: -4,
+    },
+    headerActions: {
+        flexDirection: 'row',
+        gap: 16,
+    },
+    iconButton: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'rgba(191, 149, 64, 0.2)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(191, 149, 64, 0.05)',
+    },
+    selectorContainer: {
+        paddingHorizontal: 24,
+        marginBottom: 32,
+        marginTop: 16,
+    },
+    selector: {
+        flexDirection: 'row',
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: 12,
+        padding: 4,
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.1)',
+    },
+    selectorButtonActive: {
+        flex: 1,
+        paddingVertical: 8,
+        alignItems: 'center',
+        borderRadius: 8,
+        backgroundColor: '#bf9540',
+    },
+    selectorButtonInactive: {
+        flex: 1,
+        paddingVertical: 8,
+        alignItems: 'center',
+        borderRadius: 8,
+    },
+    selectorTextActive: {
+        fontSize: 10,
+        fontFamily: 'Cinzel_700Bold',
+        color: '#0a0c14',
+        letterSpacing: 1,
+    },
+    selectorTextInactive: {
+        fontSize: 10,
+        fontFamily: 'Cinzel_400Regular',
+        color: 'rgba(191, 149, 64, 0.6)',
+        letterSpacing: 1,
+    },
+    timelineContent: {
+        flex: 1,
+        paddingHorizontal: 24,
+    },
+    timelineLine: {
+        position: 'absolute',
+        left: 24 + 10, // Match nodes
+        top: 0,
+        bottom: 0,
+        width: 1,
+    },
+    timelineItemContainer: {
+        position: 'relative',
+        paddingLeft: 48,
+        marginBottom: 40,
+    },
+    nodeWrapper: {
+        position: 'absolute',
+        left: 0,
+        top: 16,
+    },
+    cardTouchable: {
+        width: '100%',
+    },
+    lockedCard: {
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.05)',
+        borderRadius: 16,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        padding: 20,
+        opacity: 0.5,
+    },
+    cardContent: {
+        backgroundColor: 'rgba(10, 12, 20, 0.95)',
+        padding: 20,
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 12,
+    },
+    revelationText: {
+        fontSize: 10,
+        fontFamily: 'Cinzel_400Regular',
+        color: '#ffffff',
+        letterSpacing: 1.5,
+    },
+    revelationTextGold: {
+        fontSize: 10,
+        fontFamily: 'Cinzel_400Regular',
+        color: '#bf9540',
+        letterSpacing: 1.5,
+    },
+    surahName: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 20,
+        color: '#ffffff',
+        marginTop: 4,
+    },
+    surahNameWhite: {
+        fontFamily: 'Cinzel_700Bold',
+        fontSize: 20,
+        color: '#ffffff',
+        marginTop: 4,
+    },
+    surahTranslationLower: {
+        fontFamily: 'Newsreader_400Regular_Italic',
+        fontSize: 14,
+        color: 'rgba(255, 255, 255, 0.5)',
+    },
+    surahTranslationGold: {
+        fontFamily: 'Newsreader_400Regular_Italic',
+        fontSize: 14,
+        color: 'rgba(191, 149, 64, 0.7)',
+    },
+    surahNumberLocked: {
+        fontFamily: 'Cinzel_400Regular',
+        fontSize: 24,
+        color: 'rgba(255, 255, 255, 0.2)',
+    },
+    surahNumberGold: {
+        fontFamily: 'Cinzel_400Regular',
+        fontSize: 24,
+        color: 'rgba(191, 149, 64, 0.3)',
+    },
+    surahSummary: {
+        color: 'rgba(255, 255, 255, 0.6)',
+        fontSize: 14,
+        lineHeight: 20,
+        marginBottom: 16,
+        fontFamily: 'Newsreader_400Regular',
+    },
+    cardFooter: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingTop: 16,
+        borderTopWidth: 1,
+        borderTopColor: 'rgba(255, 255, 255, 0.05)',
+    },
+    tagRow: {
+        flexDirection: 'row',
+        gap: 8,
+    },
+    tag: {
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        backgroundColor: 'rgba(191, 149, 64, 0.1)',
+        borderRadius: 4,
+    },
+    tagText: {
+        fontSize: 10,
+        color: '#bf9540',
+        fontFamily: 'Lato_700Bold',
+        letterSpacing: 0.5,
+    },
+    exploreButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+    },
+    exploreText: {
+        fontSize: 12,
+        fontFamily: 'Lato_700Bold',
+        color: '#bf9540',
+        letterSpacing: 1,
+    },
+    lockRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        marginTop: 8,
+    },
+    lockText: {
+        fontSize: 10,
+        fontFamily: 'Lato_700Bold',
+        color: 'rgba(191, 149, 64, 0.5)',
+        letterSpacing: 1,
+    },
+    listContent: {
+        paddingBottom: 120,
+        paddingTop: 20,
+    }
+});
