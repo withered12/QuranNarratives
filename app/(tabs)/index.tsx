@@ -4,15 +4,23 @@ import { StoryNode } from '@/components/ui/StoryNode';
 import { getSurahList } from '@/services/quranApi';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link } from 'expo-router';
+import { Link, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Home() {
-    const surahs = getSurahList();
+    const { query } = useLocalSearchParams();
+    const allSurahs = getSurahList();
     const insets = useSafeAreaInsets();
+
+    const surahs = query
+        ? allSurahs.filter(s =>
+            s.name_ar.includes(query as string) ||
+            s.stories?.some(st => st.title_ar.includes(query as string))
+        )
+        : allSurahs;
 
     const renderTimelineItem = ({ item, index }: { item: any, index: number }) => {
         const isLocked = index > 2;

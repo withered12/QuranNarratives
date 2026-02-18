@@ -67,7 +67,10 @@ export default function Reader() {
             <BlurView intensity={80} tint="dark" style={styles.header}>
                 <SafeAreaView edges={['top']}>
                     <View style={styles.headerContent}>
-                        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+                        <TouchableOpacity
+                            onPress={() => router.canGoBack() ? router.back() : router.replace('/')}
+                            style={styles.backButton}
+                        >
                             <MaterialCommunityIcons name="arrow-right" size={24} color="#bf9540" />
                         </TouchableOpacity>
                         <View style={styles.headerTitleContainer}>
@@ -96,10 +99,7 @@ export default function Reader() {
                         ayahs.map((ayah, index) => (
                             <View key={ayah.number} style={styles.verseBlock}>
                                 <Text style={styles.arabicText}>{ayah.text}</Text>
-                                {/* We don't have English text in the API result here, but we can simulate/placeholder */}
-                                <Text style={styles.translationText}>
-                                    "تحمل العبارات المنزلة في هذه الآية حكماً باهرة للمؤمنين."
-                                </Text>
+
 
                                 {index < ayahs.length - 1 && (
                                     <View style={styles.divider}>
@@ -377,5 +377,6 @@ const styles = StyleSheet.create({
         lineHeight: 32,
         marginBottom: 24,
         textAlign: 'right',
+        writingDirection: 'rtl',
     }
 });

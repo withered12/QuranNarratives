@@ -16,7 +16,7 @@ export default function CenterAction() {
             const randomSurah = validSurahs[Math.floor(Math.random() * validSurahs.length)];
             const randomStory = randomSurah.stories[Math.floor(Math.random() * randomSurah.stories.length)];
 
-            router.replace({
+            router.push({
                 pathname: `/reader/${randomStory.id}`,
                 params: { surahId: randomSurah.id }
             });

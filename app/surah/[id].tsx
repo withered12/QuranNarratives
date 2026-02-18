@@ -58,7 +58,10 @@ export default function SurahTimeline() {
 
                 {/* Sub Header */}
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+                    <TouchableOpacity
+                        onPress={() => router.canGoBack() ? router.back() : router.replace('/')}
+                        style={styles.backButton}
+                    >
                         <MaterialCommunityIcons name="arrow-right" size={24} color="#bf9540" />
                     </TouchableOpacity>
                     <View style={styles.titleContainer}>
