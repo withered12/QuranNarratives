@@ -8,10 +8,11 @@ import { Link } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Home() {
     const surahs = getSurahList();
+    const insets = useSafeAreaInsets();
 
     const renderTimelineItem = ({ item, index }: { item: any, index: number }) => {
         const isLocked = index > 2;
@@ -91,7 +92,7 @@ export default function Home() {
 
     return (
         <BackgroundPattern>
-            <SafeAreaView style={styles.safeArea}>
+            <View style={[styles.safeArea, { paddingTop: insets.top }]}>
                 {/* Header */}
                 <View style={styles.header}>
                     <View style={styles.headerTitleContainer}>
@@ -137,7 +138,7 @@ export default function Home() {
                         removeClippedSubviews={false}
                     />
                 </View>
-            </SafeAreaView>
+            </View>
         </BackgroundPattern>
     );
 }
@@ -221,25 +222,25 @@ const styles = StyleSheet.create({
     },
     timelineContent: {
         flex: 1,
-        paddingHorizontal: 40, // Increased to 40
+        paddingHorizontal: 24, // Reverted to 24
         overflow: 'visible',
     },
     timelineLine: {
         position: 'absolute',
-        start: 74, // 40 (pad) + 24 (node) + 10 (half width)
+        start: 42, // 24 (pad) + 8 (node) + 10 (half width)
         top: 0,
         bottom: 0,
         width: 1,
     },
     timelineItemContainer: {
         position: 'relative',
-        paddingStart: 90, // Increased
+        paddingStart: 56, // Reverted/Balanced
         marginBottom: 40,
         overflow: 'visible',
     },
     nodeWrapper: {
         position: 'absolute',
-        start: 24, // Increased to 24
+        start: 8, // Reduced offset
         top: 16,
         overflow: 'visible',
     },

@@ -7,13 +7,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function SurahTimeline() {
     const { id } = useLocalSearchParams();
     const router = useRouter();
     const surahId = Array.isArray(id) ? id[0] : id;
     const data = getSurahStories(surahId || '');
+    const insets = useSafeAreaInsets();
 
     if (!data) return null;
 
@@ -52,7 +53,7 @@ export default function SurahTimeline() {
 
     return (
         <BackgroundPattern>
-            <SafeAreaView style={styles.safeArea}>
+            <View style={[styles.safeArea, { paddingTop: insets.top }]}>
                 <Stack.Screen options={{ headerShown: false }} />
 
                 {/* Sub Header */}
@@ -83,7 +84,7 @@ export default function SurahTimeline() {
                         removeClippedSubviews={false}
                     />
                 </View>
-            </SafeAreaView>
+            </View>
         </BackgroundPattern>
     );
 }
@@ -124,25 +125,25 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingHorizontal: 40, // Increased
+        paddingHorizontal: 24, // Reverted
         overflow: 'visible',
     },
     timelineLine: {
         position: 'absolute',
-        start: 72, // 40 (pad) + 24 (node) + 8 (half width)
+        start: 40, // 24 (pad) + 8 (node) + 8 (half width)
         top: 0,
         bottom: 0,
         width: 1,
     },
     timelineItemContainer: {
         position: 'relative',
-        paddingStart: 90, // Increased
+        paddingStart: 48, // Reverted
         marginBottom: 24,
         overflow: 'visible',
     },
     nodeWrapper: {
         position: 'absolute',
-        start: 24, // Increased
+        start: 8, // Reduced
         top: 20,
         overflow: 'visible',
     },
