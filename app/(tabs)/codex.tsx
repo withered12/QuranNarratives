@@ -35,8 +35,8 @@ export default function Codex() {
             style={{ backgroundColor: '#1E1E1E', padding: 16, borderRadius: 12, marginBottom: 12, borderWidth: 1, borderColor: '#1F2937' }}
         >
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                    <Text className="text-lg font-bold text-[#E0E0E0]" style={{ color: '#E0E0E0', fontSize: 18, fontWeight: 'bold', textAlign: 'left' }}>{item.title_ar}</Text>
+                <View className="flex-1">
+                    <Text className="text-lg font-bold text-[#E0E0E0]" style={{ color: '#E0E0E0', fontSize: 18, fontWeight: 'bold', textAlign: 'right' }}>{item.title_ar}</Text>
                     <Text className="text-[#D4AF37] text-xs" style={{ color: '#D4AF37', fontSize: 12, textAlign: 'left' }}>{item.title}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={20} color="#D4AF37" />

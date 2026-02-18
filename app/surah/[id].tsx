@@ -9,6 +9,9 @@ export default function SurahTimeline() {
     const router = useRouter();
     const isRTL = I18nManager.isRTL;
 
+    // Dynamic Alignment Strategy: Empirical fix (Left = Right in current env)
+    const alignAr = 'left';
+
     const surahId = Array.isArray(id) ? id[0] : id;
     // @ts-ignore
     const data = getSurahStories(surahId || '');
@@ -58,9 +61,9 @@ export default function SurahTimeline() {
                             className="flex-1 bg-[#1E1E1E] p-5 rounded-2xl mb-8 border border-gray-800"
                             style={{ flex: 1, backgroundColor: '#1E1E1E', padding: 20, borderRadius: 16, marginBottom: 32, borderWidth: 1, borderColor: '#1F2937', alignItems: isRTL ? 'flex-start' : 'flex-start' }}
                         >
-                            <Text className="text-xl font-bold text-[#E0E0E0] mb-1" style={{ color: '#E0E0E0', fontSize: 20, fontWeight: 'bold', textAlign: isRTL ? 'left' : 'left' }}>{item.title_ar}</Text>
-                            <Text className="text-[#D4AF37] text-sm mb-3 font-semibold" style={{ color: '#D4AF37', fontSize: 14, marginBottom: 12, fontWeight: '600' }}>الآيات {item.start_ayah} - {item.end_ayah}</Text>
-                            <Text className="text-gray-400 text-sm leading-6" style={{ color: '#9CA3AF', fontSize: 16, lineHeight: 24, textAlign: isRTL ? 'left' : 'left' }}>{item.summary_ar}</Text>
+                            <Text className="text-xl font-bold text-[#E0E0E0] mb-1" style={{ color: '#E0E0E0', fontSize: 20, fontWeight: 'bold', textAlign: alignAr }}>{item.title_ar}</Text>
+                            <Text className="text-[#D4AF37] text-sm mb-3 font-semibold" style={{ color: '#D4AF37', fontSize: 14, marginBottom: 12, fontWeight: '600', textAlign: alignAr }}>الآيات {item.start_ayah} - {item.end_ayah}</Text>
+                            <Text className="text-gray-400 text-sm leading-6" style={{ color: '#9CA3AF', fontSize: 16, lineHeight: 24, textAlign: alignAr }}>{item.summary_ar}</Text>
                         </Pressable>
                     </View>
                 )}

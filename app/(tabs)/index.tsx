@@ -10,6 +10,10 @@ export default function Home() {
     const surahs = getSurahList();
     const isRTL = I18nManager.isRTL;
 
+    // Dynamic Alignment Strategy: Empirical fix
+    const alignAr = 'left'; // Goal: Right
+    const alignEn = 'right'; // Goal: Left
+
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
 
@@ -31,8 +35,8 @@ export default function Home() {
             <View className="px-6 pt-4" style={{ paddingHorizontal: 24, paddingTop: 16 }}>
                 {/* Header */}
                 <View className="mb-6" style={{ marginBottom: 24 }}>
-                    <Text className="text-4xl font-bold text-[#D4AF37] mb-2" style={{ color: '#D4AF37', fontSize: 36, fontWeight: 'bold', textAlign: 'left' }}>قصص القرآن</Text>
-                    <Text className="text-[#E0E0E0] text-lg opacity-80" style={{ color: '#E0E0E0', fontSize: 18, textAlign: 'left' }}>استكشف القصص والعبر في آيات الذكر الحكيم.</Text>
+                    <Text className="text-4xl font-bold text-[#D4AF37] mb-2" style={{ color: '#D4AF37', fontSize: 36, fontWeight: 'bold', textAlign: alignAr }}>قصص القرآن</Text>
+                    <Text className="text-[#E0E0E0] text-lg opacity-80" style={{ color: '#E0E0E0', fontSize: 18, textAlign: alignAr }}>استكشف القصص والعبر في آيات الذكر الحكيم.</Text>
                 </View>
 
                 {/* Smart Search Bar */}
@@ -40,14 +44,14 @@ export default function Home() {
                     className="flex-row items-center bg-[#1E1E1E] px-4 py-3 rounded-2xl mb-8 border border-gray-800"
                     style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#1E1E1E', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 16, marginBottom: 32, borderWidth: 1, borderColor: '#1F2937' }}
                 >
-                    <Ionicons name="search" size={20} color="#6B7280" style={{ marginRight: 12 }} />
+                    <Ionicons name="search" size={20} color="#6B7280" style={{ [isRTL ? 'marginLeft' : 'marginRight']: 12 }} />
                     <TextInput
                         placeholder="ابحث عن نبي، موضوع، أو قصة..."
                         placeholderTextColor="#6B7280"
                         value={searchQuery}
                         onChangeText={handleSearch}
                         className="flex-1 text-[#E0E0E0] text-base"
-                        style={{ flex: 1, color: '#E0E0E0', fontSize: 16, textAlign: 'left' }}
+                        style={{ flex: 1, color: '#E0E0E0', fontSize: 16, textAlign: alignAr }}
                     />
                     {searchQuery.length > 0 && (
                         <Pressable onPress={() => handleSearch('')}>
@@ -75,8 +79,8 @@ export default function Home() {
                                     className="bg-[#1E1E1E] p-4 rounded-xl mb-3 border border-[#D4AF37]/20"
                                     style={{ backgroundColor: '#1E1E1E', padding: 16, borderRadius: 12, marginBottom: 12, borderWidth: 1, borderColor: 'rgba(212, 175, 55, 0.2)' }}
                                 >
-                                    <Text className="text-[#E0E0E0] font-bold" style={{ color: '#E0E0E0', fontWeight: 'bold' }}>{item.title_ar}</Text>
-                                    <Text className="text-gray-500 text-xs" style={{ color: '#6B7280', fontSize: 12 }}>{item.title}</Text>
+                                    <Text className="text-[#E0E0E0] font-bold" style={{ color: '#E0E0E0', fontWeight: 'bold', writingDirection: 'rtl', textAlign: 'right' }}>{item.title_ar}</Text>
+                                    <Text className="text-gray-500 text-xs" style={{ color: '#6B7280', fontSize: 12, writingDirection: 'ltr', textAlign: 'left' }}>{item.title}</Text>
                                 </Pressable>
                             )}
                             ListEmptyComponent={() => (
@@ -106,8 +110,8 @@ export default function Home() {
                                     }}
                                 >
                                     <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                                        <Text className="text-2xl font-bold text-[#E0E0E0] mb-1" style={{ color: '#E0E0E0', fontSize: 22, fontWeight: 'bold' }}>سورة {item.name_ar}</Text>
-                                        <Text className="text-gray-400" style={{ color: '#9CA3AF' }}>{item.stories.length} قصص متوفرة</Text>
+                                        <Text className="text-2xl font-bold text-[#E0E0E0] mb-1" style={{ color: '#E0E0E0', fontSize: 22, fontWeight: 'bold', writingDirection: 'rtl', textAlign: 'right' }}>سورة {item.name_ar}</Text>
+                                        <Text className="text-gray-400" style={{ color: '#9CA3AF', writingDirection: 'rtl', textAlign: 'right' }}>{item.stories.length} قصص متوفرة</Text>
                                     </View>
                                     <View
                                         className="bg-[#D4AF37]/20 w-12 h-12 rounded-full items-center justify-center"

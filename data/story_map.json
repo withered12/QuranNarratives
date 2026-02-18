@@ -345,7 +345,8 @@
         "prophets_ar": [],
         "category": "Parables",
         "category_ar": "الأمثال",
-        "chronology_index": 100
+        "chronology_index": 100,
+        "preferred_tafsir_source": 14
       },
       {
         "id": "musa_khidr",

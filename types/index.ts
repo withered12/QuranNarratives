@@ -13,6 +13,7 @@ export interface Story {
     category?: string;
     category_ar?: string;
     chronology_index?: number;
+    preferred_tafsir_source?: number;
 }
 
 export interface SurahData {
