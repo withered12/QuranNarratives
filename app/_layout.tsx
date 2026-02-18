@@ -1,35 +1,38 @@
-import "../global.css";
+import { Amiri_400Regular, Amiri_700Bold } from "@expo-google-fonts/amiri";
+import { Cinzel_400Regular, Cinzel_700Bold, useFonts } from "@expo-google-fonts/cinzel";
+import { Lato_300Light, Lato_400Regular, Lato_700Bold } from "@expo-google-fonts/lato";
+import { Newsreader_400Regular, Newsreader_400Regular_Italic, Newsreader_700Bold } from "@expo-google-fonts/newsreader";
 import { Stack } from "expo-router";
-import { useFonts } from "expo-font";
-import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { View, I18nManager } from "react-native";
+import { useEffect } from "react";
+import { I18nManager, View } from "react-native";
+import "../global.css";
 
-// Force RTL for Arabic
-I18nManager.forceRTL(true);
-I18nManager.allowRTL(true);
-
+// Prevent splash screen from hiding automatically
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    // We can add custom fonts here later
+    Cinzel_400Regular,
+    Cinzel_700Bold,
+    Lato_300Light,
+    Lato_400Regular,
+    Lato_700Bold,
+    Amiri_400Regular,
+    Amiri_700Bold,
+    Newsreader_400Regular,
+    Newsreader_400Regular_Italic,
+    Newsreader_700Bold,
   });
 
   useEffect(() => {
+    // Configure RTL for Arabic content
+    I18nManager.allowRTL(true);
+    I18nManager.forceRTL(false); // We handle RTL per component or reading view to avoid UI mess
+
     if (loaded || error) {
       SplashScreen.hideAsync();
-    }
-
-    // Ensure RTL is active according to Manager
-    console.log("Current I18nManager.isRTL:", I18nManager.isRTL);
-    if (!I18nManager.isRTL) {
-      console.log("Forcing RTL...");
-      I18nManager.forceRTL(true);
-      I18nManager.allowRTL(true);
-      // In some environments, a reload might be desired here but expo-updates might not be installed.
-      // We'll trust the forced state for now.
     }
   }, [loaded, error]);
 
@@ -38,19 +41,19 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#121212' }}>
+    <View style={{ flex: 1, backgroundColor: '#0a0c14' }}>
       <StatusBar style="light" />
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: "#1A1A1A",
+            backgroundColor: "#0a0c14",
           },
-          headerTintColor: "#D4AF37",
+          headerTintColor: "#bf9540",
           headerTitleStyle: {
-            fontWeight: "bold",
+            fontFamily: "Cinzel_700Bold",
           },
           contentStyle: {
-            backgroundColor: "#121212",
+            backgroundColor: "#0a0c14",
           },
         }}
       >

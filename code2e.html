@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuranNarratives - Reader Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#bf9540",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#0a0c14", /* Deep Midnight Blue as requested */
+                        "cream": "#F5F5DC",
+                        "gold-light": "#e5c07b",
+                        "gold-dark": "#8c6a2d"
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "arabic": ["Amiri", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .gold-ingot-gradient {
+            background: linear-gradient(135deg, #e5c07b 0%, #bf9540 50%, #8c6a2d 100%);
+            box-shadow: 0 4px 15px rgba(191, 149, 64, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(191, 149, 64, 0.2);
+            border-radius: 10px;
+        }
+        .arabic-text {
+            line-height: 2.5;
+            direction: rtl;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-cream overflow-hidden">
+<!-- Main Container -->
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Top App Bar (Minimalist) -->
+<header class="z-20 flex items-center justify-between p-4 bg-background-dark/80 backdrop-blur-sm border-b border-primary/10">
+<button class="flex items-center justify-center p-2 text-primary hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined text-[28px]">arrow_back</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="text-[10px] uppercase tracking-[0.2em] text-primary/60 font-medium">Currently Reading</span>
+<h2 class="text-cream text-sm font-semibold tracking-wide">The Story of Prophet Musa</h2>
+</div>
+<div class="w-10"></div> <!-- Spacer for symmetry -->
+</header>
+<!-- Progress Indicator -->
+<div class="w-full h-[2px] bg-primary/10 z-20">
+<div class="h-full bg-primary" style="width: 42%;"></div>
+</div>
+<!-- Reader Canvas -->
+<main class="flex-1 overflow-y-auto custom-scrollbar px-6 pt-12 pb-32">
+<div class="max-w-2xl mx-auto space-y-16">
+<!-- Verse Block -->
+<section class="flex flex-col items-center text-center space-y-8">
+<div class="arabic-text font-arabic text-4xl md:text-5xl lg:text-6xl text-cream selection:bg-primary/30">
+                        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                    </div>
+<p class="text-lg text-primary/80 font-display italic leading-relaxed max-w-lg">
+                        "In the name of Allah, the Entirely Merciful, the Especially Merciful."
+                    </p>
+</section>
+<!-- Verse Block -->
+<section class="flex flex-col items-center text-center space-y-10">
+<div class="arabic-text font-arabic text-4xl md:text-5xl lg:text-6xl text-cream selection:bg-primary/30 leading-[3rem]">
+                        وَلَقَدْ آتَيْنَا مُوسَى الْكِتَابَ وَقَفَّيْنَا مِن بَعْدِهِ بِالرُّسُلِ
+                    </div>
+<div class="space-y-4">
+<p class="text-xl text-cream/90 font-display leading-relaxed">
+                            "And We did certainly give Moses the Scripture and followed up after him with messengers."
+                        </p>
+<span class="text-xs tracking-widest text-primary/40 font-bold">[ SURAH AL-BAQARAH : 87 ]</span>
+</div>
+</section>
+<!-- Verse Block -->
+<section class="flex flex-col items-center text-center space-y-10">
+<div class="arabic-text font-arabic text-4xl md:text-5xl lg:text-6xl text-cream selection:bg-primary/30">
+                        وَآتَيْنَا عِيسَى ابْنَ مَرْيَمَ الْبَيِّنَاتِ وَأَيَّدْنَاهُ بِرُوحِ الْقُدُسِ
+                    </div>
+<div class="space-y-4">
+<p class="text-xl text-cream/90 font-display leading-relaxed">
+                            "And We gave Jesus, the son of Mary, clear proofs and supported him with the Pure Spirit."
+                        </p>
+</div>
+</section>
+<!-- Decorative Divider -->
+<div class="flex justify-center items-center gap-4 py-8">
+<div class="h-[1px] w-12 bg-primary/20"></div>
+<span class="material-symbols-outlined text-primary/30 scale-75">auto_awesome</span>
+<div class="h-[1px] w-12 bg-primary/20"></div>
+</div>
+<!-- More content to demonstrate scroll -->
+<section class="flex flex-col items-center text-center space-y-10">
+<div class="arabic-text font-arabic text-4xl md:text-5xl lg:text-6xl text-cream selection:bg-primary/30">
+                        أَفَكُلَّمَا جَاءَكُمْ رَسُولٌ بِمَا لَا تَهْوَىٰ أَنفُسُكُمُ اسْتَكْبَرْتُمْ
+                    </div>
+<div class="space-y-4">
+<p class="text-xl text-cream/90 font-display leading-relaxed">
+                            "But is it [not] that every time a messenger came to you, [O Children of Israel], with what your souls did not desire, you were arrogant?"
+                        </p>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Action Button (Gold Ingot) -->
+<div class="fixed bottom-10 left-0 right-0 flex justify-center px-6 z-30">
+<button class="gold-ingot-gradient group flex items-center justify-between gap-4 px-8 py-4 rounded-xl transition-all hover:scale-105 active:scale-95 shadow-2xl min-w-[200px]">
+<span class="text-black font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-black group-hover:rotate-12 transition-transform">menu_book</span>
+                    Tafsir &amp; Story
+                </span>
+<div class="h-6 w-[1px] bg-black/20"></div>
+<span class="material-symbols-outlined text-black font-bold">arrow_forward_ios</span>
+</button>
+</div>
+<!-- Subtle Background Pattern Overlay -->
+<div class="pointer-events-none fixed inset-0 opacity-[0.03] mix-blend-overlay z-0" data-alt="Subtle Arabic geometric pattern texture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-sdfe7Q0V1VvpnlM1HSdut5WIwA8WW5lMnnloCEM_iiMqCc-QUZps59oNNInNs3YxudWxqoG8YJHLkogsNxPcdDwFsQLgeXBaSTgDxr5F_-3PgIaOsw_DognROs8Vq0_aVj7BAmdk6skQOKFhwe6fE4xcppojkaVym-Ao5qHBLkcD5AUYmMsuxy5sSXIxDZ1TgXiC7IuSNrBJFyoTJnl9-GyzFkvTITbFQ69OKmUpjz6yjohzYOG7Z4jwPYmDy74PtdsJB710-Dw');">
+</div>
+</div>
+<!-- Bottom Navigation Fade Gradient -->
+<div class="fixed bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background-dark via-background-dark/80 to-transparent pointer-events-none z-20"></div>
+</body></html>

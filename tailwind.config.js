@@ -1,20 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    // NOTE: Update this to include the paths to all of your component files.
     content: ["./app/**/*.{js,jsx,ts,tsx}", "./components/**/*.{js,jsx,ts,tsx}"],
     presets: [require("nativewind/preset")],
     theme: {
         extend: {
             colors: {
-                primary: '#D4AF37', // Gold
-                secondary: '#1A1A1A', // Dark Gray
-                background: '#121212', // Very Dark Gray
-                text: '#E0E0E0', // Light Gray
+                primary: "#bf9540", // Gold
+                "background-dark": "#0a0c14", // Deep Midnight Blue
+                midnight: "#111827", // Secondary dark
+                cream: "#F5F5DC",
+                "gold-light": "#e5c17d",
+                "gold-dark": "#8c6a26",
             },
             fontFamily: {
-                uthmani: ['KFGQPC Uthman Taha Naskh', 'sans-serif'], // Placeholder
-            }
+                display: ["Cinzel_700Bold"],
+                body: ["Lato_400Regular"],
+                reading: ["Newsreader_400Regular"],
+                arabic: ["Amiri_400Regular"],
+            },
         },
     },
     plugins: [],
-}
+};

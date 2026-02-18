@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QuranNarratives - The Codex</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Cinzel:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#bf9540",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#0a0e1a",
+                        "midnight": "#111827",
+                        "cream": "#f5f5dc",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"],
+                        "accent": ["Cinzel", "serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-tab {
+            border-bottom: 2px solid #bf9540;
+            color: #bf9540;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-midnight dark:text-cream min-h-screen flex flex-col">
+<header class="pt-8 px-6 pb-4">
+<div class="flex items-center justify-between mb-6">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-accent text-2xl font-bold tracking-widest text-primary">THE CODEX</h1>
+<div class="w-10 h-10 rounded-full border border-primary/30 flex items-center justify-center overflow-hidden bg-primary/10">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="person">person</span>
+</div>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="edit_note">edit_note</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-midnight/50 dark:bg-midnight border-2 border-primary/40 focus:border-primary rounded-lg text-cream placeholder-primary/50 focus:ring-0 transition-all font-display italic" placeholder="Search the ancient narratives..." type="text"/>
+</div>
+</header>
+<nav class="px-6 mb-8">
+<div class="flex gap-8 border-b border-primary/10">
+<button class="font-accent tracking-widest pb-3 text-sm active-tab font-bold">PROPHETS</button>
+<button class="font-accent tracking-widest pb-3 text-sm text-primary/60 hover:text-primary transition-colors">THEMES</button>
+<button class="font-accent tracking-widest pb-3 text-sm text-primary/60 hover:text-primary transition-colors">CHRONICLES</button>
+</div>
+</nav>
+<main class="flex-1 px-6 pb-24 overflow-y-auto">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-midnight border border-primary/20 rounded-lg p-6 flex flex-col items-center justify-center aspect-square group hover:border-primary transition-all cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-4" data-icon="history_edu">history_edu</span>
+<h3 class="font-accent text-sm tracking-widest text-center uppercase">Ibrahim</h3>
+<p class="text-[10px] text-primary/60 mt-1 uppercase tracking-tighter italic">The Father of Faith</p>
+</div>
+<div class="bg-midnight border border-primary/20 rounded-lg p-6 flex flex-col items-center justify-center aspect-square group hover:border-primary transition-all cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-4" data-icon="waves">waves</span>
+<h3 class="font-accent text-sm tracking-widest text-center uppercase">Musa</h3>
+<p class="text-[10px] text-primary/60 mt-1 uppercase tracking-tighter italic">The Speaker with God</p>
+</div>
+<div class="bg-midnight border border-primary/20 rounded-lg p-6 flex flex-col items-center justify-center aspect-square group hover:border-primary transition-all cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-4" data-icon="stars">stars</span>
+<h3 class="font-accent text-sm tracking-widest text-center uppercase">Yusuf</h3>
+<p class="text-[10px] text-primary/60 mt-1 uppercase tracking-tighter italic">The Interpreter of Dreams</p>
+</div>
+<div class="bg-midnight border border-primary/20 rounded-lg p-6 flex flex-col items-center justify-center aspect-square group hover:border-primary transition-all cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-4" data-icon="temple_hindu">temple_hindu</span>
+<h3 class="font-accent text-sm tracking-widest text-center uppercase">Maryam</h3>
+<p class="text-[10px] text-primary/60 mt-1 uppercase tracking-tighter italic">The Purest of Women</p>
+</div>
+<div class="bg-midnight border border-primary/20 rounded-lg p-6 flex flex-col items-center justify-center aspect-square group hover:border-primary transition-all cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-4" data-icon="sailing">sailing</span>
+<h3 class="font-accent text-sm tracking-widest text-center uppercase">Nuh</h3>
+<p class="text-[10px] text-primary/60 mt-1 uppercase tracking-tighter italic">The Great Ark-Builder</p>
+</div>
+<div class="bg-midnight border border-primary/20 rounded-lg p-6 flex flex-col items-center justify-center aspect-square group hover:border-primary transition-all cursor-pointer relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined text-primary text-5xl mb-4" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="font-accent text-sm tracking-widest text-center uppercase">Isa</h3>
+<p class="text-[10px] text-primary/60 mt-1 uppercase tracking-tighter italic">The Word of Truth</p>
+</div>
+</div>
+<div class="mt-12 mb-8 text-center">
+<h2 class="font-accent text-primary tracking-[0.2em] text-xs uppercase mb-4">Scholarly Themes</h2>
+<div class="flex flex-wrap justify-center gap-3">
+<span class="px-4 py-2 border border-primary/30 rounded-full text-xs font-accent tracking-widest hover:bg-primary/10 cursor-pointer transition-colors">PATIENCE</span>
+<span class="px-4 py-2 border border-primary/30 rounded-full text-xs font-accent tracking-widest hover:bg-primary/10 cursor-pointer transition-colors">MIRACLES</span>
+<span class="px-4 py-2 border border-primary/30 rounded-full text-xs font-accent tracking-widest hover:bg-primary/10 cursor-pointer transition-colors">CREATION</span>
+<span class="px-4 py-2 border border-primary/30 rounded-full text-xs font-accent tracking-widest hover:bg-primary/10 cursor-pointer transition-colors">WISDOM</span>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 w-full bg-background-dark/95 backdrop-blur-md border-t border-primary/20 px-6 py-4">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary/60 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="auto_stories">auto_stories</span>
+<span class="text-[10px] font-accent tracking-widest uppercase">Chronicles</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-3xl font-bold" data-icon="search_insights">search_insights</span>
+<span class="text-[10px] font-accent tracking-widest uppercase">Codex</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary/60 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="bookmarks">bookmarks</span>
+<span class="text-[10px] font-accent tracking-widest uppercase">Archives</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary/60 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="settings_b_roll">settings_b_roll</span>
+<span class="text-[10px] font-accent tracking-widest uppercase">Settings</span>
+</a>
+</div>
+</nav>
+<div class="hidden">
+<img data-alt="Golden star pattern on dark blue paper texture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXrUZ6VpXD4Bp6z12fydnHHH0jQ1FTI_81LKjs5NqrS9BWX7dl20ijIztnVQ-KFGdPSW30gIMa0sjlvkYXN6bFjAyKM6ldOG38EiXWMPNBgup0wPrH9xER8GUdVx2T2LQkbByeyjEzU4Xrd5Q-pX-rNc5bdrzot2d4KCuiVEFU1beQwbzdgT9ZlnLDqowXSwS6o5ri4l2Q_dAjtUF0TdzLhCPN8NBJn8q30Jzj6YF-43FZ24JkHoydXQuyTNAXxOjYowSL6Nb4eLI"/>
+</div>
+</body></html>

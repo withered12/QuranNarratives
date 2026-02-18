@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&amp;family=Lato:wght@300;400;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#bf9540",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#0a0c12", // Deep Midnight Blue
+                        "gold-light": "#e5c17d",
+                        "gold-dark": "#8c6a26",
+                    },
+                    fontFamily: {
+                        "display": ["Cinzel", "serif"],
+                        "body": ["Lato", "sans-serif"],
+                        "serif-alt": ["Newsreader", "serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>.gold-gradient-border {
+    background: linear-gradient(to right, #8c6a26, #bf9540, #e5c17d, #bf9540, #8c6a26);
+    padding: 1px
+    }
+.gold-text-gradient {
+    background: linear-gradient(to bottom, #fceabb 0%, #fccd4d 50%, #f8b500 51%, #fbdf93 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent
+    }
+.islamic-pattern {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCsXWTwIVHf1SyFPwsp-dRc-JophD0GTDtLuKQgiE3woyrs9s1ej282VhvYZnK--r2rWVeVOaKHbkuNSsboOLKVZblRsVE8ykFf7BloWwpURYYWtImx6aO8s8ydRPkr2e-gZkXn3pjpv6s25ph-qcGjMmkcFfBK3UYY_VYwl6n1_pOmPHprpA_UCb-e57DErfs_wKyMRDNXZei-r3Et0tKN5HYmkgc6L4YlydguZnI5JY09mXSnvMsYSEiWuq70L308oSXFyVGloPU);
+    /* Placeholder for geometric feel */
+    opacity: 0.1
+    }
+.story-node-glow {
+    box-shadow: 0 0 15px rgba(191, 149, 64, 0.4)
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-dark text-white font-body selection:bg-primary/30">
+<!-- Background Pattern Overlay -->
+<div class="fixed inset-0 pointer-events-none islamic-pattern z-0" data-alt="Subtle Islamic geometric pattern texture"></div>
+<div class="relative z-10 flex flex-col min-h-screen">
+<!-- Header -->
+<header class="flex items-center justify-between px-6 py-8">
+<div class="flex flex-col">
+<h1 class="font-display text-2xl tracking-widest gold-text-gradient">QURAN</h1>
+<p class="font-display text-xs tracking-[0.3em] text-primary/80 uppercase -mt-1">Narratives</p>
+</div>
+<div class="flex gap-4">
+<button class="w-10 h-10 rounded-full border border-primary/20 flex items-center justify-center bg-primary/5">
+<span class="material-symbols-outlined text-primary text-xl">search</span>
+</button>
+<div class="w-10 h-10 rounded-full border border-primary/40 p-0.5 overflow-hidden">
+<div class="w-full h-full bg-primary/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xl">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Timeline Selector -->
+<div class="px-6 mb-8">
+<div class="flex bg-white/5 rounded-xl p-1 border border-white/10">
+<button class="flex-1 py-2 text-xs font-display tracking-widest uppercase rounded-lg bg-primary text-background-dark font-bold">Chronological</button>
+<button class="flex-1 py-2 text-xs font-display tracking-widest uppercase rounded-lg text-primary/60 hover:text-primary transition-colors">Traditional</button>
+</div>
+</div>
+<!-- Main Timeline Content -->
+<main class="flex-1 px-6 pb-24 relative">
+<!-- Central Vertical Line -->
+<div class="absolute left-10 top-0 bottom-0 w-[1px] bg-gradient-to-b from-primary/0 via-primary/40 to-primary/0"></div>
+<!-- Surah Cards List -->
+<div class="space-y-12">
+<!-- Timeline Item 1 -->
+<div class="relative pl-12">
+<!-- Story Node (Pearl) -->
+<div class="absolute left-[-11px] top-4 w-5 h-5 rounded-full bg-gradient-to-br from-gold-light via-primary to-gold-dark border border-white/20 story-node-glow z-20 flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-white/40"></div>
+</div>
+<!-- Card -->
+<div class="gold-gradient-border rounded-xl">
+<div class="bg-background-dark/90 p-5 rounded-xl backdrop-blur-sm">
+<div class="flex justify-between items-start mb-3">
+<div>
+<span class="text-[10px] font-display text-primary uppercase tracking-widest">Revelation 01 • Meccan</span>
+<h2 class="font-display text-xl text-white mt-1">Al-Alaq</h2>
+<p class="font-serif-alt italic text-primary/70 text-sm">The Clot</p>
+</div>
+<div class="text-right">
+<p class="font-display text-2xl text-primary/30 opacity-50">٩٦</p>
+</div>
+</div>
+<p class="text-white/60 text-sm leading-relaxed mb-4 font-serif-alt">The first five verses revealed to the Prophet in the Cave of Hira, commanding to "Read in the name of your Lord."</p>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-primary/10 rounded text-[10px] text-primary uppercase tracking-tighter">Knowledge</span>
+<span class="px-2 py-1 bg-primary/10 rounded text-[10px] text-primary uppercase tracking-tighter">Creation</span>
+</div>
+<button class="flex items-center gap-1 text-primary hover:text-gold-light transition-colors">
+<span class="text-xs font-bold uppercase tracking-widest">Explore</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-12">
+<!-- Story Node (Pearl) -->
+<div class="absolute left-[-11px] top-4 w-5 h-5 rounded-full bg-gradient-to-br from-gold-light via-primary to-gold-dark border border-white/20 story-node-glow z-20 flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-white/40"></div>
+</div>
+<!-- Card -->
+<div class="gold-gradient-border rounded-xl opacity-80">
+<div class="bg-background-dark/90 p-5 rounded-xl">
+<div class="flex justify-between items-start mb-3">
+<div>
+<span class="text-[10px] font-display text-primary uppercase tracking-widest">Revelation 02 • Meccan</span>
+<h2 class="font-display text-xl text-white mt-1">Al-Qalam</h2>
+<p class="font-serif-alt italic text-primary/70 text-sm">The Pen</p>
+</div>
+<div class="text-right">
+<p class="font-display text-2xl text-primary/30 opacity-50">٦٨</p>
+</div>
+</div>
+<p class="text-white/60 text-sm leading-relaxed mb-4 font-serif-alt">An affirmation of the Prophet's character and a warning to those who deny the truth of the revelation.</p>
+<div class="flex items-center justify-between pt-4 border-t border-white/5">
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-primary/10 rounded text-[10px] text-primary uppercase tracking-tighter">Morality</span>
+</div>
+<button class="flex items-center gap-1 text-primary hover:text-gold-light transition-colors">
+<span class="text-xs font-bold uppercase tracking-widest">Explore</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Item 3 (Small Indicator) -->
+<div class="relative pl-12 py-4">
+<div class="absolute left-[-7px] top-6 w-3 h-3 rounded-full border border-primary/40 bg-background-dark z-20"></div>
+<p class="text-[10px] font-display uppercase tracking-[0.3em] text-primary/40">Surah Al-Muzzammil follows...</p>
+</div>
+<!-- Timeline Item 4 -->
+<div class="relative pl-12">
+<!-- Story Node (Pearl) -->
+<div class="absolute left-[-11px] top-4 w-5 h-5 rounded-full bg-gradient-to-br from-slate-400 via-slate-600 to-slate-800 border border-white/10 z-20 flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-white/20"></div>
+</div>
+<!-- Card Locked -->
+<div class="border border-white/5 rounded-xl bg-white/5 group">
+<div class="p-5 rounded-xl">
+<div class="flex justify-between items-start mb-3 opacity-40">
+<div>
+<span class="text-[10px] font-display text-white uppercase tracking-widest">Revelation 03 • Meccan</span>
+<h2 class="font-display text-xl text-white mt-1">Al-Muzzammil</h2>
+<p class="font-serif-alt italic text-white/70 text-sm">The Enshrouded One</p>
+</div>
+<div class="text-right">
+<p class="font-display text-2xl text-white/30">٧٣</p>
+</div>
+</div>
+<div class="flex items-center gap-2 text-primary/50 py-2">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="text-[10px] font-bold uppercase tracking-widest">Complete previous to unlock</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Luxury Bottom NavBar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 px-6 pb-6">
+<div class="bg-background-dark/80 backdrop-blur-xl border border-primary/20 rounded-2xl flex justify-between items-center p-2 shadow-2xl shadow-black/50">
+<a class="flex flex-col items-center justify-center w-16 h-12 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">home</span>
+<span class="text-[8px] uppercase tracking-widest font-bold mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-primary/40 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="text-[8px] uppercase tracking-widest font-bold mt-1">Stories</span>
+</a>
+<!-- Center Action Button -->
+<div class="relative -mt-10">
+<div class="absolute inset-0 bg-primary blur-lg opacity-20"></div>
+<button class="w-14 h-14 rounded-full bg-gradient-to-br from-gold-light via-primary to-gold-dark flex items-center justify-center text-background-dark shadow-xl border-4 border-background-dark">
+<span class="material-symbols-outlined text-2xl font-bold">menu_book</span>
+</button>
+</div>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-primary/40 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">bookmark</span>
+<span class="text-[8px] uppercase tracking-widest font-bold mt-1">Saved</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-primary/40 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[8px] uppercase tracking-widest font-bold mt-1">Prefs</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>
