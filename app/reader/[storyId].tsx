@@ -1,7 +1,7 @@
 import { getStoryDetails, getStoryVerses } from '@/services/quranApi';
 import { fetchAndMergeNarrative } from '@/services/TafsirService';
 import { Ayah } from '@/types';
-import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -68,10 +68,10 @@ export default function Reader() {
                 <SafeAreaView edges={['top']}>
                     <View style={styles.headerContent}>
                         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                            <MaterialCommunityIcons name="arrow-left" size={24} color="#bf9540" />
+                            <MaterialCommunityIcons name="arrow-right" size={24} color="#bf9540" />
                         </TouchableOpacity>
                         <View style={styles.headerTitleContainer}>
-                            <Text style={styles.headerSubtitle}>CURRENTLY READING</Text>
+                            <Text style={styles.headerSubtitle}>أنت تقرأ الآن</Text>
                             <Text style={styles.headerTitle} numberOfLines={1}>{story.title_ar}</Text>
                         </View>
                         <View style={{ width: 40 }} />
@@ -98,7 +98,7 @@ export default function Reader() {
                                 <Text style={styles.arabicText}>{ayah.text}</Text>
                                 {/* We don't have English text in the API result here, but we can simulate/placeholder */}
                                 <Text style={styles.translationText}>
-                                    "The narrative revealed in this verse carries profound wisdom for the believers."
+                                    "تحمل العبارات المنزلة في هذه الآية حكماً باهرة للمؤمنين."
                                 </Text>
 
                                 {index < ayahs.length - 1 && (
@@ -119,7 +119,7 @@ export default function Reader() {
                             colors={['rgba(191, 149, 64, 0.1)', 'transparent']}
                             style={styles.tafsirGradient}
                         />
-                        <Text style={styles.tafsirTitle}>SCHOLARLY INSIGHT</Text>
+                        <Text style={styles.tafsirTitle}>نظرة العلماء والتبصر</Text>
                         {loadingTafsir ? (
                             <ActivityIndicator color="#bf9540" />
                         ) : (
@@ -146,10 +146,10 @@ export default function Reader() {
                     >
                         <View style={styles.fabLeft}>
                             <MaterialCommunityIcons name="book-open-page-variant" size={20} color="#0a0c14" />
-                            <Text style={styles.fabText}>TAFSIR & STORY</Text>
+                            <Text style={styles.fabText}>التفسير والقصة</Text>
                         </View>
                         <View style={styles.fabDivider} />
-                        <MaterialCommunityIcons name="chevron-right" size={20} color="#0a0c14" />
+                        <MaterialCommunityIcons name="chevron-left" size={20} color="#0a0c14" />
                     </LinearGradient>
                 </TouchableOpacity>
             </View>
@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
     header: {
         position: 'absolute',
         top: 0,
-        left: 0,
-        right: 0,
+        start: 0,
+        end: 0,
         zIndex: 100,
         borderBottomWidth: 1,
         borderBottomColor: 'rgba(191, 149, 64, 0.1)',
@@ -265,8 +265,8 @@ const styles = StyleSheet.create({
     fabContainer: {
         position: 'absolute',
         bottom: 40,
-        left: 0,
-        right: 0,
+        start: 0,
+        end: 0,
         alignItems: 'center',
         zIndex: 100,
     },
@@ -306,8 +306,8 @@ const styles = StyleSheet.create({
     bottomFade: {
         position: 'absolute',
         bottom: 0,
-        left: 0,
-        right: 0,
+        start: 0,
+        end: 0,
         height: 120,
         zIndex: 90,
     },
@@ -323,8 +323,8 @@ const styles = StyleSheet.create({
     tafsirGradient: {
         position: 'absolute',
         top: 0,
-        left: 0,
-        right: 0,
+        start: 0,
+        end: 0,
         height: 100,
         borderRadius: 32,
     },

@@ -1,7 +1,7 @@
 import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
 import { GoldGradientBorder } from '@/components/ui/GoldGradientBorder';
 import { getAllProphetsAr, getAllTagsAr } from '@/services/quranApi';
-import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -26,11 +26,20 @@ export default function Codex() {
             <GoldGradientBorder borderRadius={12}>
                 <View style={styles.categoryContent}>
                     <Text style={styles.categoryTextAr}>{item}</Text>
-                    <MaterialCommunityIcons name="chevron-right" size={16} color="#bf9540" />
+                    <MaterialCommunityIcons name="chevron-left" size={16} color="#bf9540" />
                 </View>
             </GoldGradientBorder>
         </TouchableOpacity>
     );
+
+    const getTabLabel = (tab: Tab) => {
+        switch (tab) {
+            case 'Prophets': return 'الأنبياء';
+            case 'Themes': return 'الموضوعات';
+            case 'Chronicles': return 'سجلات';
+            default: return tab;
+        }
+    };
 
     return (
         <BackgroundPattern>
@@ -40,8 +49,8 @@ export default function Codex() {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {/* Header */}
                     <View style={styles.header}>
-                        <Text style={styles.headerSubtitle}>DISCOVER</Text>
-                        <Text style={styles.headerTitle}>CHRONICLES</Text>
+                        <Text style={styles.headerSubtitle}>استكشف</Text>
+                        <Text style={styles.headerTitle}>المخطوطة</Text>
                     </View>
 
                     {/* Search Bar */}
@@ -49,11 +58,12 @@ export default function Codex() {
                         <View style={styles.searchBackground}>
                             <MaterialCommunityIcons name="magnify" size={20} color="rgba(191, 149, 64, 0.6)" />
                             <TextInput
-                                placeholder="PROPHETS, THEMES, OR PLACES..."
+                                placeholder="الأنبياء، الموضوعات، أو الأماكن..."
                                 placeholderTextColor="rgba(191, 149, 64, 0.4)"
                                 style={styles.searchInput}
                                 value={searchQuery}
                                 onChangeText={setSearchQuery}
+                                textAlign="right"
                             />
                         </View>
                     </View>
@@ -68,7 +78,7 @@ export default function Codex() {
                                     style={[styles.tabButton, activeTab === tab && styles.tabButtonActive]}
                                 >
                                     <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
-                                        {tab.toUpperCase()}
+                                        {getTabLabel(tab)}
                                     </Text>
                                 </TouchableOpacity>
                             ))}
@@ -77,19 +87,19 @@ export default function Codex() {
 
                     {/* Featured Sections */}
                     <View style={styles.sectionContainer}>
-                        <Text style={styles.sectionTitle}>CURATED SELECTIONS</Text>
+                        <Text style={styles.sectionTitle}>مختارات منتقاة</Text>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.featuredScroll}>
                             {[1, 2, 3].map((i) => (
                                 <TouchableOpacity key={i} style={styles.featuredCard}>
-                                    <GoldGradientBorder borderRadius={20}>
+                                    <GoldGradientBorder borderRadius={20} style={{ flex: 1 }}>
                                         <View style={styles.featuredContent}>
                                             <LinearGradient
                                                 colors={['rgba(191,149,64,0.3)', 'transparent', 'rgba(10,12,20,0.9)']}
                                                 style={styles.featuredOverlay}
                                             />
                                             <View style={styles.featuredTextContainer}>
-                                                <Text style={styles.featuredTag}>CHAPTER {i}</Text>
-                                                <Text style={styles.featuredTitle}>Prophetic Wisdom</Text>
+                                                <Text style={styles.featuredTag}>الفصل {i}</Text>
+                                                <Text style={styles.featuredTitle}>حكمة نبوية</Text>
                                             </View>
                                         </View>
                                     </GoldGradientBorder>
@@ -100,11 +110,11 @@ export default function Codex() {
 
                     {/* List Section */}
                     <View style={styles.listContainer}>
-                        <Text style={styles.sectionTitle}>{activeTab.toUpperCase()}</Text>
+                        <Text style={styles.sectionTitle}>{getTabLabel(activeTab)}</Text>
                         <View style={styles.categoryGrid}>
                             {activeTab === 'Prophets' ? prophets.map(renderCategoryItem) :
                                 activeTab === 'Themes' ? themes.map(renderCategoryItem) :
-                                    [1, 2, 3, 4, 5].map(i => renderCategoryItem(`Chronicle ${i}`))}
+                                    ['سجل 1', 'سجل 2', 'سجل 3', 'سجل 4', 'سجل 5'].map(renderCategoryItem)}
                         </View>
                     </View>
 
@@ -123,6 +133,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         paddingTop: 24,
         marginBottom: 24,
+        alignItems: 'flex-start',
     },
     headerSubtitle: {
         fontFamily: 'Cinzel_400Regular',
@@ -153,11 +164,12 @@ const styles = StyleSheet.create({
     },
     searchInput: {
         flex: 1,
-        marginLeft: 12,
+        marginStart: 12,
         color: '#F5F5DC',
         fontFamily: 'Lato_700Bold',
         fontSize: 12,
         letterSpacing: 1,
+        textAlign: 'auto',
     },
     tabContainer: {
         marginBottom: 32,
@@ -165,6 +177,7 @@ const styles = StyleSheet.create({
     tabScroll: {
         paddingHorizontal: 24,
         gap: 12,
+        flexDirection: 'row',
     },
     tabButton: {
         paddingHorizontal: 20,
@@ -179,10 +192,9 @@ const styles = StyleSheet.create({
         borderColor: '#bf9540',
     },
     tabText: {
-        fontFamily: 'Cinzel_700Bold',
-        fontSize: 10,
+        fontFamily: 'Amiri_700Bold',
+        fontSize: 14,
         color: 'rgba(191, 149, 64, 0.6)',
-        letterSpacing: 1,
     },
     tabTextActive: {
         color: '#0a0c14',
@@ -197,10 +209,12 @@ const styles = StyleSheet.create({
         fontSize: 10,
         color: 'rgba(255, 255, 255, 0.4)',
         letterSpacing: 2,
+        textAlign: 'start',
     },
     featuredScroll: {
         paddingHorizontal: 24,
         gap: 16,
+        flexDirection: 'row',
     },
     featuredCard: {
         width: 280,
@@ -218,7 +232,8 @@ const styles = StyleSheet.create({
     featuredTextContainer: {
         position: 'absolute',
         bottom: 20,
-        left: 20,
+        start: 20,
+        alignItems: 'flex-start',
     },
     featuredTag: {
         fontFamily: 'Lato_700Bold',
@@ -228,8 +243,8 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     featuredTitle: {
-        fontFamily: 'Cinzel_700Bold',
-        fontSize: 18,
+        fontFamily: 'Amiri_700Bold',
+        fontSize: 22,
         color: '#ffffff',
     },
     listContainer: {

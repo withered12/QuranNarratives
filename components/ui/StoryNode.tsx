@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 20,
+        overflow: 'visible',
     },
     pearl: {
         width: '100%',
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(255, 255, 255, 0.2)',
         justifyContent: 'center',
         alignItems: 'center',
+        overflow: 'visible',
     },
     core: {
         backgroundColor: 'rgba(255, 255, 255, 0.4)',

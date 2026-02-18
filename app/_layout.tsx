@@ -12,6 +12,11 @@ import "../global.css";
 // Prevent splash screen from hiding automatically
 SplashScreen.preventAutoHideAsync();
 
+// Force RTL early for Arabic
+I18nManager.allowRTL(true);
+I18nManager.forceRTL(true);
+console.log('[RTL Check] isRTL:', I18nManager.isRTL);
+
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     Cinzel_400Regular,
@@ -27,10 +32,6 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    // Configure RTL for Arabic content
-    I18nManager.allowRTL(true);
-    I18nManager.forceRTL(false); // We handle RTL per component or reading view to avoid UI mess
-
     if (loaded || error) {
       SplashScreen.hideAsync();
     }

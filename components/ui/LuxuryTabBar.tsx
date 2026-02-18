@@ -1,4 +1,4 @@
-import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -29,29 +29,22 @@ export const LuxuryTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
                             }
                         };
 
-                        const label = options.tabBarLabel !== undefined
+                        let label = options.tabBarLabel !== undefined
                             ? options.tabBarLabel
                             : options.title !== undefined
                                 ? options.title
                                 : route.name;
 
-                        // Handle center button uniquely
+                        // Localize labels
+                        if (route.name === 'index') label = 'الرئيسية';
+                        else if (route.name === 'stories') label = 'القصص';
+                        else if (route.name === 'saved') label = 'المحفوظات';
+                        else if (route.name === 'settings') label = 'الإعدادات';
+                        else if (route.name === 'center') label = 'القارئ';
+
+                        // Skip the center button here, we'll render it separately to avoid clipping
                         if (route.name === 'center') {
-                            return (
-                                <View key={route.key} style={styles.centerButtonContainer}>
-                                    <TouchableOpacity
-                                        onPress={onPress}
-                                        activeOpacity={0.8}
-                                    >
-                                        <LinearGradient
-                                            colors={['#e5c17d', '#bf9540', '#8c6a26']}
-                                            style={styles.centerButton}
-                                        >
-                                            <MaterialCommunityIcons name="book-open-variant" size={28} color="#0a0c14" />
-                                        </LinearGradient>
-                                    </TouchableOpacity>
-                                </View>
-                            );
+                            return <View key={route.key} style={styles.tabItem} />;
                         }
 
                         const iconName = route.name === 'index' ? 'home' :
@@ -81,6 +74,40 @@ export const LuxuryTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
                     })}
                 </View>
             </BlurView>
+
+            {/* Render center button outside BlurView to prevent clipping */}
+            {state.routes.map((route, index) => {
+                if (route.name === 'center') {
+                    const onPress = () => {
+                        const event = navigation.emit({
+                            type: 'tabPress',
+                            target: route.key,
+                            canPreventDefault: true,
+                        });
+                        if (state.index !== index && !event.defaultPrevented) {
+                            navigation.navigate(route.name);
+                        }
+                    };
+
+                    return (
+                        <View key={route.key} style={styles.centerButtonOuter}>
+                            <TouchableOpacity
+                                onPress={onPress}
+                                activeOpacity={0.8}
+                                style={styles.centerButtonTouchable}
+                            >
+                                <LinearGradient
+                                    colors={['#e5c17d', '#bf9540', '#8c6a26']}
+                                    style={styles.centerButton}
+                                >
+                                    <MaterialCommunityIcons name="book-open-variant" size={28} color="#0a0c14" />
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </View>
+                    );
+                }
+                return null;
+            })}
         </View>
     );
 };
@@ -113,10 +140,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 1,
     },
-    centerButtonContainer: {
-        top: -25,
-        justifyContent: 'center',
+    centerButtonOuter: {
+        position: 'absolute',
+        top: -15, // Adjusted to sit nicely above the bar
+        left: 0,
+        right: 0,
         alignItems: 'center',
+        zIndex: 100,
+    },
+    centerButtonTouchable: {
+        shadowColor: '#bf9540',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+        elevation: 8,
     },
     centerButton: {
         width: 58,
@@ -126,11 +163,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 4,
         borderColor: '#0a0c14',
-        shadowColor: '#bf9540',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.4,
-        shadowRadius: 8,
-        elevation: 8,
     },
     label: {
         fontSize: 8,

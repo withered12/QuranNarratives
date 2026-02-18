@@ -2,7 +2,7 @@ import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
 import { GoldGradientBorder } from '@/components/ui/GoldGradientBorder';
 import { StoryNode } from '@/components/ui/StoryNode';
 import { getSurahList } from '@/services/quranApi';
-import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import React from 'react';
@@ -34,16 +34,16 @@ export default function Home() {
                                 <View style={styles.cardHeader}>
                                     <View>
                                         <Text style={styles.revelationText}>
-                                            REVELATION {item.id.toString().padStart(2, '0')} • MECCAN
+                                            النزول {item.id.toString().padStart(2, '0')} • مكية
                                         </Text>
-                                        <Text style={styles.surahName}>Sura {item.name_ar}</Text>
+                                        <Text style={styles.surahName}>{item.name_ar}</Text>
                                         <Text style={styles.surahTranslationLower}>{item.name_en}</Text>
                                     </View>
                                     <Text style={styles.surahNumberLocked}>{item.id}</Text>
                                 </View>
                                 <View style={styles.lockRow}>
                                     <MaterialCommunityIcons name="lock" size={14} color="rgba(191, 149, 64, 0.5)" />
-                                    <Text style={styles.lockText}>COMPLETE PREVIOUS TO UNLOCK</Text>
+                                    <Text style={styles.lockText}>أكمل السابق لفتح القفل</Text>
                                 </View>
                             </View>
                         ) : (
@@ -52,9 +52,9 @@ export default function Home() {
                                     <View style={styles.cardHeader}>
                                         <View>
                                             <Text style={styles.revelationTextGold}>
-                                                REVELATION {item.id.toString().padStart(2, '0')} • MECCAN
+                                                النزول {item.id.toString().padStart(2, '0')} • مكية
                                             </Text>
-                                            <Text style={styles.surahNameWhite}>Sura {item.name_ar}</Text>
+                                            <Text style={styles.surahNameWhite}>{item.name_ar}</Text>
                                             <Text style={styles.surahTranslationGold}>{item.name_en}</Text>
                                         </View>
                                         <View>
@@ -63,21 +63,21 @@ export default function Home() {
                                     </View>
 
                                     <Text style={styles.surahSummary}>
-                                        {item.stories?.[0]?.summary || "Exploring the divine narratives and profound wisdom revealed in this chapter of the Holy Quran."}
+                                        {item.stories?.[0]?.summary_ar || item.stories?.[0]?.summary || "استكشاف الروايات الإلهية والحكمة العميقة التي أنزلت في هذا الجزء من القرآن الكريم."}
                                     </Text>
 
                                     <View style={styles.cardFooter}>
                                         <View style={styles.tagRow}>
                                             <View style={styles.tag}>
-                                                <Text style={styles.tagText}>WISDOM</Text>
+                                                <Text style={styles.tagText}>حكمة</Text>
                                             </View>
                                             <View style={styles.tag}>
-                                                <Text style={styles.tagText}>CREATION</Text>
+                                                <Text style={styles.tagText}>خلق</Text>
                                             </View>
                                         </View>
                                         <View style={styles.exploreButton}>
-                                            <Text style={styles.exploreText}>EXPLORE</Text>
-                                            <MaterialCommunityIcons name="arrow-right" size={14} color="#bf9540" />
+                                            <Text style={styles.exploreText}>اكتشف</Text>
+                                            <MaterialCommunityIcons name="arrow-left" size={14} color="#bf9540" />
                                         </View>
                                     </View>
                                 </View>
@@ -94,9 +94,9 @@ export default function Home() {
             <SafeAreaView style={styles.safeArea}>
                 {/* Header */}
                 <View style={styles.header}>
-                    <View>
-                        <Text style={styles.headerTitle}>QURAN</Text>
-                        <Text style={styles.headerSubtitle}>NARRATIVES</Text>
+                    <View style={styles.headerTitleContainer}>
+                        <Text style={styles.headerTitle}>قصص القرآن</Text>
+                        <Text style={styles.headerSubtitle}>QURAN NARRATIVES</Text>
                     </View>
                     <View style={styles.headerActions}>
                         <TouchableOpacity style={styles.iconButton}>
@@ -112,10 +112,10 @@ export default function Home() {
                 <View style={styles.selectorContainer}>
                     <View style={styles.selector}>
                         <TouchableOpacity style={styles.selectorButtonActive}>
-                            <Text style={styles.selectorTextActive}>CHRONOLOGICAL</Text>
+                            <Text style={styles.selectorTextActive}>ترتيب النزول</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.selectorButtonInactive}>
-                            <Text style={styles.selectorTextInactive}>TRADITIONAL</Text>
+                            <Text style={styles.selectorTextInactive}>الترتيب التقليدي</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -151,6 +151,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 24,
         paddingVertical: 16,
+    },
+    headerTitleContainer: {
+        alignItems: 'flex-start',
     },
     headerTitle: {
         fontFamily: 'Cinzel_700Bold',
@@ -206,37 +209,37 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     selectorTextActive: {
-        fontSize: 10,
-        fontFamily: 'Cinzel_700Bold',
-        color: '#0a0c14',
-        letterSpacing: 1,
+        fontSize: 12,
+        fontFamily: 'Amiri_700Bold',
+        color: '#0a0c13',
     },
     selectorTextInactive: {
-        fontSize: 10,
-        fontFamily: 'Cinzel_400Regular',
+        fontSize: 12,
+        fontFamily: 'Amiri_400Regular',
         color: 'rgba(191, 149, 64, 0.6)',
-        letterSpacing: 1,
     },
     timelineContent: {
         flex: 1,
-        paddingHorizontal: 24,
+        paddingHorizontal: 32, // Increased from 24
     },
     timelineLine: {
         position: 'absolute',
-        left: 24 + 10, // Match nodes
+        start: 58, // 32 (padding) + 16 (node start) + 10 (half width)
         top: 0,
         bottom: 0,
         width: 1,
     },
     timelineItemContainer: {
         position: 'relative',
-        paddingLeft: 48,
+        paddingStart: 72, // Increased to maintain text gap
         marginBottom: 40,
+        overflow: 'visible',
     },
     nodeWrapper: {
         position: 'absolute',
-        left: 0,
+        start: 16, // significantly increased from 4
         top: 16,
+        overflow: 'visible',
     },
     cardTouchable: {
         width: '100%',
@@ -272,25 +275,25 @@ const styles = StyleSheet.create({
         letterSpacing: 1.5,
     },
     surahName: {
-        fontFamily: 'Cinzel_700Bold',
-        fontSize: 20,
+        fontFamily: 'Amiri_700Bold',
+        fontSize: 24,
         color: '#ffffff',
         marginTop: 4,
     },
     surahNameWhite: {
-        fontFamily: 'Cinzel_700Bold',
-        fontSize: 20,
+        fontFamily: 'Amiri_700Bold',
+        fontSize: 24,
         color: '#ffffff',
         marginTop: 4,
     },
     surahTranslationLower: {
-        fontFamily: 'Newsreader_400Regular_Italic',
-        fontSize: 14,
+        fontFamily: 'Lato_400Regular',
+        fontSize: 12,
         color: 'rgba(255, 255, 255, 0.5)',
     },
     surahTranslationGold: {
-        fontFamily: 'Newsreader_400Regular_Italic',
-        fontSize: 14,
+        fontFamily: 'Lato_400Regular',
+        fontSize: 12,
         color: 'rgba(191, 149, 64, 0.7)',
     },
     surahNumberLocked: {
@@ -305,10 +308,10 @@ const styles = StyleSheet.create({
     },
     surahSummary: {
         color: 'rgba(255, 255, 255, 0.6)',
-        fontSize: 14,
-        lineHeight: 20,
+        fontSize: 16,
+        lineHeight: 24,
         marginBottom: 16,
-        fontFamily: 'Newsreader_400Regular',
+        fontFamily: 'Amiri_400Regular',
     },
     cardFooter: {
         flexDirection: 'row',
@@ -331,8 +334,7 @@ const styles = StyleSheet.create({
     tagText: {
         fontSize: 10,
         color: '#bf9540',
-        fontFamily: 'Lato_700Bold',
-        letterSpacing: 0.5,
+        fontFamily: 'Amiri_700Bold',
     },
     exploreButton: {
         flexDirection: 'row',
@@ -340,10 +342,9 @@ const styles = StyleSheet.create({
         gap: 4,
     },
     exploreText: {
-        fontSize: 12,
-        fontFamily: 'Lato_700Bold',
+        fontSize: 14,
+        fontFamily: 'Amiri_700Bold',
         color: '#bf9540',
-        letterSpacing: 1,
     },
     lockRow: {
         flexDirection: 'row',
@@ -353,9 +354,8 @@ const styles = StyleSheet.create({
     },
     lockText: {
         fontSize: 10,
-        fontFamily: 'Lato_700Bold',
+        fontFamily: 'Amiri_400Regular',
         color: 'rgba(191, 149, 64, 0.5)',
-        letterSpacing: 1,
     },
     listContent: {
         paddingBottom: 120,

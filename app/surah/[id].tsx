@@ -2,7 +2,7 @@ import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
 import { GoldGradientBorder } from '@/components/ui/GoldGradientBorder';
 import { StoryNode } from '@/components/ui/StoryNode';
 import { getSurahStories } from '@/services/quranApi';
-import { MaterialCommunityIcons } from '@expo-vector-icons/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
@@ -35,10 +35,10 @@ export default function SurahTimeline() {
                         <View style={styles.cardContent}>
                             <View style={styles.cardHeader}>
                                 <View>
-                                    <Text style={styles.ayahRange}>AYATS {item.start_ayah} — {item.end_ayah}</Text>
+                                    <Text style={styles.ayahRange}>الآيات {item.start_ayah} — {item.end_ayah}</Text>
                                     <Text style={styles.storyTitle}>{item.title_ar}</Text>
                                 </View>
-                                <MaterialCommunityIcons name="chevron-right" size={20} color="#bf9540" />
+                                <MaterialCommunityIcons name="chevron-left" size={20} color="#bf9540" />
                             </View>
                             <Text style={styles.storySummary} numberOfLines={3}>
                                 {item.summary_ar}
@@ -58,10 +58,10 @@ export default function SurahTimeline() {
                 {/* Sub Header */}
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-                        <MaterialCommunityIcons name="arrow-left" size={24} color="#bf9540" />
+                        <MaterialCommunityIcons name="arrow-right" size={24} color="#bf9540" />
                     </TouchableOpacity>
                     <View style={styles.titleContainer}>
-                        <Text style={styles.subtitle}>SURAH</Text>
+                        <Text style={styles.subtitle}>سورة</Text>
                         <Text style={styles.title}>{data.name_ar}</Text>
                     </View>
                     <View style={{ width: 40 }} />
@@ -116,31 +116,33 @@ const styles = StyleSheet.create({
         color: 'rgba(191, 149, 64, 0.6)',
     },
     title: {
-        fontFamily: 'Cinzel_700Bold',
-        fontSize: 22,
+        fontFamily: 'Amiri_700Bold',
+        fontSize: 26,
         color: '#bf9540',
         marginTop: 2,
     },
     content: {
         flex: 1,
-        paddingHorizontal: 24,
+        paddingHorizontal: 32, // Increased
     },
     timelineLine: {
         position: 'absolute',
-        left: 24 + 8, // Match nodes
+        start: 56, // 32 (padding) + 16 (node start) + 8 (half width)
         top: 0,
         bottom: 0,
         width: 1,
     },
     timelineItemContainer: {
         position: 'relative',
-        paddingLeft: 40,
+        paddingStart: 64, // Increased
         marginBottom: 24,
+        overflow: 'visible',
     },
     nodeWrapper: {
         position: 'absolute',
-        left: 0,
+        start: 16, // Increased
         top: 20,
+        overflow: 'visible',
     },
     cardContent: {
         backgroundColor: 'rgba(10, 12, 20, 0.95)',
@@ -154,21 +156,22 @@ const styles = StyleSheet.create({
     },
     ayahRange: {
         fontSize: 10,
-        fontFamily: 'Lato_700Bold',
+        fontFamily: 'Amiri_700Bold',
         color: 'rgba(191, 149, 64, 0.8)',
-        letterSpacing: 1,
     },
     storyTitle: {
-        fontFamily: 'Cinzel_700Bold',
-        fontSize: 18,
+        fontFamily: 'Amiri_700Bold',
+        fontSize: 20,
         color: '#ffffff',
         marginTop: 2,
+        textAlign: 'right',
     },
     storySummary: {
         color: 'rgba(255, 255, 255, 0.6)',
-        fontSize: 14,
-        lineHeight: 20,
-        fontFamily: 'Newsreader_400Regular',
+        fontSize: 16,
+        lineHeight: 22,
+        fontFamily: 'Amiri_400Regular',
+        textAlign: 'right',
     },
     listContent: {
         paddingTop: 20,

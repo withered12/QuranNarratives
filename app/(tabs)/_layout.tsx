@@ -1,41 +1,43 @@
+import { LuxuryTabBar } from '@/components/ui/LuxuryTabBar';
 import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { I18nManager } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from 'react';
 
 export default function TabLayout() {
-  const insets = useSafeAreaInsets();
-
   return (
     <Tabs
+      tabBar={(props) => <LuxuryTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: '#1A1A1A',
-          borderTopColor: '#1F2937',
-          height: 60 + insets.bottom,
-          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
-        },
-        tabBarActiveTintColor: '#D4AF37',
-        tabBarInactiveTintColor: '#6B7280',
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'الرئيسية',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
-          ),
         }}
       />
       <Tabs.Screen
-        name="codex"
+        name="stories"
         options={{
-          title: 'الفهرس',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book" size={size} color={color} />
-          ),
+          title: 'القصص',
+        }}
+      />
+      <Tabs.Screen
+        name="center"
+        options={{
+          title: 'القارئ',
+        }}
+      />
+      <Tabs.Screen
+        name="saved"
+        options={{
+          title: 'المحفوظات',
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'الإعدادات',
         }}
       />
     </Tabs>
