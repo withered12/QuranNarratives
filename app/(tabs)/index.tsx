@@ -134,6 +134,7 @@ export default function Home() {
                         keyExtractor={item => item.id.toString()}
                         contentContainerStyle={styles.listContent}
                         showsVerticalScrollIndicator={false}
+                        removeClippedSubviews={false}
                     />
                 </View>
             </SafeAreaView>
@@ -220,24 +221,25 @@ const styles = StyleSheet.create({
     },
     timelineContent: {
         flex: 1,
-        paddingHorizontal: 32, // Increased from 24
+        paddingHorizontal: 40, // Increased to 40
+        overflow: 'visible',
     },
     timelineLine: {
         position: 'absolute',
-        start: 58, // 32 (padding) + 16 (node start) + 10 (half width)
+        start: 74, // 40 (pad) + 24 (node) + 10 (half width)
         top: 0,
         bottom: 0,
         width: 1,
     },
     timelineItemContainer: {
         position: 'relative',
-        paddingStart: 72, // Increased to maintain text gap
+        paddingStart: 90, // Increased
         marginBottom: 40,
         overflow: 'visible',
     },
     nodeWrapper: {
         position: 'absolute',
-        start: 16, // significantly increased from 4
+        start: 24, // Increased to 24
         top: 16,
         overflow: 'visible',
     },

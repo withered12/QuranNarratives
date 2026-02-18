@@ -80,6 +80,7 @@ export default function SurahTimeline() {
                         keyExtractor={item => item.id}
                         contentContainerStyle={styles.listContent}
                         showsVerticalScrollIndicator={false}
+                        removeClippedSubviews={false}
                     />
                 </View>
             </SafeAreaView>
@@ -123,24 +124,25 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        paddingHorizontal: 32, // Increased
+        paddingHorizontal: 40, // Increased
+        overflow: 'visible',
     },
     timelineLine: {
         position: 'absolute',
-        start: 56, // 32 (padding) + 16 (node start) + 8 (half width)
+        start: 72, // 40 (pad) + 24 (node) + 8 (half width)
         top: 0,
         bottom: 0,
         width: 1,
     },
     timelineItemContainer: {
         position: 'relative',
-        paddingStart: 64, // Increased
+        paddingStart: 90, // Increased
         marginBottom: 24,
         overflow: 'visible',
     },
     nodeWrapper: {
         position: 'absolute',
-        start: 16, // Increased
+        start: 24, // Increased
         top: 20,
         overflow: 'visible',
     },
