@@ -7,16 +7,20 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Link } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home() {
     const surahs = getSurahList();
 
     const renderTimelineItem = ({ item, index }: { item: any, index: number }) => {
-        const isLocked = index > 1; // Simulation for demo
+        const isLocked = index > 2;
 
         return (
-            <View style={styles.timelineItemContainer}>
+            <Animated.View
+                entering={FadeInUp.delay(index * 100).duration(800)}
+                style={styles.timelineItemContainer}
+            >
                 {/* Story Node (Pearl) */}
                 <View style={styles.nodeWrapper}>
                     <StoryNode size={20} glow={!isLocked} />
@@ -81,7 +85,7 @@ export default function Home() {
                         )}
                     </TouchableOpacity>
                 </Link>
-            </View>
+            </Animated.View>
         );
     };
 

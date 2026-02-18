@@ -1,6 +1,13 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withRepeat,
+    withSequence,
+    withTiming
+} from 'react-native-reanimated';
 
 interface StoryNodeProps {
     size?: number;
@@ -11,12 +18,57 @@ export const StoryNode: React.FC<StoryNodeProps> = ({
     size = 20,
     glow = true
 }) => {
+    const scale = useSharedValue(1);
+    const opacity = useSharedValue(0.4);
+
+    useEffect(() => {
+        if (glow) {
+            scale.value = withRepeat(
+                withSequence(
+                    withTiming(1.5, { duration: 1500 }),
+                    withTiming(1, { duration: 1500 })
+                ),
+                -1,
+                true
+            );
+            opacity.value = withRepeat(
+                withSequence(
+                    withTiming(0.6, { duration: 1500 }),
+                    withTiming(0.2, { duration: 1500 })
+                ),
+                -1,
+                true
+            );
+        } else {
+            scale.value = 1;
+            opacity.value = 0.4;
+        }
+    }, [glow]);
+
+    const animatedGlowStyles = useAnimatedStyle(() => ({
+        transform: [{ scale: scale.value }],
+        opacity: opacity.value,
+    }));
+
     return (
         <View style={[
             styles.container,
             { width: size, height: size },
-            glow && styles.glow
         ]}>
+            {glow && (
+                <Animated.View
+                    style={[
+                        styles.glowRing,
+                        {
+                            width: size * 2.5,
+                            height: size * 2.5,
+                            borderRadius: size * 1.25,
+                            backgroundColor: '#bf9540',
+                        },
+                        animatedGlowStyles
+                    ]}
+                />
+            )}
             <LinearGradient
                 colors={['#e5c17d', '#bf9540', '#8c6a26']}
                 start={{ x: 0, y: 0 }}
@@ -46,11 +98,11 @@ const styles = StyleSheet.create({
     core: {
         backgroundColor: 'rgba(255, 255, 255, 0.4)',
     },
-    glow: {
+    glowRing: {
+        position: 'absolute',
         shadowColor: '#bf9540',
         shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.6,
-        shadowRadius: 10,
-        elevation: 5,
+        shadowOpacity: 0.8,
+        shadowRadius: 15,
     },
 });
