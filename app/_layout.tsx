@@ -61,6 +61,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="surah/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="reader/[storyId]" options={{ headerShown: false }} />
+        <Stack.Screen name="listen/player" options={{ presentation: 'fullScreenModal', headerShown: false }} />
       </Stack>
     </View>
   );

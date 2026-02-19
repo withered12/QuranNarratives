@@ -35,9 +35,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="listen"
         options={{
-          title: 'الإعدادات',
+          title: 'LISTEN',
         }}
       />
     </Tabs>
