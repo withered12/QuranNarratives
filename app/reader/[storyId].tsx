@@ -1,15 +1,14 @@
 import { getStoryDetails, getStoryVerses } from '@/services/quranApi';
 import { fetchAndMergeNarrative } from '@/services/TafsirService';
 import { Ayah } from '@/types';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { Audio } from 'expo-av';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const { width } = Dimensions.get('window');
 
 export default function Reader() {
     const { storyId, surahId } = useLocalSearchParams();
@@ -20,6 +19,11 @@ export default function Reader() {
     const [showTafsir, setShowTafsir] = useState(false);
     const [tafsirData, setTafsirData] = useState<string[]>([]);
     const [loadingTafsir, setLoadingTafsir] = useState(false);
+
+    // Audio State
+    const [sound, setSound] = useState<Audio.Sound | null>(null);
+    const [playingAyahKey, setPlayingAyahKey] = useState<string | null>(null);
+    const [loadingAudio, setLoadingAudio] = useState<string | null>(null);
 
     const sId = Array.isArray(storyId) ? storyId[0] : storyId;
     const surahIdStr = Array.isArray(surahId) ? surahId[0] : surahId;
@@ -36,7 +40,72 @@ export default function Reader() {
             setLoading(false);
         }
         loadData();
-    }, [story, surahIdStr]);
+
+        return () => {
+            if (sound) {
+                sound.unloadAsync();
+            }
+        };
+    }, [story, surahIdStr, sound]);
+
+    const playAudio = async (ayahNumber: number) => {
+        const ayahKey = `${surahIdStr}:${ayahNumber}`;
+
+        try {
+            // If already playing this verse, pause it
+            if (playingAyahKey === ayahKey) {
+                await pauseAudio();
+                return;
+            }
+
+            setLoadingAudio(ayahKey);
+
+            // Unload previous sound if any
+            if (sound) {
+                await sound.unloadAsync();
+            }
+
+            // Fetch audio URL from Quran.com API
+            const response = await fetch(`https://api.quran.com/api/v4/recitations/7/by_ayah/${ayahKey}`);
+            const data = await response.json();
+
+            if (data.audio_files && data.audio_files.length > 0) {
+                let audioUrl = data.audio_files[0].url;
+                if (!audioUrl.startsWith('http')) {
+                    if (audioUrl.startsWith('//')) {
+                        audioUrl = `https:${audioUrl}`;
+                    } else {
+                        audioUrl = `https://verses.quran.com/${audioUrl}`;
+                    }
+                }
+
+                const { sound: newSound } = await Audio.Sound.createAsync(
+                    { uri: audioUrl },
+                    { shouldPlay: true }
+                );
+
+                setSound(newSound);
+                setPlayingAyahKey(ayahKey);
+
+                newSound.setOnPlaybackStatusUpdate((status) => {
+                    if (status.isLoaded && status.didJustFinish) {
+                        setPlayingAyahKey(null);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("Error playing audio:", error);
+        } finally {
+            setLoadingAudio(null);
+        }
+    };
+
+    const pauseAudio = async () => {
+        if (sound) {
+            await sound.pauseAsync();
+            setPlayingAyahKey(null);
+        }
+    };
 
     const loadTafsir = async () => {
         if (!story || !surahIdStr) return;
@@ -96,20 +165,49 @@ export default function Reader() {
                     {loading ? (
                         <ActivityIndicator color="#bf9540" size="large" style={{ marginTop: 100 }} />
                     ) : (
-                        ayahs.map((ayah, index) => (
-                            <View key={ayah.number} style={styles.verseBlock}>
-                                <Text style={styles.arabicText}>{ayah.text}</Text>
+                        ayahs.map((ayah, index) => {
+                            const ayahKey = `${surahIdStr}:${ayah.number}`;
+                            const isPlaying = playingAyahKey === ayahKey;
+                            const isLoading = loadingAudio === ayahKey;
 
+                            return (
+                                <View key={ayah.number} style={styles.verseBlock}>
+                                    <Text style={[styles.arabicText, isPlaying && styles.activeText]}>
+                                        {ayah.text}
+                                    </Text>
 
-                                {index < ayahs.length - 1 && (
-                                    <View style={styles.divider}>
-                                        <View style={styles.dividerLine} />
-                                        <MaterialCommunityIcons name="auto-fix" size={12} color="rgba(191, 149, 64, 0.3)" />
-                                        <View style={styles.dividerLine} />
+                                    <View style={styles.audioControls}>
+                                        <TouchableOpacity
+                                            onPress={() => playAudio(ayah.number)}
+                                            style={[styles.audioButton, isPlaying && styles.activeAudioButton]}
+                                            disabled={isLoading}
+                                        >
+                                            {isLoading ? (
+                                                <ActivityIndicator size="small" color="#bf9540" />
+                                            ) : (
+                                                <MaterialIcons
+                                                    name={isPlaying ? "pause" : "play-arrow"}
+                                                    size={24}
+                                                    color={isPlaying ? "#0a0c14" : "#bf9540"}
+                                                />
+                                            )}
+                                        </TouchableOpacity>
+                                        <View style={styles.citationContainer}>
+                                            <Text style={styles.citationText}>تلاوة الشيخ مشاري العفاسي</Text>
+                                        </View>
                                     </View>
-                                )}
-                            </View>
-                        ))
+
+
+                                    {index < ayahs.length - 1 && (
+                                        <View style={styles.divider}>
+                                            <View style={styles.dividerLine} />
+                                            <MaterialCommunityIcons name="auto-fix" size={12} color="rgba(191, 149, 64, 0.3)" />
+                                            <View style={styles.dividerLine} />
+                                        </View>
+                                    )}
+                                </View>
+                            );
+                        })
                     )}
                 </View>
             </ScrollView>
@@ -262,8 +360,48 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'rgba(191, 149, 64, 0.8)',
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: 12,
         lineHeight: 26,
+        flex: 1,
+    },
+    audioControls: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 20,
+        gap: 16,
+        width: '100%',
+        justifyContent: 'center',
+    },
+    audioButton: {
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        borderWidth: 1,
+        borderColor: 'rgba(191, 149, 64, 0.3)',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent',
+    },
+    citationContainer: {
+        backgroundColor: 'rgba(191, 149, 64, 0.1)',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'rgba(191, 149, 64, 0.2)',
+    },
+    citationText: {
+        fontFamily: 'Amiri_400Regular',
+        fontSize: 12,
+        color: '#bf9540',
+        textAlign: 'right',
+    },
+    activeAudioButton: {
+        backgroundColor: '#bf9540',
+        borderColor: '#bf9540',
+    },
+    activeText: {
+        color: '#bf9540',
     },
     divider: {
         flexDirection: 'row',

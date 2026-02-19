@@ -10,7 +10,7 @@ export default function SettingsScreen() {
     const isRTL = I18nManager.isRTL;
 
     const handleEmailSupport = () => {
-        Linking.openURL('mailto:aburawi@outlook.com');
+        Linking.openURL('mailto:qn@databridge.ly');
     };
 
     const Section = ({ title, children }: { title?: string, children: React.ReactNode }) => (
@@ -65,15 +65,15 @@ export default function SettingsScreen() {
 
                 {/* App Info Section */}
                 <Section title="APP INFO">
-                    <Row label="Developer" value="AAtech" />
+                    <Row label="Developer" value="شركة جسر البيانات" />
                     <Row label="Author" value="Ahmed Aburawi" isLast />
                 </Section>
 
                 {/* Data Sources Section */}
                 <Section title="DATA SOURCES">
                     <Row label="Quran Text" value="الرسم العثماني" />
-                    <Row label="Tafsir" value="Tafsir Ibn Kathir" />
-                    <Row label="Narratives" value="AAtech Research" isLast />
+                    <Row label="Tafsir" value="تفسير ابن كثير" />
+                    <Row label="Narratives" value="Data Bridge Solutions Research" isLast />
                 </Section>
 
                 {/* Support Section */}
@@ -89,10 +89,10 @@ export default function SettingsScreen() {
                 {/* Footer */}
                 <View className="items-center mt-8 px-4">
                     <Text className="text-gray-400 text-xs text-center">
-                        © 2026 AAtech. All rights reserved.
+                        © 2026 Data Bridge Solutions. All rights reserved.
                     </Text>
                     <Text className="text-gray-400 text-xs text-center mt-1">
-                        Built with ❤️ by Ahmed Aburawi
+                        Made by Ahmed Aburawi
                     </Text>
                 </View>
             </ScrollView>

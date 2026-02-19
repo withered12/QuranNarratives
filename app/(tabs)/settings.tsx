@@ -11,7 +11,7 @@ export default function SettingsScreen() {
     const version = Constants.expoConfig?.version || '1.0.0';
 
     const handleEmailSupport = () => {
-        Linking.openURL('mailto:support@nur.digital');
+        Linking.openURL('mailto:qn@databridge.ly');
     };
 
     const Section = ({ title, children }: { title?: string, children: React.ReactNode }) => (
@@ -67,7 +67,7 @@ export default function SettingsScreen() {
 
                     {/* App Info Section */}
                     <Section title="معلومات التطبيق">
-                        <Row label="المطور" value="AAtech" />
+                        <Row label="المطور" value="شركة جسر البيانات" />
                         <Row label="المؤلف" value="Ahmed Aburawi" isLast />
                     </Section>
 
@@ -75,7 +75,7 @@ export default function SettingsScreen() {
                     <Section title="مصادر البيانات">
                         <Row label="نص القرآن" value="الرسم العثماني (Quran.com)" />
                         <Row label="التفسير" value="تفسير ابن كثير" />
-                        <Row label="الروايات" value="أبحاث AAtech" isLast />
+                        <Row label="الروايات" value="أبحاث شركة جسر البيانات" isLast />
                     </Section>
 
                     {/* Support Section */}
@@ -90,10 +90,10 @@ export default function SettingsScreen() {
                     {/* Footer */}
                     <View style={styles.footer}>
                         <Text style={styles.footerText}>
-                            © 2026 AAtech. جميع الحقوق محفوظة.
+                            © 2026 Data Bridge Solutions. جميع الحقوق محفوظة.
                         </Text>
                         <Text style={styles.footerSubtext}>
-                            صنع بكل ❤️ بواسطة أحمد أبورواي
+                            Made by Ahmed Aburawi
                         </Text>
                     </View>
                 </ScrollView>
