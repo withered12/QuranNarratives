@@ -42,6 +42,7 @@ export const LuxuryTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
                         if (route.name === 'index') label = 'الرئيسية';
                         else if (route.name === 'stories') label = 'القصص';
                         else if (route.name === 'saved') label = 'المحفوظات';
+                        else if (route.name === 'listen') label = 'استماع';
                         else if (route.name === 'center') label = 'القارئ';
 
                         // Skip the center button here, we'll render it separately to avoid clipping
@@ -51,7 +52,8 @@ export const LuxuryTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
 
                         const iconName = route.name === 'index' ? 'home' :
                             route.name === 'stories' ? 'library' :
-                                route.name === 'saved' ? 'bookmark' : 'square';
+                                route.name === 'saved' ? 'bookmark' :
+                                    route.name === 'listen' ? 'headphones' : 'square';
 
                         return (
                             <TouchableOpacity

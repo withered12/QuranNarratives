@@ -34,6 +34,12 @@ export default function TabLayout() {
           title: 'المحفوظات',
         }}
       />
+      <Tabs.Screen
+        name="listen"
+        options={{
+          title: 'استماع',
+        }}
+      />
     </Tabs>
   );
 }

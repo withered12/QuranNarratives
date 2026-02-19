@@ -99,12 +99,16 @@ const PlayerScreen = () => {
 
     // Handle auto-scroll when verse changes
     useEffect(() => {
-        if (verses.length > 0 && flatListRef.current) {
-            flatListRef.current.scrollToIndex({
-                index: currentVerseIndex,
-                animated: true,
-                viewPosition: 0.3
-            });
+        if (verses.length > 0 && currentVerseIndex < verses.length && flatListRef.current) {
+            try {
+                flatListRef.current.scrollToIndex({
+                    index: currentVerseIndex,
+                    animated: true,
+                    viewPosition: 0.3
+                });
+            } catch (error) {
+                console.warn('[Player] Scroll error:', error);
+            }
         }
     }, [currentVerseIndex, verses.length]);
 
