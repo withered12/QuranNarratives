@@ -108,12 +108,13 @@ const styles = StyleSheet.create({
     },
     header: {
         alignItems: 'center',
-        paddingVertical: 40,
+        paddingTop: 10,
+        paddingBottom: 30,
     },
     logoContainer: {
-        width: 100,
-        height: 100,
-        marginBottom: 20,
+        width: 80,
+        height: 80,
+        marginBottom: 12,
     },
     logoBackground: {
         flex: 1,
@@ -124,13 +125,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         borderRadius: 12,
     },
     bannerTitle: {
         fontFamily: 'Amiri_700Bold',
-        fontSize: 32,
+        fontSize: 28,
         color: '#bf9540',
         textAlign: 'center',
     },
