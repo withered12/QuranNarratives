@@ -4,7 +4,7 @@ import { StoryNode } from '@/components/ui/StoryNode';
 import { getSurahList } from '@/services/quranApi';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Home() {
     const { query } = useLocalSearchParams();
+    const router = useRouter();
     const allSurahs = getSurahList();
     const insets = useSafeAreaInsets();
 
@@ -108,7 +109,10 @@ export default function Home() {
                         <Text style={styles.headerSubtitle}>QURAN NARRATIVES</Text>
                     </View>
                     <View style={styles.headerActions}>
-                        <TouchableOpacity style={styles.iconButton}>
+                        <TouchableOpacity
+                            style={styles.iconButton}
+                            onPress={() => router.push('/settings')}
+                        >
                             <MaterialCommunityIcons name="menu" size={24} color="#bf9540" />
                         </TouchableOpacity>
                     </View>
