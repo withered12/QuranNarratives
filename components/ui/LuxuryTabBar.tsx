@@ -94,7 +94,7 @@ export const LuxuryTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
                     };
 
                     return (
-                        <View key={route.key} style={styles.centerButtonOuter}>
+                        <View key={route.key} style={styles.centerButtonOuter} pointerEvents="box-none">
                             <TouchableOpacity
                                 onPress={onPress}
                                 activeOpacity={0.8}
