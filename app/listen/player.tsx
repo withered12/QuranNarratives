@@ -116,13 +116,28 @@ const PlayerScreen = () => {
         }
 
         try {
+            const verseAudio = currentVerses[index]?.audio;
+            if (!verseAudio) {
+                console.warn(`[Player] No audio found for verse ${index + 1}, skipping...`);
+                if (index + 1 < currentVerses.length) {
+                    playVerse(index + 1, currentVerses);
+                }
+                return;
+            }
+
+            console.log(`[Player] Playing verse ${index + 1}: ${verseAudio}`);
+
             // Cleanup previous sound
             if (soundRef.current) {
-                await soundRef.current.unloadAsync();
+                try {
+                    await soundRef.current.unloadAsync();
+                } catch (e) {
+                    console.log('[Player] Error unloading sound:', e);
+                }
             }
 
             const { sound: newSound } = await Audio.Sound.createAsync(
-                { uri: currentVerses[index].audio },
+                { uri: verseAudio },
                 { shouldPlay: true },
                 (status: any) => {
                     if (status.didJustFinish) {
