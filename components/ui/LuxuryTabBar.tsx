@@ -60,6 +60,7 @@ export const LuxuryTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
                                 key={route.key}
                                 onPress={onPress}
                                 style={styles.tabItem}
+                                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                             >
                                 <MaterialCommunityIcons
                                     name={iconName as any}
@@ -98,6 +99,7 @@ export const LuxuryTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
                                 onPress={onPress}
                                 activeOpacity={0.8}
                                 style={styles.centerButtonTouchable}
+                                hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
                             >
                                 <LinearGradient
                                     colors={['#e5c17d', '#bf9540', '#8c6a26']}

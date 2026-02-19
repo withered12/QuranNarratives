@@ -23,7 +23,7 @@ export const GoldGradientBorder: React.FC<GoldGradientBorderProps> = ({
             style={[styles.gradient, { borderRadius }, style]}
             className={className}
         >
-            <View style={[styles.innerContainer, { borderRadius: borderRadius - 1 }]}>
+            <View style={[styles.innerContainer, { borderRadius: borderRadius - 1 }, { flex: 1 }]}>
                 {children}
             </View>
         </LinearGradient>

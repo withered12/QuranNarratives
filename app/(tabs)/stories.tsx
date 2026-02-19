@@ -1,6 +1,6 @@
 import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
 import { GoldGradientBorder } from '@/components/ui/GoldGradientBorder';
-import { getAllProphetsAr, getAllTagsAr } from '@/services/quranApi';
+import { getAllProphetsAr, getAllStories, getAllTagsAr } from '@/services/quranApi';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useRouter } from 'expo-router';
@@ -17,6 +17,7 @@ export default function Codex() {
 
     const prophets = getAllProphetsAr();
     const themes = getAllTagsAr();
+    const featuredStories = getAllStories().slice(0, 5);
 
     const renderCategoryItem = (item: string) => (
         <TouchableOpacity
@@ -96,8 +97,17 @@ export default function Codex() {
                     <View style={styles.sectionContainer}>
                         <Text style={styles.sectionTitle}>مختارات منتقاة</Text>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.featuredScroll}>
-                            {[1, 2, 3].map((i) => (
-                                <TouchableOpacity key={i} style={styles.featuredCard}>
+                            {featuredStories.map((story) => (
+                                <TouchableOpacity
+                                    key={story.id}
+                                    style={styles.featuredCard}
+                                    onPress={() => {
+                                        router.push({
+                                            pathname: `/reader/${story.id}`,
+                                            params: { surahId: story.surahId }
+                                        });
+                                    }}
+                                >
                                     <GoldGradientBorder borderRadius={20} style={{ flex: 1 }}>
                                         <View style={styles.featuredContent}>
                                             <LinearGradient
@@ -105,8 +115,10 @@ export default function Codex() {
                                                 style={styles.featuredOverlay}
                                             />
                                             <View style={styles.featuredTextContainer}>
-                                                <Text style={styles.featuredTag}>الفصل {i}</Text>
-                                                <Text style={styles.featuredTitle}>حكمة نبوية</Text>
+                                                <Text style={styles.featuredTag}>
+                                                    {story.tags_ar?.[0] || 'قصة إلهية'}
+                                                </Text>
+                                                <Text style={styles.featuredTitle}>{story.title_ar || story.title}</Text>
                                             </View>
                                         </View>
                                     </GoldGradientBorder>
@@ -240,6 +252,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 20,
         start: 20,
+        end: 20,
         alignItems: 'flex-start',
     },
     featuredTag: {
@@ -248,11 +261,14 @@ const styles = StyleSheet.create({
         color: '#bf9540',
         letterSpacing: 2,
         marginBottom: 4,
+        textAlign: 'right',
     },
     featuredTitle: {
         fontFamily: 'Amiri_700Bold',
         fontSize: 22,
         color: '#ffffff',
+        textAlign: 'right',
+        width: '100%',
     },
     listContainer: {
         paddingHorizontal: 24,
