@@ -26,11 +26,11 @@ interface Verse {
 // Mapping Quran.com reciter IDs to Al-Quran Cloud identifiers
 const RECITER_MAP: Record<string, string> = {
     '7': 'ar.alafasy',
-    '2': 'ar.abdulabasetmurattal',
-    '1': 'ar.abdulabasethafsumujawwad',
-    '12': 'ar.husarymuallim',
-    '9': 'ar.minshawimurattal',
-    '8': 'ar.minshawi',
+    '2': 'ar.abdulbasitmurattal',
+    '1': 'ar.abdulsamad',
+    '12': 'ar.husary',
+    '9': 'ar.minshawi',
+    '8': 'ar.ahmedajamy', // Using AJamy as fallback for 8
 };
 
 const PlayerScreen = () => {

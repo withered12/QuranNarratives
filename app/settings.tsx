@@ -76,6 +76,16 @@ export default function SettingsScreen() {
                     <Row label="Narratives" value="Data Bridge Solutions Research" isLast />
                 </Section>
 
+                {/* Features Section */}
+                <Section title="FEATURES">
+                    <Row
+                        label="Quran Player"
+                        onPress={() => router.push('/listen')}
+                        showChevron
+                        isLast
+                    />
+                </Section>
+
                 {/* Support Section */}
                 <Section title="SUPPORT">
                     <Row
