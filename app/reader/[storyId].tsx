@@ -1,3 +1,4 @@
+import AudioService from '@/services/AudioService';
 import { getStoryDetails, getStoryVerses } from '@/services/quranApi';
 import { fetchAndMergeNarrative } from '@/services/TafsirService';
 import { Ayah } from '@/types';
@@ -42,9 +43,7 @@ export default function Reader() {
         loadData();
 
         return () => {
-            if (sound) {
-                sound.unloadAsync();
-            }
+            AudioService.stopCurrentSound();
         };
     }, [story, surahIdStr, sound]);
 
@@ -60,11 +59,6 @@ export default function Reader() {
 
             setLoadingAudio(ayahKey);
 
-            // Unload previous sound if any
-            if (sound) {
-                await sound.unloadAsync();
-            }
-
             // Fetch audio URL from Quran.com API
             const response = await fetch(`https://api.quran.com/api/v4/recitations/7/by_ayah/${ayahKey}`);
             const data = await response.json();
@@ -79,19 +73,13 @@ export default function Reader() {
                     }
                 }
 
-                const { sound: newSound } = await Audio.Sound.createAsync(
-                    { uri: audioUrl },
-                    { shouldPlay: true }
-                );
-
-                setSound(newSound);
-                setPlayingAyahKey(ayahKey);
-
-                newSound.setOnPlaybackStatusUpdate((status) => {
+                await AudioService.playNewSound(audioUrl, (status) => {
                     if (status.isLoaded && status.didJustFinish) {
                         setPlayingAyahKey(null);
                     }
                 });
+
+                setPlayingAyahKey(ayahKey);
             }
         } catch (error) {
             console.error("Error playing audio:", error);
@@ -101,10 +89,8 @@ export default function Reader() {
     };
 
     const pauseAudio = async () => {
-        if (sound) {
-            await sound.pauseAsync();
-            setPlayingAyahKey(null);
-        }
+        await AudioService.stopCurrentSound();
+        setPlayingAyahKey(null);
     };
 
     const loadTafsir = async () => {
@@ -146,7 +132,6 @@ export default function Reader() {
                             <Text style={styles.headerSubtitle}>أنت تقرأ الآن</Text>
                             <Text style={styles.headerTitle} numberOfLines={1}>{story.title_ar}</Text>
                         </View>
-                        <View style={{ width: 40 }} />
                     </View>
                 </SafeAreaView>
             </BlurView>
@@ -236,9 +221,43 @@ export default function Reader() {
                             {loadingTafsir ? (
                                 <ActivityIndicator color="#bf9540" size="large" style={{ marginTop: 40 }} />
                             ) : (
-                                tafsirData.map((para, i) => (
-                                    <Text key={i} style={styles.tafsirText}>{para.replace(/<[^>]*>?/gm, '')}</Text>
-                                ))
+                                tafsirData.map((para, i) => {
+                                    // 1. Convert any HTML tags into newlines
+                                    const withNewlines = para.replace(/<(br|p|div)[^>]*>/gi, '\n');
+                                    // Strip other HTML
+                                    const cleanText = withNewlines.replace(/<[^>]*>?/gm, '').trim();
+
+                                    if (!cleanText) return null;
+
+                                    // 2. Fallback: split by Arabic delimiters (periods, commas) to break wall of text
+                                    // Since some Tafsirs lack HTML spacing entirely.
+                                    let segments = cleanText.split(/\n+/);
+                                    if (segments.length === 1 && cleanText.length > 150) {
+                                        // Split tightly compressed sentences 
+                                        segments = cleanText.split(/([.؟] |، )/);
+                                        // Re-join sentences in pairs (delimiter + text)
+                                        const grouped = [];
+                                        let current = '';
+                                        for (const chunk of segments) {
+                                            if (/[.؟] |، /.test(chunk)) {
+                                                if (current) grouped.push(current + chunk.trim());
+                                                current = '';
+                                            } else {
+                                                current += chunk;
+                                            }
+                                        }
+                                        if (current) grouped.push(current);
+                                        segments = grouped;
+                                    }
+
+                                    return segments.map((segment, j) => {
+                                        const trimmed = segment.trim();
+                                        if (!trimmed) return null;
+                                        return (
+                                            <Text key={`${i}-${j}`} style={styles.tafsirText}>{trimmed}</Text>
+                                        );
+                                    });
+                                })
                             )}
                         </ScrollView>
                     </BlurView>
@@ -307,19 +326,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerTitleContainer: {
-        alignItems: 'center',
+        flex: 1,
+        alignItems: 'flex-start',
+        paddingRight: 16,
     },
     headerSubtitle: {
         fontFamily: 'Lato_700Bold',
         fontSize: 8,
         letterSpacing: 2,
         color: 'rgba(191, 149, 64, 0.6)',
+        textAlign: 'right',
+        alignSelf: 'stretch',
     },
     headerTitle: {
         fontFamily: 'Lato_700Bold',
         fontSize: 14,
         color: '#F5F5DC',
         marginTop: 2,
+        textAlign: 'right',
+        alignSelf: 'stretch',
     },
     progressBarBackground: {
         height: 2,
@@ -395,6 +420,9 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#bf9540',
         textAlign: 'right',
+        writingDirection: 'rtl',
+        width: '100%',
+        alignSelf: 'stretch',
     },
     activeAudioButton: {
         backgroundColor: '#bf9540',
@@ -507,14 +535,17 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#bf9540',
         letterSpacing: 2,
+        textAlign: 'right',
     },
     tafsirText: {
-        fontFamily: 'Newsreader_400Regular',
+        fontFamily: 'Amiri_400Regular',
         fontSize: 18,
         color: '#F5F5DC',
         lineHeight: 32,
         marginBottom: 24,
         textAlign: 'right',
         writingDirection: 'rtl',
+        width: '100%',
+        alignSelf: 'stretch',
     }
 });

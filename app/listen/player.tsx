@@ -1,6 +1,6 @@
 import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
+import AudioService from '@/services/AudioService';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Audio } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
@@ -91,9 +91,7 @@ const PlayerScreen = () => {
         loadInitialData();
 
         return () => {
-            if (soundRef.current) {
-                soundRef.current.unloadAsync();
-            }
+            AudioService.stopCurrentSound();
         };
     }, [chapter_id, reciter_id]);
 
@@ -131,29 +129,17 @@ const PlayerScreen = () => {
 
             console.log(`[Player] Playing verse ${index + 1}: ${verseAudio}`);
 
-            // Cleanup previous sound
-            if (soundRef.current) {
-                try {
-                    await soundRef.current.unloadAsync();
-                } catch (e) {
-                    console.log('[Player] Error unloading sound:', e);
+            await AudioService.playNewSound(verseAudio, (status: any) => {
+                if (status.didJustFinish) {
+                    setCurrentVerseIndex(prev => {
+                        const next = prev + 1;
+                        playVerse(next, currentVerses);
+                        return next;
+                    });
                 }
-            }
+            });
 
-            const { sound: newSound } = await Audio.Sound.createAsync(
-                { uri: verseAudio },
-                { shouldPlay: true },
-                (status: any) => {
-                    if (status.didJustFinish) {
-                        setCurrentVerseIndex(prev => {
-                            const next = prev + 1;
-                            playVerse(next, currentVerses);
-                            return next;
-                        });
-                    }
-                }
-            );
-
+            const newSound = AudioService.getSound();
             soundRef.current = newSound;
             setSound(newSound);
             setIsPlaying(true);
@@ -169,13 +155,12 @@ const PlayerScreen = () => {
         if (!soundRef.current) return;
 
         if (isPlaying) {
-            await soundRef.current.pauseAsync();
+            await AudioService.stopCurrentSound();
             setIsPlaying(false);
             isPlayingRef.current = false;
         } else {
-            await soundRef.current.playAsync();
-            setIsPlaying(true);
-            isPlayingRef.current = true;
+            // Restart current verse if no sound exists
+            playVerse(currentVerseIndex);
         }
     };
 
@@ -336,7 +321,7 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
     },
     surahTitle: {
-        fontFamily: 'Cinzel_700Bold',
+        fontFamily: 'Amiri_700Bold',
         fontSize: 18,
         color: '#bf9540',
         marginTop: 4,

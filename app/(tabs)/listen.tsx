@@ -48,8 +48,8 @@ const ListenScreen = () => {
         const fetchInitialData = async () => {
             try {
                 const [recitationsRes, chaptersRes] = await Promise.all([
-                    fetch('https://api.quran.com/api/v4/resources/recitations?language=en').catch(() => ({ ok: false })),
-                    fetch('https://api.quran.com/api/v4/chapters?language=en').catch(() => ({ ok: false }))
+                    fetch('https://api.quran.com/api/v4/resources/recitations?language=ar').catch(() => ({ ok: false })),
+                    fetch('https://api.quran.com/api/v4/chapters?language=ar').catch(() => ({ ok: false }))
                 ]);
 
                 if (!recitationsRes.ok || !chaptersRes.ok) {
@@ -97,12 +97,11 @@ const ListenScreen = () => {
                             </View>
                             <View style={styles.nameContainer}>
                                 <Text style={styles.surahNameEn}>{item.name_simple}</Text>
-                                <Text style={styles.surahTranslationEn}>{item.translated_name?.name || ''}</Text>
+                                <Text style={styles.surahTranslationEn}>{item.revelation_place === 'makkah' ? 'مكية' : 'مدنية'} • {item.verses_count} آيات</Text>
                             </View>
                         </View>
                         <View style={styles.arabicContainer}>
                             <Text style={styles.surahNameAr}>{item.name_arabic}</Text>
-                            <Text style={styles.ayahCount}>{item.verses_count} آيات</Text>
                         </View>
                     </View>
                 </GoldGradientBorder>
@@ -126,7 +125,7 @@ const ListenScreen = () => {
             <View style={[styles.container, { paddingTop: insets.top }]}>
                 <View style={styles.header}>
                     <Text style={styles.headerTitle}>استماع</Text>
-                    <Text style={styles.headerSubtitle}>QURAN RECITATION</Text>
+                    <Text style={styles.headerSubtitle}>تلاوة القرآن</Text>
                 </View>
 
                 <View style={styles.reciterSection}>
@@ -200,11 +199,11 @@ const styles = StyleSheet.create({
         letterSpacing: 2,
     },
     headerSubtitle: {
-        fontFamily: 'Cinzel_400Regular',
-        fontSize: 10,
-        letterSpacing: 3,
+        fontFamily: 'Amiri_400Regular',
+        fontSize: 12,
+        letterSpacing: 1,
         color: 'rgba(191, 149, 64, 0.6)',
-        marginTop: -4,
+        marginTop: 4,
     },
     reciterSection: {
         paddingVertical: 12,
@@ -234,13 +233,13 @@ const styles = StyleSheet.create({
         borderColor: '#bf9540',
     },
     reciterName: {
-        fontFamily: 'Lato_400Regular',
-        fontSize: 13,
+        fontFamily: 'Amiri_400Regular',
+        fontSize: 14,
         color: 'rgba(191, 149, 64, 0.8)',
     },
     reciterNameSelected: {
         color: '#0a0c14',
-        fontFamily: 'Lato_700Bold',
+        fontFamily: 'Amiri_700Bold',
     },
     listContent: {
         paddingHorizontal: 20,
@@ -250,14 +249,14 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     surahCard: {
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 16,
         backgroundColor: 'rgba(10, 12, 20, 0.95)',
     },
     surahInfo: {
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         alignItems: 'center',
         gap: 12,
     },
@@ -277,7 +276,7 @@ const styles = StyleSheet.create({
         color: '#bf9540',
     },
     nameContainer: {
-        alignItems: 'flex-start',
+        alignItems: 'flex-end',
     },
     surahNameEn: {
         fontFamily: 'Cinzel_700Bold',
@@ -285,13 +284,14 @@ const styles = StyleSheet.create({
         color: '#ffffff',
     },
     surahTranslationEn: {
-        fontFamily: 'Lato_400Regular',
-        fontSize: 11,
+        fontFamily: 'Amiri_400Regular',
+        fontSize: 12,
         color: 'rgba(191, 149, 64, 0.6)',
         marginTop: 2,
+        textAlign: 'right',
     },
     arabicContainer: {
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
     },
     surahNameAr: {
         fontFamily: 'Amiri_700Bold',
