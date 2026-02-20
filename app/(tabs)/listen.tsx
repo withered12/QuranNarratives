@@ -99,17 +99,12 @@ const ListenScreen = () => {
             >
                 <GoldGradientBorder borderRadius={12}>
                     <View style={styles.surahCard}>
-                        <View style={styles.surahInfo}>
-                            <View style={styles.numberBadge}>
-                                <Text style={styles.surahNumberText}>{item.id}</Text>
-                            </View>
-                            <View style={styles.nameContainer}>
-                                <Text style={styles.surahNameEn}>{item.name_arabic}</Text>
-                                <Text style={styles.surahTranslationEn}>{item.revelation_place === 'makkah' ? 'مكية' : 'مدنية'} • {item.verses_count} آيات</Text>
-                            </View>
-                        </View>
                         <View style={styles.arabicContainer}>
                             <Text style={styles.surahNameAr}>{item.name_arabic}</Text>
+                            <Text style={styles.ayahCount}>{item.revelation_place === 'makkah' ? 'مكية' : 'مدنية'} • {item.verses_count} آيات</Text>
+                        </View>
+                        <View style={styles.numberBadge}>
+                            <Text style={styles.surahNumberText}>{item.id}</Text>
                         </View>
                     </View>
                 </GoldGradientBorder>
@@ -137,7 +132,9 @@ const ListenScreen = () => {
                 </View>
 
                 <View style={styles.reciterSection}>
-                    <Text style={styles.sectionTitle}>اختر القارئ</Text>
+                    <View style={{ width: '100%', paddingHorizontal: 20, marginBottom: 12 }}>
+                        <Text style={[styles.sectionTitle, { paddingHorizontal: 0 }]}>اختر القارئ</Text>
+                    </View>
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}
@@ -298,7 +295,7 @@ const styles = StyleSheet.create({
         marginTop: 2,
     },
     arabicContainer: {
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
     },
     surahNameAr: {
         fontFamily: 'Amiri_700Bold',
@@ -309,7 +306,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Amiri_400Regular',
         fontSize: 12,
         color: 'rgba(255, 255, 255, 0.4)',
-        marginTop: 2,
+        marginTop: 0,
     },
 });
 
