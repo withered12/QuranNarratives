@@ -23,15 +23,7 @@ interface Verse {
     audio: string;
 }
 
-// Mapping Quran.com reciter IDs to Al-Quran Cloud identifiers
-const RECITER_MAP: Record<string, string> = {
-    '7': 'ar.alafasy',
-    '2': 'ar.abdulbasitmurattal',
-    '1': 'ar.abdulsamad',
-    '12': 'ar.husary',
-    '9': 'ar.minshawi',
-    '8': 'ar.ahmedajamy', // Using AJamy as fallback for 8
-};
+// reciter_id is now the Al-Quran Cloud identifier directly (e.g. 'ar.alafasy')
 
 const PlayerScreen = () => {
     const { chapter_id, reciter_id } = useLocalSearchParams();
@@ -52,7 +44,7 @@ const PlayerScreen = () => {
     useEffect(() => {
         const loadInitialData = async () => {
             try {
-                const reciterIdentifier = RECITER_MAP[reciter_id as string] || 'ar.alafasy';
+                const reciterIdentifier = (reciter_id as string) || 'ar.alafasy';
 
                 const [versesRes, chapterRes] = await Promise.all([
                     fetch(`https://api.alquran.cloud/v1/surah/${chapter_id}/${reciterIdentifier}`).catch(() => ({ ok: false })),

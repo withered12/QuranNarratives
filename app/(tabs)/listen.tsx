@@ -15,7 +15,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Reciter {
-    id: number;
+    id: string;
     reciter_name: string;
     style?: string;
 }
@@ -37,25 +37,25 @@ interface Chapter {
 }
 
 const CURATED_RECITERS: Reciter[] = [
-    { id: 7, reciter_name: 'مشاري راشد العفاسي' },
-    { id: 1, reciter_name: 'عبد الباسط عبد الصمد' },
-    { id: 2, reciter_name: 'عبد الرحمن السديس' },
-    { id: 6, reciter_name: 'محمود خليل الحصري' },
-    { id: 5, reciter_name: 'محمد صديق المنشاوي' },
-    { id: 4, reciter_name: 'سعود الشريم' },
-    { id: 3, reciter_name: 'ماهر المعيقلي' },
-    { id: 10, reciter_name: 'أبو بكر الشاطري' },
-    { id: 9, reciter_name: 'هاني الرفاعي' },
-    { id: 11, reciter_name: 'ناصر القطامي' },
-    { id: 8, reciter_name: 'ياسر الدوسري' },
-    { id: 12, reciter_name: 'أحمد بن علي العجمي' },
+    { id: 'ar.alafasy', reciter_name: 'مشاري راشد العفاسي' },
+    { id: 'ar.abdulsamad', reciter_name: 'عبد الباسط عبد الصمد' },
+    { id: 'ar.abdurrahmaansudais', reciter_name: 'عبد الرحمن السديس' },
+    { id: 'ar.husary', reciter_name: 'محمود خليل الحصري' },
+    { id: 'ar.saoodshuraym', reciter_name: 'سعود الشريم' },
+    { id: 'ar.mahermuaiqly', reciter_name: 'ماهر المعيقلي' },
+    { id: 'ar.shaatree', reciter_name: 'أبو بكر الشاطري' },
+    { id: 'ar.hanirifai', reciter_name: 'هاني الرفاعي' },
+    { id: 'ar.ahmedajamy', reciter_name: 'أحمد بن علي العجمي' },
+    { id: 'ar.hudhaify', reciter_name: 'علي الحذيفي' },
+    { id: 'ar.muhammadayyoub', reciter_name: 'محمد أيوب' },
+    { id: 'ar.muhammadjibreel', reciter_name: 'محمد جبريل' },
 ];
 
 const ListenScreen = () => {
     const router = useRouter();
     const insets = useSafeAreaInsets();
     const [chapters, setChapters] = useState<Chapter[]>([]);
-    const [selectedReciterId, setSelectedReciterId] = useState<number>(7);
+    const [selectedReciterId, setSelectedReciterId] = useState<string>('ar.alafasy');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
