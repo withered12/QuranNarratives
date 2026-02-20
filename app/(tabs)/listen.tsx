@@ -36,54 +36,39 @@ interface Chapter {
     };
 }
 
+const CURATED_RECITERS: Reciter[] = [
+    { id: 7, reciter_name: 'مشاري راشد العفاسي' },
+    { id: 1, reciter_name: 'عبد الباسط عبد الصمد' },
+    { id: 2, reciter_name: 'عبد الرحمن السديس' },
+    { id: 6, reciter_name: 'محمود خليل الحصري' },
+    { id: 5, reciter_name: 'محمد صديق المنشاوي' },
+    { id: 4, reciter_name: 'سعود الشريم' },
+    { id: 3, reciter_name: 'ماهر المعيقلي' },
+    { id: 10, reciter_name: 'أبو بكر الشاطري' },
+    { id: 9, reciter_name: 'هاني الرفاعي' },
+    { id: 11, reciter_name: 'ناصر القطامي' },
+    { id: 8, reciter_name: 'ياسر الدوسري' },
+    { id: 12, reciter_name: 'أحمد بن علي العجمي' },
+];
+
 const ListenScreen = () => {
     const router = useRouter();
     const insets = useSafeAreaInsets();
-    const [reciters, setReciters] = useState<Reciter[]>([]);
     const [chapters, setChapters] = useState<Chapter[]>([]);
-    const [selectedReciterId, setSelectedReciterId] = useState<number>(7); // Default: Mishari Rashid al-Afasy
+    const [selectedReciterId, setSelectedReciterId] = useState<number>(7);
     const [loading, setLoading] = useState(true);
-
-    // Arabic reciter name mapping for common reciters
-    const reciterArNames: Record<string, string> = {
-        'Mishari Rashid al-`Afasy': 'مشاري راشد العفاسي',
-        'AbdulBaset AbdulSamad': 'عبد الباسط عبد الصمد',
-        'Abdul Rahman Al-Sudais': 'عبد الرحمن السديس',
-        'Hani ar-Rifai': 'هاني الرفاعي',
-        'Mahmoud Khalil Al-Husary': 'محمود خليل الحصري',
-        'Mohamed Siddiq al-Minshawi': 'محمد صديق المنشاوي',
-        'Sa`ud ash-Shuraym': 'سعود الشريم',
-        'Mohamed al-Tablawi': 'محمد الطبلاوي',
-        'Maher Al Muaiqly': 'ماهر المعيقلي',
-        'Abu Bakr al-Shatri': 'أبو بكر الشاطري',
-        'Nasser Alqatami': 'ناصر القطامي',
-        'Ali Jaber': 'علي جابر',
-        'Yasser Ad-Dossari': 'ياسر الدوسري',
-        'Khalifah Taniji': 'خليفة الطنيجي',
-        'Ahmad ibn Ali al-Ajamy': 'أحمد بن علي العجمي',
-        'Bandar Balila': 'بندر بليلة',
-        'Ibrahim Walk': 'إبراهيم واك',
-    };
-
-    const getReciterArName = (name: string) => reciterArNames[name] || name;
 
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
-                const [recitationsRes, chaptersRes] = await Promise.all([
-                    fetch('https://api.quran.com/api/v4/resources/recitations?language=ar').catch(() => ({ ok: false })),
-                    fetch('https://api.quran.com/api/v4/chapters?language=ar').catch(() => ({ ok: false }))
-                ]);
+                const chaptersRes = await fetch('https://api.quran.com/api/v4/chapters?language=ar').catch(() => ({ ok: false }));
 
-                if (!recitationsRes.ok || !chaptersRes.ok) {
-                    console.error('[Listen] One or more API requests failed');
+                if (!chaptersRes.ok) {
+                    console.error('[Listen] Chapters API request failed');
                     return;
                 }
 
-                const recitationsData = await (recitationsRes as Response).json();
                 const chaptersData = await (chaptersRes as Response).json();
-
-                if (recitationsData?.recitations) setReciters(recitationsData.recitations);
                 if (chaptersData?.chapters) setChapters(chaptersData.chapters);
             } catch (error) {
                 console.error('[Listen] Error loading data:', error);
@@ -153,7 +138,7 @@ const ListenScreen = () => {
                         showsHorizontalScrollIndicator={false}
                         contentContainerStyle={styles.reciterList}
                     >
-                        {reciters.map((reciter) => (
+                        {CURATED_RECITERS.map((reciter) => (
                             <TouchableOpacity
                                 key={reciter.id}
                                 style={[
@@ -168,7 +153,7 @@ const ListenScreen = () => {
                                         selectedReciterId === reciter.id && styles.reciterNameSelected
                                     ]}
                                 >
-                                    {getReciterArName(reciter.reciter_name)}
+                                    {reciter.reciter_name}
                                 </Text>
                             </TouchableOpacity>
                         ))}
