@@ -114,14 +114,12 @@ const ListenScreen = () => {
             >
                 <GoldGradientBorder borderRadius={12}>
                     <View style={styles.surahCard}>
-                        <View style={styles.surahInfo}>
-                            <View style={styles.numberBadge}>
-                                <Text style={styles.surahNumberText}>{item.id}</Text>
-                            </View>
-                            <View style={styles.nameContainer}>
-                                <Text className="text-right" style={styles.surahNameAr}>{item.name_arabic}</Text>
-                                <Text className="text-right" style={styles.surahTranslationEn}>{item.revelation_place === 'makkah' ? 'مكية' : 'مدنية'} • {item.verses_count} آيات</Text>
-                            </View>
+                        <View style={styles.numberBadge}>
+                            <Text style={styles.surahNumberText}>{item.id}</Text>
+                        </View>
+                        <View style={styles.nameContainer}>
+                            <Text className="text-right w-full" style={styles.surahNameAr}>{item.name_arabic}</Text>
+                            <Text className="text-right w-full" style={styles.surahTranslationEn}>{item.revelation_place === 'makkah' ? 'مكية' : 'مدنية'} • {item.verses_count} آيات</Text>
                         </View>
                     </View>
                 </GoldGradientBorder>
@@ -269,14 +267,14 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     surahCard: {
-        flexDirection: 'row-reverse',
-        justifyContent: 'space-between',
+        flexDirection: 'row',
         alignItems: 'center',
+        gap: 12,
         padding: 16,
         backgroundColor: 'rgba(10, 12, 20, 0.95)',
     },
     surahInfo: {
-        flexDirection: 'row-reverse',
+        flexDirection: 'row',
         alignItems: 'center',
         gap: 12,
     },
@@ -296,6 +294,7 @@ const styles = StyleSheet.create({
         color: '#bf9540',
     },
     nameContainer: {
+        flex: 1,
         alignItems: 'flex-end',
     },
     surahNameEn: {
