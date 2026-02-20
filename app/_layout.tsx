@@ -1,3 +1,4 @@
+import { AudioProvider } from "@/context/AudioContext";
 import { Amiri_400Regular, Amiri_700Bold } from "@expo-google-fonts/amiri";
 import { Cinzel_400Regular, Cinzel_700Bold, useFonts } from "@expo-google-fonts/cinzel";
 import { Lato_300Light, Lato_400Regular, Lato_700Bold } from "@expo-google-fonts/lato";
@@ -42,27 +43,29 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#0a0c14' }}>
-      <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: "#0a0c14",
-          },
-          headerTintColor: "#bf9540",
-          headerTitleStyle: {
-            fontFamily: "Cinzel_700Bold",
-          },
-          contentStyle: {
-            backgroundColor: "#0a0c14",
-          },
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="surah/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="reader/[storyId]" options={{ headerShown: false }} />
-        <Stack.Screen name="listen/player" options={{ presentation: 'fullScreenModal', headerShown: false }} />
-      </Stack>
-    </View>
+    <AudioProvider>
+      <View style={{ flex: 1, backgroundColor: '#0a0c14' }}>
+        <StatusBar style="light" />
+        <Stack
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "#0a0c14",
+            },
+            headerTintColor: "#bf9540",
+            headerTitleStyle: {
+              fontFamily: "Cinzel_700Bold",
+            },
+            contentStyle: {
+              backgroundColor: "#0a0c14",
+            },
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="surah/[id]" options={{ headerShown: false }} />
+          <Stack.Screen name="reader/[storyId]" options={{ headerShown: false }} />
+          <Stack.Screen name="listen/player" options={{ presentation: 'fullScreenModal', headerShown: false }} />
+        </Stack>
+      </View>
+    </AudioProvider>
   );
 }

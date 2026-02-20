@@ -1,9 +1,8 @@
-import AudioService from '@/services/AudioService';
+import { useAudio } from '@/context/AudioContext';
 import { getStoryDetails, getStoryVerses } from '@/services/quranApi';
 import { fetchAndMergeNarrative } from '@/services/TafsirService';
 import { Ayah } from '@/types';
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { Audio } from 'expo-av';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -14,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Reader() {
     const { storyId, surahId } = useLocalSearchParams();
     const router = useRouter();
+    const { loadAndPlayAudio, stopAndClear, isPlaying, trackInfo } = useAudio();
 
     const [ayahs, setAyahs] = useState<Ayah[]>([]);
     const [loading, setLoading] = useState(true);
@@ -21,8 +21,7 @@ export default function Reader() {
     const [tafsirData, setTafsirData] = useState<string[]>([]);
     const [loadingTafsir, setLoadingTafsir] = useState(false);
 
-    // Audio State
-    const [sound, setSound] = useState<Audio.Sound | null>(null);
+    // Local state for UI feedback
     const [playingAyahKey, setPlayingAyahKey] = useState<string | null>(null);
     const [loadingAudio, setLoadingAudio] = useState<string | null>(null);
 
@@ -41,18 +40,23 @@ export default function Reader() {
             setLoading(false);
         }
         loadData();
+    }, [story, surahIdStr]);
 
-        return () => {
-            AudioService.stopCurrentSound();
-        };
-    }, [story, surahIdStr, sound]);
+    // Sync local playingAyahKey with global trackInfo
+    useEffect(() => {
+        if (trackInfo && trackInfo.surahId === surahIdStr) {
+            setPlayingAyahKey(`${surahIdStr}:${trackInfo.verseNumber}`);
+        } else {
+            setPlayingAyahKey(null);
+        }
+    }, [trackInfo, surahIdStr]);
 
     const playAudio = async (ayahNumber: number) => {
         const ayahKey = `${surahIdStr}:${ayahNumber}`;
 
         try {
             // If already playing this verse, pause it
-            if (playingAyahKey === ayahKey) {
+            if (playingAyahKey === ayahKey && isPlaying) {
                 await pauseAudio();
                 return;
             }
@@ -73,11 +77,18 @@ export default function Reader() {
                     }
                 }
 
-                await AudioService.playNewSound(audioUrl, (status) => {
-                    if (status.isLoaded && status.didJustFinish) {
+                await loadAndPlayAudio(
+                    {
+                        surahName: story?.title_ar || 'قرآن',
+                        verseNumber: ayahNumber,
+                        reciterName: 'مشاري العفاسي',
+                        surahId: surahIdStr as string
+                    },
+                    audioUrl,
+                    () => {
                         setPlayingAyahKey(null);
                     }
-                });
+                );
 
                 setPlayingAyahKey(ayahKey);
             }
@@ -89,7 +100,7 @@ export default function Reader() {
     };
 
     const pauseAudio = async () => {
-        await AudioService.stopCurrentSound();
+        await stopAndClear();
         setPlayingAyahKey(null);
     };
 
@@ -152,28 +163,28 @@ export default function Reader() {
                     ) : (
                         ayahs.map((ayah, index) => {
                             const ayahKey = `${surahIdStr}:${ayah.number}`;
-                            const isPlaying = playingAyahKey === ayahKey;
+                            const isAyahPlaying = playingAyahKey === ayahKey && isPlaying;
                             const isLoading = loadingAudio === ayahKey;
 
                             return (
                                 <View key={ayah.number} style={styles.verseBlock}>
-                                    <Text className="text-center" style={[styles.arabicText, isPlaying && styles.activeText]}>
+                                    <Text className="text-center" style={[styles.arabicText, isAyahPlaying && styles.activeText]}>
                                         {ayah.text}
                                     </Text>
 
                                     <View style={styles.audioControls}>
                                         <TouchableOpacity
                                             onPress={() => playAudio(ayah.number)}
-                                            style={[styles.audioButton, isPlaying && styles.activeAudioButton]}
+                                            style={[styles.audioButton, isAyahPlaying && styles.activeAudioButton]}
                                             disabled={isLoading}
                                         >
                                             {isLoading ? (
                                                 <ActivityIndicator size="small" color="#bf9540" />
                                             ) : (
                                                 <MaterialIcons
-                                                    name={isPlaying ? "pause" : "play-arrow"}
+                                                    name={isAyahPlaying ? "pause" : "play-arrow"}
                                                     size={24}
-                                                    color={isPlaying ? "#0a0c14" : "#bf9540"}
+                                                    color={isAyahPlaying ? "#0a0c14" : "#bf9540"}
                                                 />
                                             )}
                                         </TouchableOpacity>
@@ -181,7 +192,6 @@ export default function Reader() {
                                             <Text className="text-right" style={styles.citationText}>تلاوة الشيخ مشاري العفاسي</Text>
                                         </View>
                                     </View>
-
 
                                     {index < ayahs.length - 1 && (
                                         <View style={styles.divider}>
@@ -222,21 +232,15 @@ export default function Reader() {
                                 <ActivityIndicator color="#bf9540" size="large" style={{ marginTop: 40 }} />
                             ) : (
                                 tafsirData.map((para, i) => {
-                                    // 1. Convert any HTML tags into newlines
                                     const withNewlines = para.replace(/<(br|p|div)[^>]*>/gi, '\n');
-                                    // Strip other HTML
                                     const cleanText = withNewlines.replace(/<[^>]*>?/gm, '').trim();
 
                                     if (!cleanText) return null;
 
-                                    // 2. Fallback: split by Arabic delimiters (periods, commas) to break wall of text
-                                    // Since some Tafsirs lack HTML spacing entirely.
                                     let segments = cleanText.split(/\n+/);
                                     if (segments.length === 1 && cleanText.length > 150) {
-                                        // Split tightly compressed sentences 
                                         segments = cleanText.split(/([.؟] |، )/);
-                                        // Re-join sentences in pairs (delimiter + text)
-                                        const grouped = [];
+                                        const grouped: string[] = [];
                                         let current = '';
                                         for (const chunk of segments) {
                                             if (/[.؟] |، /.test(chunk)) {
@@ -349,7 +353,7 @@ const styles = StyleSheet.create({
     progressBarBackground: {
         height: 2,
         backgroundColor: 'rgba(191, 149, 64, 0.1)',
-        marginTop: 80, // Approximate header height + padding
+        marginTop: 80,
         width: '100%',
     },
     progressBarFill: {
@@ -547,5 +551,5 @@ const styles = StyleSheet.create({
         writingDirection: 'rtl',
         width: '100%',
         alignSelf: 'stretch',
-    }
+    },
 });

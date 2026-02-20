@@ -1,5 +1,5 @@
 import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
-import AudioService from '@/services/AudioService';
+import { useAudio } from '@/context/AudioContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -23,68 +23,98 @@ interface Verse {
     audio: string;
 }
 
-// reciter_id is now the Al-Quran Cloud identifier directly (e.g. 'ar.alafasy')
-
 const PlayerScreen = () => {
     const { chapter_id, reciter_id, reciter_name } = useLocalSearchParams();
     const router = useRouter();
     const insets = useSafeAreaInsets();
+    const {
+        loadAndPlayAudio,
+        togglePlayPause,
+        isPlaying,
+        trackInfo,
+        isMiniPlayerVisible
+    } = useAudio();
 
     const [loading, setLoading] = useState(true);
-    const [isPlaying, setIsPlaying] = useState(false);
     const [verses, setVerses] = useState<Verse[]>([]);
     const [currentVerseIndex, setCurrentVerseIndex] = useState(0);
-    const [sound, setSound] = useState<Audio.Sound | null>(null);
     const [chapterInfo, setChapterInfo] = useState<any>(null);
+    const [currentChapterId, setCurrentChapterId] = useState<string>(chapter_id as string);
 
     const flatListRef = useRef<FlatList>(null);
-    const soundRef = useRef<Audio.Sound | null>(null);
-    const isPlayingRef = useRef(false);
+    const isFirstLoad = useRef(true);
+
+    const loadChapterData = async (chapterId: string, autoPlay: boolean = true) => {
+        try {
+            const reciterIdentifier = (reciter_id as string) || '7';
+
+            // Fetch verse text and audio from Quran.com API
+            const [versesRes, audioRes, chapterRes] = await Promise.all([
+                fetch(`https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=${chapterId}`).catch(() => ({ ok: false })),
+                fetch(`https://api.quran.com/api/v4/recitations/${reciterIdentifier}/by_chapter/${chapterId}`).catch(() => ({ ok: false })),
+                fetch(`https://api.quran.com/api/v4/chapters/${chapterId}?language=en`).catch(() => ({ ok: false }))
+            ]);
+
+            if (!versesRes.ok || !audioRes.ok || !chapterRes.ok) {
+                console.error('[Player] One or more API requests failed');
+                return null;
+            }
+
+            const versesData = await (versesRes as Response).json();
+            const audioData = await (audioRes as Response).json();
+            const chapterData = await (chapterRes as Response).json();
+
+            // Build audio URL map keyed by verse_key
+            const audioMap: Record<string, string> = {};
+            for (const af of audioData.audio_files) {
+                let url = af.url;
+                if (!url.startsWith('http')) {
+                    url = url.startsWith('//') ? `https:${url}` : `https://verses.quran.com/${url}`;
+                }
+                audioMap[af.verse_key] = url;
+            }
+
+            const combined = versesData.verses.map((v: any, index: number) => ({
+                number: index + 1,
+                text: v.text_uthmani,
+                audio: audioMap[v.verse_key] || ''
+            }));
+
+            setVerses(combined);
+            setChapterInfo(chapterData.chapter);
+            setCurrentChapterId(chapterId);
+            setCurrentVerseIndex(0);
+
+            if (autoPlay && combined.length > 0) {
+                playVerse(0, combined, chapterData.chapter, chapterId);
+            }
+
+            return { verses: combined, chapterInfo: chapterData.chapter };
+        } catch (error) {
+            console.error('[Player] Error loading chapter data:', error);
+            return null;
+        }
+    };
 
     useEffect(() => {
         const loadInitialData = async () => {
-            try {
-                const reciterIdentifier = (reciter_id as string) || 'ar.alafasy';
+            const chapterId = chapter_id as string;
 
-                const [versesRes, chapterRes] = await Promise.all([
-                    fetch(`https://api.alquran.cloud/v1/surah/${chapter_id}/${reciterIdentifier}`).catch(() => ({ ok: false })),
-                    fetch(`https://api.quran.com/api/v4/chapters/${chapter_id}?language=en`).catch(() => ({ ok: false }))
-                ]);
-
-                if (!versesRes.ok || !chapterRes.ok) {
-                    console.error('[Player] One or more API requests failed');
-                    return;
-                }
-
-                const versesData = await (versesRes as Response).json();
-                const chapterData = await (chapterRes as Response).json();
-
-                const combined = versesData.data.ayahs.map((a: any) => ({
-                    number: a.numberInSurah,
-                    text: a.text,
-                    audio: a.audio
-                }));
-
-                setVerses(combined);
-                setChapterInfo(chapterData.chapter);
-                setLoading(false);
-
-                // Start playing the first verse if it exists
-                if (combined.length > 0) {
-                    playVerse(0, combined);
-                }
-
-            } catch (error) {
-                console.error('[Player] Error loading data:', error);
-                setLoading(false);
+            // If this surah is already playing, sync the index
+            if (trackInfo && trackInfo.surahId === chapterId) {
+                await loadChapterData(chapterId, false);
+                setCurrentVerseIndex(trackInfo.verseNumber - 1);
+            } else if (isFirstLoad.current) {
+                await loadChapterData(chapterId, true);
+            } else {
+                await loadChapterData(chapterId, true);
             }
+
+            setLoading(false);
+            isFirstLoad.current = false;
         };
 
         loadInitialData();
-
-        return () => {
-            AudioService.stopCurrentSound();
-        };
     }, [chapter_id, reciter_id]);
 
     // Handle auto-scroll when verse changes
@@ -102,40 +132,71 @@ const PlayerScreen = () => {
         }
     }, [currentVerseIndex, verses.length]);
 
-    const playVerse = async (index: number, currentVerses: Verse[] = verses) => {
+    // Sync currentVerseIndex if audio finishes and advances in context
+    useEffect(() => {
+        if (trackInfo && trackInfo.surahId === chapter_id) {
+            const index = trackInfo.verseNumber - 1;
+            if (index !== currentVerseIndex && index < verses.length) {
+                setCurrentVerseIndex(index);
+            }
+        }
+    }, [trackInfo]);
+
+    const playVerse = async (index: number, currentVerses: Verse[] = verses, info = chapterInfo, chapterId: string = currentChapterId) => {
         if (index >= currentVerses.length) {
-            setIsPlaying(false);
-            isPlayingRef.current = false;
             return;
         }
 
         try {
-            const verseAudio = currentVerses[index]?.audio;
-            if (!verseAudio) {
+            const verse = currentVerses[index];
+            if (!verse?.audio) {
                 console.warn(`[Player] No audio found for verse ${index + 1}, skipping...`);
                 if (index + 1 < currentVerses.length) {
-                    playVerse(index + 1, currentVerses);
+                    playVerse(index + 1, currentVerses, info, chapterId);
+                } else {
+                    // Last verse had no audio, advance to next surah
+                    const nextId = parseInt(chapterId) + 1;
+                    if (nextId <= 114) {
+                        console.log(`[Player] Auto-advancing to Surah ${nextId}`);
+                        setLoading(true);
+                        loadChapterData(String(nextId), true).then(() => setLoading(false));
+                    }
                 }
                 return;
             }
 
-            console.log(`[Player] Playing verse ${index + 1}: ${verseAudio}`);
+            console.log(`[Player] Playing verse ${index + 1}: ${verse.audio}`);
 
-            await AudioService.playNewSound(verseAudio, (status: any) => {
-                if (status.didJustFinish) {
-                    setCurrentVerseIndex(prev => {
-                        const next = prev + 1;
-                        playVerse(next, currentVerses);
-                        return next;
-                    });
+            const reciterName = (reciter_name as string) || 'Reciter';
+            const surahName = info?.name_arabic || 'Surah';
+
+            await loadAndPlayAudio(
+                {
+                    surahName,
+                    verseNumber: verse.number,
+                    reciterName,
+                    surahId: chapterId
+                },
+                verse.audio,
+                () => {
+                    // Callback when current verse finishes
+                    const nextIndex = index + 1;
+                    if (nextIndex < currentVerses.length) {
+                        playVerse(nextIndex, currentVerses, info, chapterId);
+                    } else {
+                        // Last verse finished — advance to next surah
+                        const nextId = parseInt(chapterId) + 1;
+                        if (nextId <= 114) {
+                            console.log(`[Player] Auto-advancing to Surah ${nextId}`);
+                            setLoading(true);
+                            loadChapterData(String(nextId), true).then(() => setLoading(false));
+                        } else {
+                            console.log('[Player] Reached the end of the Quran');
+                        }
+                    }
                 }
-            });
+            );
 
-            const newSound = AudioService.getSound();
-            soundRef.current = newSound;
-            setSound(newSound);
-            setIsPlaying(true);
-            isPlayingRef.current = true;
             setCurrentVerseIndex(index);
 
         } catch (error) {
@@ -144,21 +205,20 @@ const PlayerScreen = () => {
     };
 
     const togglePlayback = async () => {
-        if (!soundRef.current) return;
-
-        if (isPlaying) {
-            await AudioService.stopCurrentSound();
-            setIsPlaying(false);
-            isPlayingRef.current = false;
-        } else {
-            // Restart current verse if no sound exists
-            playVerse(currentVerseIndex);
-        }
+        await togglePlayPause();
     };
 
     const skipToNext = () => {
         if (currentVerseIndex < verses.length - 1) {
             playVerse(currentVerseIndex + 1);
+        } else {
+            // On the last verse, skip to next surah
+            const nextId = parseInt(currentChapterId) + 1;
+            if (nextId <= 114) {
+                console.log(`[Player] Skipping to Surah ${nextId}`);
+                setLoading(true);
+                loadChapterData(String(nextId), true).then(() => setLoading(false));
+            }
         }
     };
 
