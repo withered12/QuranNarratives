@@ -16,10 +16,9 @@ export const LuxuryTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
         >
             <BlurView intensity={80} tint="dark" style={styles.blurContainer}>
                 <View style={styles.content}>
-                    {[...state.routes].reverse().map((route, index) => {
-                        const originalIndex = state.routes.length - 1 - index;
+                    {state.routes.map((route, index) => {
                         const { options } = descriptors[route.key];
-                        const isFocused = state.index === originalIndex;
+                        const isFocused = state.index === index;
 
                         const onPress = () => {
                             const event = navigation.emit({

@@ -42,35 +42,37 @@ export default function Home() {
                         {isLocked ? (
                             <View style={styles.lockedCard}>
                                 <View style={styles.cardHeader}>
-                                    <Text style={styles.surahNumberLocked}>{item.id}</Text>
-                                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                                        <Text className="text-right" style={styles.revelationText}>
+                                    <View>
+                                        <Text style={styles.revelationText}>
                                             النزول {item.id.toString().padStart(2, '0')} • مكية
                                         </Text>
-                                        <Text className="text-right" style={styles.surahName}>{item.name_ar}</Text>
-                                        <Text className="text-right" style={styles.surahTranslationLower}>{item.name_en}</Text>
+                                        <Text style={styles.surahName}>{item.name_ar}</Text>
+                                        <Text style={styles.surahTranslationLower}>{item.name_en}</Text>
                                     </View>
+                                    <Text style={styles.surahNumberLocked}>{item.id}</Text>
                                 </View>
                                 <View style={styles.lockRow}>
                                     <MaterialCommunityIcons name="lock" size={14} color="rgba(191, 149, 64, 0.5)" />
-                                    <Text className="text-right" style={[styles.lockText, { flex: 1 }]}>أكمل السابق لفتح القفل</Text>
+                                    <Text style={styles.lockText}>أكمل السابق لفتح القفل</Text>
                                 </View>
                             </View>
                         ) : (
                             <GoldGradientBorder borderRadius={16}>
                                 <View style={styles.cardContent}>
                                     <View style={styles.cardHeader}>
-                                        <Text style={styles.surahNumberGold}>{item.id}</Text>
-                                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                                            <Text className="text-right" style={styles.revelationTextGold}>
+                                        <View>
+                                            <Text style={styles.revelationTextGold}>
                                                 النزول {item.id.toString().padStart(2, '0')} • مكية
                                             </Text>
-                                            <Text className="text-right" style={styles.surahNameWhite}>{item.name_ar}</Text>
-                                            <Text className="text-right" style={styles.surahTranslationGold}>{item.name_en}</Text>
+                                            <Text style={styles.surahNameWhite}>{item.name_ar}</Text>
+                                            <Text style={styles.surahTranslationGold}>{item.name_en}</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={styles.surahNumberGold}>{item.id}</Text>
                                         </View>
                                     </View>
 
-                                    <Text className="text-right w-full" style={styles.surahSummary}>
+                                    <Text style={styles.surahSummary}>
                                         {item.stories?.[0]?.summary_ar || item.stories?.[0]?.summary || "استكشاف الروايات الإلهية والحكمة العميقة التي أنزلت في هذا الجزء من القرآن الكريم."}
                                     </Text>
 
@@ -84,7 +86,7 @@ export default function Home() {
                                             </View>
                                         </View>
                                         <View style={styles.exploreButton}>
-                                            <Text className="text-right" style={styles.exploreText}>اكتشف</Text>
+                                            <Text style={styles.exploreText}>اكتشف</Text>
                                             <MaterialCommunityIcons name="arrow-left" size={14} color="#bf9540" />
                                         </View>
                                     </View>
@@ -93,7 +95,7 @@ export default function Home() {
                         )}
                     </TouchableOpacity>
                 </Link>
-            </Animated.View >
+            </Animated.View>
         );
     };
 
@@ -102,6 +104,10 @@ export default function Home() {
             <View style={[styles.safeArea, { paddingTop: insets.top }]}>
                 {/* Header */}
                 <View style={styles.header}>
+                    <View style={styles.headerTitleContainer}>
+                        <Text style={styles.headerTitle}>قصص القرآن</Text>
+                        <Text style={styles.headerSubtitle}>QURAN NARRATIVES</Text>
+                    </View>
                     <View style={styles.headerActions}>
                         <TouchableOpacity
                             style={styles.iconButton}
@@ -109,10 +115,6 @@ export default function Home() {
                         >
                             <MaterialCommunityIcons name="menu" size={24} color="#bf9540" />
                         </TouchableOpacity>
-                    </View>
-                    <View style={styles.headerTitleContainer}>
-                        <Text className="text-right" style={styles.headerTitle}>قصص القرآن</Text>
-                        <Text className="text-right" style={styles.headerSubtitle}>QURAN NARRATIVES</Text>
                     </View>
                 </View>
 
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
     },
     headerTitleContainer: {
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
     },
     headerTitle: {
         fontFamily: 'Cinzel_700Bold',
@@ -322,7 +324,6 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         marginBottom: 16,
         fontFamily: 'Amiri_400Regular',
-        textAlign: 'right',
     },
     cardFooter: {
         flexDirection: 'row',

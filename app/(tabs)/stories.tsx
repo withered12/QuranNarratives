@@ -33,8 +33,8 @@ export default function Codex() {
         >
             <GoldGradientBorder borderRadius={12}>
                 <View style={styles.categoryContent}>
+                    <Text style={styles.categoryTextAr}>{item}</Text>
                     <MaterialCommunityIcons name="chevron-left" size={16} color="#bf9540" />
-                    <Text className="text-right" style={styles.categoryTextAr}>{item}</Text>
                 </View>
             </GoldGradientBorder>
         </TouchableOpacity>
@@ -57,12 +57,14 @@ export default function Codex() {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {/* Header */}
                     <View style={styles.header}>
-                        <Text className="text-right" style={styles.headerSubtitle}>استكشف</Text>
-                        <Text className="text-right" style={styles.headerTitle}>المخطوطة</Text>
+                        <Text style={styles.headerSubtitle}>استكشف</Text>
+                        <Text style={styles.headerTitle}>المخطوطة</Text>
                     </View>
 
+                    {/* Search Bar */}
                     <View style={styles.searchContainer}>
                         <View style={styles.searchBackground}>
+                            <MaterialCommunityIcons name="magnify" size={20} color="rgba(191, 149, 64, 0.6)" />
                             <TextInput
                                 placeholder="الأنبياء، الموضوعات، أو الأماكن..."
                                 placeholderTextColor="rgba(191, 149, 64, 0.4)"
@@ -71,7 +73,6 @@ export default function Codex() {
                                 onChangeText={setSearchQuery}
                                 textAlign="right"
                             />
-                            <MaterialCommunityIcons name="magnify" size={20} color="rgba(191, 149, 64, 0.6)" />
                         </View>
                     </View>
 
@@ -94,7 +95,7 @@ export default function Codex() {
 
                     {/* Featured Sections */}
                     <View style={styles.sectionContainer}>
-                        <Text className="text-right" style={styles.sectionTitle}>مختارات منتقاة</Text>
+                        <Text style={styles.sectionTitle}>مختارات منتقاة</Text>
                         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.featuredScroll}>
                             {featuredStories.map((story) => (
                                 <TouchableOpacity
@@ -128,7 +129,7 @@ export default function Codex() {
 
                     {/* List Section */}
                     <View style={styles.listContainer}>
-                        <Text className="text-right" style={styles.sectionTitle}>{getTabLabel(activeTab)}</Text>
+                        <Text style={styles.sectionTitle}>{getTabLabel(activeTab)}</Text>
                         <View style={styles.categoryGrid}>
                             {activeTab === 'Prophets' ? prophets.map(renderCategoryItem) :
                                 activeTab === 'Themes' ? themes.map(renderCategoryItem) :
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 24,
         paddingTop: 24,
         marginBottom: 24,
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
     },
     headerSubtitle: {
         fontFamily: 'Cinzel_400Regular',
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     tabScroll: {
         paddingHorizontal: 24,
         gap: 12,
-        flexDirection: 'row-reverse',
+        flexDirection: 'row',
     },
     tabButton: {
         paddingHorizontal: 20,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
         fontSize: 10,
         color: 'rgba(255, 255, 255, 0.4)',
         letterSpacing: 2,
-        textAlign: 'right',
+        textAlign: 'start',
     },
     featuredScroll: {
         paddingHorizontal: 24,
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
         bottom: 20,
         start: 20,
         end: 20,
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
     },
     featuredTag: {
         fontFamily: 'Lato_700Bold',
