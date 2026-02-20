@@ -56,101 +56,100 @@ export default function Home() {
                                     <MaterialCommunityIcons name="lock" size={14} color="rgba(191, 149, 64, 0.5)" />
                                 </View>
                             </View>
-                            </View>
-                    ) : (
-                    <GoldGradientBorder borderRadius={16}>
-                        <View style={styles.cardContent}>
-                            <View style={styles.cardHeader}>
-                                <View>
-                                    <Text style={styles.surahNumberGold}>{item.id}</Text>
-                                </View>
-                                <View style={{ alignItems: 'flex-end' }}>
-                                    <Text className="text-right" style={styles.revelationTextGold}>
-                                        النزول {item.id.toString().padStart(2, '0')} • مكية
+                        ) : (
+                            <GoldGradientBorder borderRadius={16}>
+                                <View style={styles.cardContent}>
+                                    <View style={styles.cardHeader}>
+                                        <View>
+                                            <Text style={styles.surahNumberGold}>{item.id}</Text>
+                                        </View>
+                                        <View style={{ alignItems: 'flex-end' }}>
+                                            <Text className="text-right" style={styles.revelationTextGold}>
+                                                النزول {item.id.toString().padStart(2, '0')} • مكية
+                                            </Text>
+                                            <Text className="text-right" style={styles.surahNameWhite}>{item.name_ar}</Text>
+                                            <Text className="text-right" style={styles.surahTranslationGold}>{item.name_en}</Text>
+                                        </View>
+                                    </View>
+
+                                    <Text className="text-right w-full" style={styles.surahSummary}>
+                                        {item.stories?.[0]?.summary_ar || item.stories?.[0]?.summary || "استكشاف الروايات الإلهية والحكمة العميقة التي أنزلت في هذا الجزء من القرآن الكريم."}
                                     </Text>
-                                    <Text className="text-right" style={styles.surahNameWhite}>{item.name_ar}</Text>
-                                    <Text className="text-right" style={styles.surahTranslationGold}>{item.name_en}</Text>
-                                </View>
-                            </View>
 
-                            <Text className="text-right w-full" style={styles.surahSummary}>
-                                {item.stories?.[0]?.summary_ar || item.stories?.[0]?.summary || "استكشاف الروايات الإلهية والحكمة العميقة التي أنزلت في هذا الجزء من القرآن الكريم."}
-                            </Text>
-
-                            <View style={styles.cardFooter}>
-                                <View style={styles.exploreButton}>
-                                    <MaterialCommunityIcons name="arrow-left" size={14} color="#bf9540" />
-                                    <Text className="text-right" style={styles.exploreText}>اكتشف</Text>
-                                </View>
-                                <View style={styles.tagRow}>
-                                    <View style={styles.tag}>
-                                        <Text style={styles.tagText}>حكمة</Text>
-                                    </View>
-                                    <View style={styles.tag}>
-                                        <Text style={styles.tagText}>خلق</Text>
+                                    <View style={styles.cardFooter}>
+                                        <View style={styles.exploreButton}>
+                                            <MaterialCommunityIcons name="arrow-left" size={14} color="#bf9540" />
+                                            <Text className="text-right" style={styles.exploreText}>اكتشف</Text>
+                                        </View>
+                                        <View style={styles.tagRow}>
+                                            <View style={styles.tag}>
+                                                <Text style={styles.tagText}>حكمة</Text>
+                                            </View>
+                                            <View style={styles.tag}>
+                                                <Text style={styles.tagText}>خلق</Text>
+                                            </View>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        </View>
-                    </GoldGradientBorder>
+                            </GoldGradientBorder>
                         )}
-                </TouchableOpacity>
-            </Link>
+                    </TouchableOpacity>
+                </Link>
             </Animated.View >
         );
-};
+    };
 
-return (
-    <BackgroundPattern>
-        <View style={[styles.safeArea, { paddingTop: insets.top }]}>
-            {/* Header */}
-            <View style={styles.header}>
-                <View style={styles.headerActions}>
-                    <TouchableOpacity
-                        style={styles.iconButton}
-                        onPress={() => router.push('/settings')}
-                    >
-                        <MaterialCommunityIcons name="menu" size={24} color="#bf9540" />
-                    </TouchableOpacity>
+    return (
+        <BackgroundPattern>
+            <View style={[styles.safeArea, { paddingTop: insets.top }]}>
+                {/* Header */}
+                <View style={styles.header}>
+                    <View style={styles.headerActions}>
+                        <TouchableOpacity
+                            style={styles.iconButton}
+                            onPress={() => router.push('/settings')}
+                        >
+                            <MaterialCommunityIcons name="menu" size={24} color="#bf9540" />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.headerTitleContainer}>
+                        <Text className="text-right" style={styles.headerTitle}>قصص القرآن</Text>
+                        <Text className="text-right" style={styles.headerSubtitle}>QURAN NARRATIVES</Text>
+                    </View>
                 </View>
-                <View style={styles.headerTitleContainer}>
-                    <Text className="text-right" style={styles.headerTitle}>قصص القرآن</Text>
-                    <Text className="text-right" style={styles.headerSubtitle}>QURAN NARRATIVES</Text>
+
+                {/* Timeline Selector */}
+                <View style={styles.selectorContainer}>
+                    <View style={styles.selector}>
+                        <TouchableOpacity style={styles.selectorButtonActive}>
+                            <Text style={styles.selectorTextActive}>ترتيب النزول</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.selectorButtonInactive}>
+                            <Text style={styles.selectorTextInactive}>الترتيب التقليدي</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                {/* Timeline Content */}
+                <View style={styles.timelineContent}>
+                    {/* Central Vertical Line */}
+                    <LinearGradient
+                        colors={['rgba(191,149,64,0)', 'rgba(191,149,64,0.4)', 'rgba(191,149,64,0)']}
+                        style={styles.timelineLine}
+                    />
+
+                    <FlatList
+                        data={surahs}
+                        renderItem={renderTimelineItem}
+                        keyExtractor={item => item.id.toString()}
+                        contentContainerStyle={styles.listContent}
+                        showsVerticalScrollIndicator={false}
+                        removeClippedSubviews={false}
+                    />
                 </View>
             </View>
-
-            {/* Timeline Selector */}
-            <View style={styles.selectorContainer}>
-                <View style={styles.selector}>
-                    <TouchableOpacity style={styles.selectorButtonActive}>
-                        <Text style={styles.selectorTextActive}>ترتيب النزول</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.selectorButtonInactive}>
-                        <Text style={styles.selectorTextInactive}>الترتيب التقليدي</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-
-            {/* Timeline Content */}
-            <View style={styles.timelineContent}>
-                {/* Central Vertical Line */}
-                <LinearGradient
-                    colors={['rgba(191,149,64,0)', 'rgba(191,149,64,0.4)', 'rgba(191,149,64,0)']}
-                    style={styles.timelineLine}
-                />
-
-                <FlatList
-                    data={surahs}
-                    renderItem={renderTimelineItem}
-                    keyExtractor={item => item.id.toString()}
-                    contentContainerStyle={styles.listContent}
-                    showsVerticalScrollIndicator={false}
-                    removeClippedSubviews={false}
-                />
-            </View>
-        </View>
-    </BackgroundPattern>
-);
+        </BackgroundPattern>
+    );
 }
 
 const styles = StyleSheet.create({
