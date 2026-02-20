@@ -44,6 +44,29 @@ const ListenScreen = () => {
     const [selectedReciterId, setSelectedReciterId] = useState<number>(7); // Default: Mishari Rashid al-Afasy
     const [loading, setLoading] = useState(true);
 
+    // Arabic reciter name mapping for common reciters
+    const reciterArNames: Record<string, string> = {
+        'Mishari Rashid al-`Afasy': 'مشاري راشد العفاسي',
+        'AbdulBaset AbdulSamad': 'عبد الباسط عبد الصمد',
+        'Abdul Rahman Al-Sudais': 'عبد الرحمن السديس',
+        'Hani ar-Rifai': 'هاني الرفاعي',
+        'Mahmoud Khalil Al-Husary': 'محمود خليل الحصري',
+        'Mohamed Siddiq al-Minshawi': 'محمد صديق المنشاوي',
+        'Sa`ud ash-Shuraym': 'سعود الشريم',
+        'Mohamed al-Tablawi': 'محمد الطبلاوي',
+        'Maher Al Muaiqly': 'ماهر المعيقلي',
+        'Abu Bakr al-Shatri': 'أبو بكر الشاطري',
+        'Nasser Alqatami': 'ناصر القطامي',
+        'Ali Jaber': 'علي جابر',
+        'Yasser Ad-Dossari': 'ياسر الدوسري',
+        'Khalifah Taniji': 'خليفة الطنيجي',
+        'Ahmad ibn Ali al-Ajamy': 'أحمد بن علي العجمي',
+        'Bandar Balila': 'بندر بليلة',
+        'Ibrahim Walk': 'إبراهيم واك',
+    };
+
+    const getReciterArName = (name: string) => reciterArNames[name] || name;
+
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
@@ -96,12 +119,9 @@ const ListenScreen = () => {
                                 <Text style={styles.surahNumberText}>{item.id}</Text>
                             </View>
                             <View style={styles.nameContainer}>
-                                <Text style={styles.surahNameEn}>{item.name_simple}</Text>
-                                <Text style={styles.surahTranslationEn}>{item.revelation_place === 'makkah' ? 'مكية' : 'مدنية'} • {item.verses_count} آيات</Text>
+                                <Text className="text-right" style={styles.surahNameAr}>{item.name_arabic}</Text>
+                                <Text className="text-right" style={styles.surahTranslationEn}>{item.revelation_place === 'makkah' ? 'مكية' : 'مدنية'} • {item.verses_count} آيات</Text>
                             </View>
-                        </View>
-                        <View style={styles.arabicContainer}>
-                            <Text style={styles.surahNameAr}>{item.name_arabic}</Text>
                         </View>
                     </View>
                 </GoldGradientBorder>
@@ -124,12 +144,12 @@ const ListenScreen = () => {
         <BackgroundPattern>
             <View style={[styles.container, { paddingTop: insets.top }]}>
                 <View style={styles.header}>
-                    <Text style={styles.headerTitle}>استماع</Text>
-                    <Text style={styles.headerSubtitle}>تلاوة القرآن</Text>
+                    <Text className="text-right" style={styles.headerTitle}>استماع</Text>
+                    <Text className="text-right" style={styles.headerSubtitle}>تلاوة القرآن</Text>
                 </View>
 
                 <View style={styles.reciterSection}>
-                    <Text style={styles.sectionTitle}>اختر القارئ</Text>
+                    <Text className="text-right" style={styles.sectionTitle}>اختر القارئ</Text>
                     <ScrollView
                         horizontal
                         showsHorizontalScrollIndicator={false}
@@ -150,7 +170,7 @@ const ListenScreen = () => {
                                         selectedReciterId === reciter.id && styles.reciterNameSelected
                                     ]}
                                 >
-                                    {reciter.reciter_name}
+                                    {getReciterArName(reciter.reciter_name)}
                                 </Text>
                             </TouchableOpacity>
                         ))}
