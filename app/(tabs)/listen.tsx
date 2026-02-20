@@ -92,7 +92,8 @@ const ListenScreen = () => {
                         pathname: '/listen/player',
                         params: {
                             chapter_id: item.id,
-                            reciter_id: selectedReciterId
+                            reciter_id: selectedReciterId,
+                            reciter_name: CURATED_RECITERS.find(r => r.id === selectedReciterId)?.reciter_name || ''
                         }
                     });
                 }}

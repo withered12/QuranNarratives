@@ -26,7 +26,7 @@ interface Verse {
 // reciter_id is now the Al-Quran Cloud identifier directly (e.g. 'ar.alafasy')
 
 const PlayerScreen = () => {
-    const { chapter_id, reciter_id } = useLocalSearchParams();
+    const { chapter_id, reciter_id, reciter_name } = useLocalSearchParams();
     const router = useRouter();
     const insets = useSafeAreaInsets();
 
@@ -219,7 +219,8 @@ const PlayerScreen = () => {
                         </TouchableOpacity>
                         <View style={styles.titleContainer}>
                             <Text style={styles.nowPlayingText}>جاري الاستماع الآن</Text>
-                            <Text style={styles.surahTitle}>{chapterInfo?.name_simple} - {chapterInfo?.name_arabic}</Text>
+                            <Text style={styles.surahTitle}>{chapterInfo?.name_arabic}</Text>
+                            {reciter_name ? <Text style={styles.reciterNameText}>{reciter_name}</Text> : null}
                         </View>
                         <View style={{ width: 40 }} />
                     </View>
@@ -246,8 +247,8 @@ const PlayerScreen = () => {
                         </View>
 
                         <View style={styles.buttonsRow}>
-                            <TouchableOpacity onPress={skipToPrevious} style={styles.navButton}>
-                                <MaterialCommunityIcons name="skip-previous" size={36} color={currentVerseIndex > 0 ? "#bf9540" : "rgba(191, 149, 64, 0.2)"} />
+                            <TouchableOpacity onPress={skipToNext} style={styles.navButton}>
+                                <MaterialCommunityIcons name="skip-next" size={36} color={currentVerseIndex < verses.length - 1 ? "#bf9540" : "rgba(191, 149, 64, 0.2)"} />
                             </TouchableOpacity>
 
                             <TouchableOpacity onPress={togglePlayback} style={styles.playButton}>
@@ -263,8 +264,8 @@ const PlayerScreen = () => {
                                 </LinearGradient>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={skipToNext} style={styles.navButton}>
-                                <MaterialCommunityIcons name="skip-next" size={36} color={currentVerseIndex < verses.length - 1 ? "#bf9540" : "rgba(191, 149, 64, 0.2)"} />
+                            <TouchableOpacity onPress={skipToPrevious} style={styles.navButton}>
+                                <MaterialCommunityIcons name="skip-previous" size={36} color={currentVerseIndex > 0 ? "#bf9540" : "rgba(191, 149, 64, 0.2)"} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -317,6 +318,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#bf9540',
         marginTop: 4,
+    },
+    reciterNameText: {
+        fontFamily: 'Amiri_400Regular',
+        fontSize: 14,
+        color: 'rgba(191, 149, 64, 0.6)',
+        marginTop: 2,
     },
     versesListContent: {
         paddingHorizontal: 30,
