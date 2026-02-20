@@ -11,13 +11,13 @@ export default function SavedScreen() {
             <SafeAreaView style={styles.safeArea}>
                 <Stack.Screen options={{ headerShown: false }} />
                 <View style={styles.header}>
-                    <Text style={styles.headerSubtitle}>المحفوظات</Text>
-                    <Text style={styles.headerTitle}>مكتبتي</Text>
+                    <Text className="text-right w-full" style={styles.headerSubtitle}>المحفوظات</Text>
+                    <Text className="text-right w-full" style={styles.headerTitle}>مكتبتي</Text>
                 </View>
 
                 <View style={styles.centered}>
                     <MaterialCommunityIcons name="bookmark-outline" size={64} color="rgba(191, 149, 64, 0.2)" />
-                    <Text style={styles.placeholderText}>لا توجد قصص محفوظة بعد</Text>
+                    <Text className="text-center" style={styles.placeholderText}>لا توجد قصص محفوظة بعد</Text>
                 </View>
             </SafeAreaView>
         </BackgroundPattern>
@@ -26,9 +26,9 @@ export default function SavedScreen() {
 
 const styles = StyleSheet.create({
     safeArea: { flex: 1 },
-    header: { paddingHorizontal: 24, paddingTop: 24, width: '100%', alignItems: 'flex-end' },
-    headerSubtitle: { fontFamily: 'Amiri_400Regular', fontSize: 12, letterSpacing: 1, color: 'rgba(191, 149, 64, 0.6)', textAlign: 'right', alignSelf: 'stretch' },
-    headerTitle: { fontFamily: 'Amiri_700Bold', fontSize: 28, color: '#bf9540', marginTop: 4, textAlign: 'right', alignSelf: 'stretch' },
+    header: { paddingHorizontal: 24, paddingTop: 24, width: '100%' },
+    headerSubtitle: { fontFamily: 'Amiri_400Regular', fontSize: 12, letterSpacing: 1, color: 'rgba(191, 149, 64, 0.6)' },
+    headerTitle: { fontFamily: 'Amiri_700Bold', fontSize: 28, color: '#bf9540', marginTop: 4 },
     centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-    placeholderText: { fontFamily: 'Amiri_400Regular', fontSize: 18, color: 'rgba(245, 245, 220, 0.4)', marginTop: 20, textAlign: 'center' },
+    placeholderText: { fontFamily: 'Amiri_400Regular', fontSize: 18, color: 'rgba(245, 245, 220, 0.4)', marginTop: 20 },
 });

@@ -129,8 +129,8 @@ export default function Reader() {
                             <MaterialCommunityIcons name="arrow-right" size={24} color="#bf9540" />
                         </TouchableOpacity>
                         <View style={styles.headerTitleContainer}>
-                            <Text style={styles.headerSubtitle}>أنت تقرأ الآن</Text>
-                            <Text style={styles.headerTitle} numberOfLines={1}>{story.title_ar}</Text>
+                            <Text className="text-right w-full" style={styles.headerSubtitle}>أنت تقرأ الآن</Text>
+                            <Text className="text-right w-full" style={styles.headerTitle} numberOfLines={1}>{story.title_ar}</Text>
                         </View>
                     </View>
                 </SafeAreaView>
@@ -157,7 +157,7 @@ export default function Reader() {
 
                             return (
                                 <View key={ayah.number} style={styles.verseBlock}>
-                                    <Text style={[styles.arabicText, isPlaying && styles.activeText]}>
+                                    <Text className="text-center" style={[styles.arabicText, isPlaying && styles.activeText]}>
                                         {ayah.text}
                                     </Text>
 
@@ -178,7 +178,7 @@ export default function Reader() {
                                             )}
                                         </TouchableOpacity>
                                         <View style={styles.citationContainer}>
-                                            <Text style={styles.citationText}>تلاوة الشيخ مشاري العفاسي</Text>
+                                            <Text className="text-right" style={styles.citationText}>تلاوة الشيخ مشاري العفاسي</Text>
                                         </View>
                                     </View>
 
@@ -213,7 +213,7 @@ export default function Reader() {
                             >
                                 <MaterialCommunityIcons name="close" size={24} color="#bf9540" />
                             </TouchableOpacity>
-                            <Text style={styles.tafsirTitle}>التفسير والقصة</Text>
+                            <Text className="text-right" style={styles.tafsirTitle}>التفسير والقصة</Text>
                             <View style={{ width: 40 }} />
                         </View>
 
@@ -254,7 +254,7 @@ export default function Reader() {
                                         const trimmed = segment.trim();
                                         if (!trimmed) return null;
                                         return (
-                                            <Text key={`${i}-${j}`} style={styles.tafsirText}>{trimmed}</Text>
+                                            <Text key={`${i}-${j}`} className="text-right w-full" style={styles.tafsirText}>{trimmed}</Text>
                                         );
                                     });
                                 })
