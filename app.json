@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "QuranNarratives",
-    "slug": "QuranNarratives",
+    "slug": "qurannarratives",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -45,7 +45,12 @@
       "reactCompiler": true
     },
     "extra": {
-      "supportsRTL": true
-    }
+      "supportsRTL": true,
+      "router": {},
+      "eas": {
+        "projectId": "0830676f-cbe4-478f-82ce-034a4a50db1a"
+      }
+    },
+    "owner": "withered13"
   }
 }
