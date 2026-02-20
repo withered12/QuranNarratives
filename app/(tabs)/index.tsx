@@ -43,7 +43,7 @@ export default function Home() {
                             <View style={styles.lockedCard}>
                                 <View style={styles.cardHeader}>
                                     <Text style={styles.surahNumberLocked}>{item.id}</Text>
-                                    <View style={{ alignItems: 'flex-end' }}>
+                                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
                                         <Text className="text-right" style={styles.revelationText}>
                                             النزول {item.id.toString().padStart(2, '0')} • مكية
                                         </Text>
@@ -52,18 +52,16 @@ export default function Home() {
                                     </View>
                                 </View>
                                 <View style={styles.lockRow}>
-                                    <Text className="text-right" style={styles.lockText}>أكمل السابق لفتح القفل</Text>
                                     <MaterialCommunityIcons name="lock" size={14} color="rgba(191, 149, 64, 0.5)" />
+                                    <Text className="text-right" style={[styles.lockText, { flex: 1 }]}>أكمل السابق لفتح القفل</Text>
                                 </View>
                             </View>
                         ) : (
                             <GoldGradientBorder borderRadius={16}>
                                 <View style={styles.cardContent}>
                                     <View style={styles.cardHeader}>
-                                        <View>
-                                            <Text style={styles.surahNumberGold}>{item.id}</Text>
-                                        </View>
-                                        <View style={{ alignItems: 'flex-end' }}>
+                                        <Text style={styles.surahNumberGold}>{item.id}</Text>
+                                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
                                             <Text className="text-right" style={styles.revelationTextGold}>
                                                 النزول {item.id.toString().padStart(2, '0')} • مكية
                                             </Text>
@@ -77,10 +75,6 @@ export default function Home() {
                                     </Text>
 
                                     <View style={styles.cardFooter}>
-                                        <View style={styles.exploreButton}>
-                                            <MaterialCommunityIcons name="arrow-left" size={14} color="#bf9540" />
-                                            <Text className="text-right" style={styles.exploreText}>اكتشف</Text>
-                                        </View>
                                         <View style={styles.tagRow}>
                                             <View style={styles.tag}>
                                                 <Text style={styles.tagText}>حكمة</Text>
@@ -88,6 +82,10 @@ export default function Home() {
                                             <View style={styles.tag}>
                                                 <Text style={styles.tagText}>خلق</Text>
                                             </View>
+                                        </View>
+                                        <View style={styles.exploreButton}>
+                                            <Text className="text-right" style={styles.exploreText}>اكتشف</Text>
+                                            <MaterialCommunityIcons name="arrow-left" size={14} color="#bf9540" />
                                         </View>
                                     </View>
                                 </View>
@@ -269,7 +267,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     cardHeader: {
-        flexDirection: 'row-reverse',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         marginBottom: 12,
@@ -327,7 +325,7 @@ const styles = StyleSheet.create({
         textAlign: 'right',
     },
     cardFooter: {
-        flexDirection: 'row-reverse',
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingTop: 16,
@@ -360,7 +358,7 @@ const styles = StyleSheet.create({
         color: '#bf9540',
     },
     lockRow: {
-        flexDirection: 'row-reverse',
+        flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
         marginTop: 8,
