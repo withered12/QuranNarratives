@@ -31,3 +31,9 @@ export interface Ayah {
     text: string;
     translation: string;
 }
+
+export interface MushafVerse {
+    id: number;
+    verseKey: string;    // e.g. "1:1"
+    textUthmani: string; // Uthmani script text
+}
