@@ -1,26 +1,71 @@
 import { BackgroundPattern } from '@/components/ui/BackgroundPattern';
 import { useMushafPage } from '@/hooks/useMushafPage';
+import { MushafVerse } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { Stack } from 'expo-router';
-import React from 'react';
+import React, { useRef } from 'react';
 import {
     ActivityIndicator,
     SafeAreaView,
-    ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from 'react-native';
+import { WebView } from 'react-native-webview';
+
+const generateHtml = (verses: MushafVerse[]): string => {
+    const versesHtml = verses.map((verse) => {
+        const ayahNumber = verse.verseKey.split(':')[1];
+        return `${verse.textUthmani} <span class="ayah-num">﴿${ayahNumber}﴾</span>`;
+    }).join(' ');
+
+    return `
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #0a0c14;
+            padding: 20px 25px;
+            direction: rtl;
+        }
+        .verses {
+            font-family: 'Amiri', serif;
+            font-size: 24px;
+            line-height: 2.2;
+            color: #F5F5DC;
+            text-align: justify;
+            text-align-last: right;
+            word-spacing: 3px;
+        }
+        .ayah-num {
+            color: #bf9540;
+            font-size: 20px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="verses">${versesHtml}</div>
+</body>
+</html>
+    `;
+};
 
 export default function MushafReader() {
+    const webViewRef = useRef<WebView>(null);
     const {
+
         currentPage,
         verses,
         loading,
         error,
-        scrollRef,
         goToNextPage,
         goToPreviousPage,
         retry
@@ -94,27 +139,16 @@ export default function MushafReader() {
                         </TouchableOpacity>
                     </View>
                 ) : (
-                    <ScrollView
-                        ref={scrollRef}
-                        contentContainerStyle={styles.scrollContent}
-                        showsVerticalScrollIndicator={false}
-                    >
-                        <View style={styles.versesContainer}>
-                            <Text style={styles.versesText}>
-                                {verses.map((verse) => {
-                                    const ayahNumber = verse.verseKey.split(':')[1];
-                                    return (
-                                        <Text key={verse.id}>
-                                            {verse.textUthmani}
-                                            <Text style={styles.ayahNumber}> ﴿{ayahNumber}﴾ </Text>
-                                        </Text>
-                                    );
-                                })}
-                            </Text>
-                        </View>
-                        {/* Space for footer */}
-                        <View style={{ height: 100 }} />
-                    </ScrollView>
+                    <View style={{ flex: 1 }}>
+                        <WebView
+                            ref={webViewRef}
+                            originWhitelist={['*']}
+                            source={{ html: generateHtml(verses) }}
+                            style={{ flex: 1, backgroundColor: 'transparent' }}
+                            showsVerticalScrollIndicator={false}
+                            scrollEnabled={true}
+                        />
+                    </View>
                 )}
 
                 {renderFooter()}
@@ -126,6 +160,7 @@ export default function MushafReader() {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
+        marginBottom: 132, // Just above the raised center button
     },
     centered: {
         flex: 1,
@@ -155,31 +190,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'Cinzel_700Bold',
     },
-    scrollContent: {
-        paddingTop: 20,
-    },
-    versesContainer: {
-        paddingHorizontal: 25,
-    },
-    versesText: {
-        fontSize: 32,
-        lineHeight: 64,
-        fontFamily: 'Amiri_400Regular',
-        color: '#F5F5DC',
-        textAlign: 'right',
-        writingDirection: 'rtl',
-    },
-    ayahNumber: {
-        color: '#bf9540',
-        fontFamily: 'Amiri_400Regular',
-        fontSize: 24,
-    },
     footer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: 80,
+        height: 60,
+        marginRight: 15,
         borderTopWidth: 0.5,
         borderTopColor: 'rgba(191, 149, 64, 0.3)',
     },
